@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 190 100" role="img" aria-label="Texas Flag">
+  <rect width="190" height="50" x="0" y="0" fill="#ffffff"/>
+  <rect width="190" height="50" x="0" y="50" fill="#bf0a30"/>
+  <rect width="63.333" height="100" x="0" y="0" fill="#002868"/>
+  <path fill="#ffffff" d="M31.666 20l5.88 17.98h18.9L41.13 48.9l5.88 17.98-15.34-11.12-15.34 11.12 5.88-17.98L6.887 37.98h18.9L31.666 20z"/>
+</svg>

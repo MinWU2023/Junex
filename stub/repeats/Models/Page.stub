@@ -1,0 +1,15 @@
+<?php
+
+namespace App\Repeats\Models;
+
+class Page extends \App\Modules\Page\Models\Page
+{
+
+    public $translatedAttributes = ['name', 'brief_content', 'content', 'title', 'keywords', 'description'];
+
+    protected $fillable = [
+
+        'parent_id', 'sort', 'img_alt', 'url_key', 'img_path', 'active'
+    ];
+
+}

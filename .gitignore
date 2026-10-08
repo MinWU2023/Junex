@@ -1,0 +1,91 @@
+# Dependencies
+/vendor
+/node_modules
+
+# Laravel runtime / cache / uploads / logs
+/storage/
+/storage/*
+/bootstrap/cache/*.php
+!/bootstrap/cache/.gitignore
+# keep empty-dir stubs so clone still has storage structure
+!/storage/app/
+!/storage/app/.gitignore
+!/storage/app/public/
+!/storage/app/public/.gitignore
+!/storage/framework/
+!/storage/framework/.gitignore
+!/storage/framework/cache/
+!/storage/framework/cache/.gitignore
+!/storage/framework/sessions/
+!/storage/framework/sessions/.gitignore
+!/storage/framework/testing/
+!/storage/framework/testing/.gitignore
+!/storage/framework/views/
+!/storage/framework/views/.gitignore
+!/storage/logs/
+!/storage/logs/.gitignore
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+
+# Archives & DB dumps (too large / sensitive)
+*.zip
+*.rar
+*.7z
+*.tar
+*.tar.gz
+*.tgz
+*.sql
+/baks/
+baks/
+/backup/
+backup/
+
+# Editor / OS
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Logs & temp
+*.log
+*.tmp
+*.temp
+npm-debug.log*
+yarn-error.log*
+.phpunit.result.cache
+.php_cs.cache
+homestead
+
+# Backups & source maps (not needed at runtime)
+*.bak
+*.map
+
+# Generated / uploaded assets
+/public/webps/
+/public/uploads/
+/public/storage
+
+# Keep selected public front assets in git; ignore the rest of public by default
+/public/*
+!/public/front/
+!/public/admin/
+!/public/.htaccess
+!/public/index.php
+!/public/favicon.ico
+!/public/robots.txt
+
+# Local SSH keys (never commit)
+wumin
+wumin.pub
+*.pem
+id_rsa
+id_rsa.pub
+id_ed25519
+id_ed25519.pub
+

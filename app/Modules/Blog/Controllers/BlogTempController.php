@@ -1,0 +1,171 @@
+<?php
+
+namespace App\Modules\Blog\Controllers;
+
+use App\Http\Controllers\Controller;
+use App\Modules\Blog\Models\Blog;
+use App\Modules\Blog\Models\BlogCategory;
+use App\Modules\Blog\Models\BlogFile;
+use App\Modules\Blog\Models\BlogTag;
+use App\Modules\Url\Models\Url;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+
+/**
+ * Class BlogController
+ * @package App\Modules\Category\Controllers
+ */
+class BlogTempController extends Controller
+{
+
+
+    public function preview($id, Request $request)
+    {
+        $translate = $request->get('translate');
+        $model = Blog::where([
+            'is_temp' => 1,
+            'id' => $id
+        ])->first();
+        is_array($translate) ? $data = array_merge($translate, $request->all()) : $data = $request->all();
+
+        try {
+            if ($model) {
+                $data['updated_at'] = date('Y-m-d H:i:s');
+                $data = array_filter($data, function ($value) {
+                    // 如果 value 不是 false, null, 空字符串, 数组为空或者 0，则返回 true
+                    return ($value !== false && $value !== null && $value !== '' && (is_array($value) ? count($value) > 0 : true) && $value !== 0);
+                });
+                unset($data['url_key']);
+                $model->update($data);
+            } else {
+                $data['is_temp'] = 1;
+                $data['admin_user_id'] = auth()->user()->id;
+                if (!$data['blog_category_id']){
+                    $data['blog_category_id'] =  $this->getCate();
+                }
+                if (!isset($data['en']['name'])) {
+                    $data['en']['name'] = '请输入名称';
+                }
+                if (!isset($data['en']['content'])) {
+                    $data['en']['content'] = '请输入详情内容';
+                }
+                $data['url_key'] = 'preBlog-'.rand(1, 10000);
+                $model = Blog::create($data);
+            }
+            $this->createBlogFile($model, $request);
+            $this->createBlogTag($model, $request);
+        }catch (\PDOException $exception){
+            Log::error('blogModel:update:更新失败，错误原因为：' . $exception->getMessage());
+            return $this->badRequest();
+        }
+        return $this->data([
+            'temp_model_id' => $model->id,
+            'url_key' => url($model->url_key)
+        ]);
+    }
+
+
+    protected function getCate()
+    {
+        $blog_category = BlogCategory::query()->first();
+        if (!$blog_category){
+            $blog_category = BlogCategory::query()->create([
+                'en' => [
+                    'name' => 'previewBlogCate'
+                ],
+                'url_key' => Str::slug('previewBlogCate')
+            ]);
+        }
+        return $blog_category->id;
+    }
+
+
+    public function delete($id)
+    {
+        $is_del = false;
+        $model = Blog::with(['blogTags'])->where([
+            'is_temp' => 1,
+            'id' => $id
+        ])->first();
+        if ($model) {
+            $this->delTempModel($model->id);
+            $is_del = true;
+        }
+        $models = Blog::where('is_temp', 1)->where('created_at', '<', date('Y-m-d H:i:s', strtotime("-1day")))->get();
+        foreach ($models as $model) {
+            $this->delTempModel($model->id);
+            $is_del = true;
+        }
+        if ($is_del){
+            $maxId = Blog::query()->max('id');
+// 如果你想设置的新的起始自增ID比当前最大ID小，那么你需要确保不会产生冲突
+            $newStartingId = $maxId + 1; // 你希望设置的下一个自增ID
+// 执行SQL命令来修改自增ID
+            DB::statement("ALTER TABLE blogs AUTO_INCREMENT = $newStartingId;");
+        }
+        return $this->success();
+    }
+
+
+
+    protected function delTempModel($model_id)
+    {
+        DB::table('blog_blog_tag')->where('blog_id',$model_id)->delete();
+        DB::table('blog_files')->where('blog_id',$model_id)->delete();
+        Blog::where('id',$model_id)->delete();
+        Url::withTrashed()->where([
+            'urlable_type' => 'App\Modules\Blog\Models\Blog',
+            'urlable_id' => $model_id
+        ])->forceDelete();
+    }
+
+    protected function createBlogTag(Blog $blog, $request)
+    {
+        $tag_names = $request->get('tag_names');
+        $tag_names = array_values(array_filter($tag_names));
+        $tagIds = [];
+        if (isset($tag_names[0])){
+            foreach ($tag_names as $tag_name){
+                if($tag_name = merge_spaces($tag_name)){
+                    $blogTag = BlogTag::whereTranslation('name', $tag_name)->first();
+                    if ($blogTag) {
+                        $blogTag->name = $tag_name;
+                        $blogTag->save();
+                    }else{
+                        $blogTag = BlogTag::create([
+                            'url_key' => Str::slug($tag_name, '-', config('app.locale')),
+                            'sort' => 0,
+                            config('app.locale') => [
+                                'name' => $tag_name
+                            ]
+                        ]);
+                    }
+                    $tagIds[] = $blogTag->id;
+                }
+            }
+            $blog->blogTags()->sync($tagIds);
+        }
+        return true;
+    }
+
+
+    protected function createBlogFile(Blog $blog, $request)
+    {
+        if ($filePaths = $request->get('filePath')) {
+            $sorts = $request->get('fileSorts');
+            $names = $request->get('fileNames');
+            foreach ($filePaths as $key => $imgPath) {
+                $add = [];
+                $add['blog_id'] = $blog->id;
+                $add['path'] = $imgPath;
+                $add['name'] = $names[$key];
+                $add['sort'] = $sorts[$key];
+                BlogFile::create($add);
+            }
+        }
+    }
+
+
+}

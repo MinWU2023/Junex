@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" fill="none" aria-hidden="true">
+  <rect width="480" height="360" rx="24" fill="#F7F8FA"/>
+  <circle cx="214" cy="168" r="96" fill="#FEECEC"/>
+  <circle cx="214" cy="168" r="72" fill="#FBD5D4"/>
+  <rect x="176" y="132" width="76" height="64" rx="8" fill="#fff" stroke="#D92B28" stroke-width="6"/>
+  <path d="M196 132v-8a18 18 0 0 1 36 0v8" stroke="#D92B28" stroke-width="6" stroke-linecap="round"/>
+  <path d="M198 164h32M206 176h16" stroke="#FBD5D4" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="292" cy="214" r="28" fill="#fff" stroke="#D92B28" stroke-width="6"/>
+  <path d="M312 234l18 18" stroke="#D92B28" stroke-width="6" stroke-linecap="round"/>
+  <path d="M284 214h16M292 206v16" stroke="#D92B28" stroke-width="4" stroke-linecap="round"/>
+  <text x="240" y="292" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="800" fill="#111827">NO PRODUCTS</text>
+  <path d="M96 72h88v56H96z" fill="#fff" stroke="#E5E7EB" stroke-width="4" rx="8"/>
+  <path d="M112 96h56M112 112h40" stroke="#D1D5DB" stroke-width="6" stroke-linecap="round"/>
+  <path d="M296 64h88v48h-88z" fill="#fff" stroke="#E5E7EB" stroke-width="4" rx="8"/>
+  <path d="M312 84h56M312 98h32" stroke="#D1D5DB" stroke-width="6" stroke-linecap="round"/>
+  <path d="M72 320h336" stroke="#E5E7EB" stroke-width="4" stroke-linecap="round"/>
+</svg>

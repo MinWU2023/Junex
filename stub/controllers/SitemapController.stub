@@ -1,0 +1,98 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Modules\Blog\Models\Blog;
+use App\Modules\Blog\Models\BlogCategory;
+use App\Modules\Blog\Models\BlogTag;
+use App\Modules\Page\Models\Page;
+use App\Modules\Product\Models\Product;
+use App\Modules\Product\Models\ProductCategory;
+use App\Modules\Product\Models\ProductTag;
+
+class SitemapController extends Controller
+{
+    public function index()
+    {
+        $productCategory = ProductCategory::orderBy('updated_at', 'desc')->first();
+        $product = Product::active()->orderBy('updated_at', 'desc')->first();
+        $productTag = ProductTag::orderBy('updated_at', 'desc')->first();
+        $blogCategory = BlogCategory::orderBy('updated_at', 'desc')->first();
+        $blog= Blog::active()->orderBy('updated_at', 'desc')->first();
+        $blogTag = BlogTag::orderBy('updated_at', 'desc')->first();
+        $page = Page::active()->orderBy('updated_at', 'desc')->first();
+
+        return response()->view('front.sitemap.index', [
+            'productCategory' => $productCategory,
+            'product' => $product,
+            'productTag' =>$productTag,
+            'blogCategory' =>$blogCategory,
+            'blog' =>$blog,
+            'blogTag' =>$blogTag,
+            'page' =>$page,
+
+        ])->header('Content-Type', 'text/xml');
+    }
+
+
+    public function sitemap(){
+        $page = Page::find(29);
+        $productCategories = ProductCategory::with(['children'])->where('parent_id',0)->get();
+        return view('front.sitemap',compact('page','productCategories'));
+    }
+
+
+    public function productCategories(){
+        $productCategories = ProductCategory::all();
+        return response()->view('front.sitemap.productCategories', [
+            'productCategories' => $productCategories,
+        ])->header('Content-Type', 'text/xml');
+    }
+
+
+
+    public function products(){
+        $products = Product::all();
+        return response()->view('front.sitemap.products', [
+            'products' => $products,
+        ])->header('Content-Type', 'text/xml');
+    }
+
+    public function productTags(){
+        $productTags = productTag::all();
+        return response()->view('front.sitemap.productTags', [
+            'productTags' => $productTags,
+        ])->header('Content-Type', 'text/xml');
+    }
+
+    public function blogCategories(){
+        $blogCategories = BlogCategory::all();
+        return response()->view('front.sitemap.blogCategories', [
+            'blogCategories' => $blogCategories,
+        ])->header('Content-Type', 'text/xml');
+    }
+
+    public function blogs(){
+        $blogs = Blog::all();
+        return response()->view('front.sitemap.blogs', [
+            'blogs' => $blogs,
+        ])->header('Content-Type', 'text/xml');
+    }
+
+    public function blogTags(){
+        $blogTags = BlogTag::all();
+        return response()->view('front.sitemap.blogTags', [
+            'blogTags' => $blogTags,
+        ])->header('Content-Type', 'text/xml');
+    }
+
+
+    public function pages(){
+        $pages = Page::all();
+        return response()->view('front.sitemap.pages', [
+            'pages' => $pages,
+        ])->header('Content-Type', 'text/xml');
+    }
+
+
+}

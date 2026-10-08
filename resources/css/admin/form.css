@@ -1,0 +1,133 @@
+/* 添加/编辑页保存、提交按钮：主题蓝底白字 */
+.layui-footer .layui-btn,
+.layui-form button.layui-btn[type="submit"]:not(.layui-btn-primary):not(.layui-btn-danger):not(.layui-chooseimg),
+.layui-form input.layui-btn[lay-submit]:not(.layui-btn-primary),
+.layui-form input[type="button"][lay-submit]:not(.layui-btn-primary),
+#layuiadmin-app-create-form-submit,
+#layuiadmin-app-edit-form-submit,
+#layuiadmin-app-publish-form-submit,
+[id^="layuiadmin-app-"][id$="-form-submit"],
+.layuiadmin-btn-list {
+    background: #656EE6 !important;
+    color: #fff !important;
+    border: none !important;
+}
+
+.layui-card .layui-tab-brief .layui-tab-title li {
+    margin: 0;
+    padding: 0;
+    line-height: 42px
+}
+.layui-input {
+    width:100%;
+}
+.layui-input-50 {
+    width: 50%;
+}
+/*.layui-form-label {*/
+/*    width: 100%;*/
+/*    text-align: left;*/
+/*}*/
+
+html {
+    background-color: #fff;
+}
+
+.layui-form-select {
+    z-index: 1000;
+}
+.layui-table-cell {
+    height: auto;
+    line-height: 28px;
+}
+#upload-upload-demoList .layui-form-radio {
+    display: none;
+}
+.layui-form-select {
+    z-index: 1000;
+}
+
+#layuiadmin-app-form-tags .form-title{
+    width: 110px;
+    padding: 9px 15px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+#layuiadmin-app-form-tags .form-text{
+    width: 95%
+}
+
+.max-width{
+    width: 225px;
+}
+.web-width{
+    width: calc(100% - 255px);
+    margin: 0;
+    display: inline-block;
+}
+
+.slide-width{
+    width: 110px;
+    padding-left: 0;
+}
+
+.main-width{
+    width: calc(100% - 130px);
+    margin: 0;
+    display: inline-block;
+}
+
+.seo-template span {
+    margin-right: 30px;
+}
+
+.product-attr-tags-container {
+    border: 1px solid #e6e6e6;
+    border-radius: 2px;
+    padding: 8px;
+    min-height: 38px;
+    background: #fff;
+}
+.product-attr-tags-display {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 8px;
+    min-height: 28px;
+}
+.product-attribute-card .product-attr-tag-item,
+.product-attr-multi-item .product-attr-tag-item {
+    display: inline-flex !important;
+    align-items: center;
+    height: auto !important;
+    line-height: 1.4 !important;
+    padding: 4px 10px !important;
+    background-color: #009688 !important;
+    color: #fff !important;
+    border-radius: 2px;
+    font-size: 13px;
+}
+.product-attr-tag-remove {
+    margin-left: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    color: #fff !important;
+    opacity: 0.9;
+}
+.product-attr-tag-remove:hover {
+    color: #ff5722 !important;
+    opacity: 1;
+}
+.product-attr-value-select {
+    width: 100%;
+    height: 38px;
+    border: 1px solid #e6e6e6;
+    border-radius: 2px;
+    padding: 0 10px;
+    background: #fff;
+}
+.product-attr-bind-input {
+    width: 100%;
+    margin-top: 8px;
+}

@@ -1,0 +1,22 @@
+stages:
+  - deploy
+
+# 定义第一个部署任务，它会被其中一个 Runner 执行
+deploy_server_1:
+  stage: deploy
+  tags:
+    - publish # 确保 Runner 可以匹配到这个 tag
+  script:
+    - ciTest nosay youhuatong
+  only:
+    - master # 仅在 master 分支上触发
+
+# 定义第二个部署任务，它会被另一个 Runner 执行
+deploy_server_2:
+  stage: deploy
+  tags:
+    - crm-java # 同样使用这个 tag
+  script:
+    - ciTest nosay youhuatong
+  only:
+    - master # 同样仅在 master 分支上触发

@@ -1,0 +1,57 @@
+;layui.extend({setter: "config", admin: "lib/admin", view: "lib/view"}).define(["setter", "admin"], function (a) {
+    var e = layui.setter, i = layui.element, n = layui.admin, t = n.tabsPage, d = layui.view, l = function (a, d, current, cur) {
+        var l, u = r("#LAY_app_tabsheader>li"), b = a.replace(/(^http(s*):)|(\?[\s\S]*$)/g, "");
+        u.each(function (e) {
+            var i = r(this), n = i.attr("lay-id");
+            n === a && (l = !0, t.index = e)
+        }), d = d || "新标签页";
+        var y = function () {
+            i.tabChange(o, a), n.tabsBodyChange(t.index, {url: a, text: d})
+        };
+        if (e.pageTabs) l || (setTimeout(function () {
+            r(s).append(['<div class="layadmin-tabsbody-item layui-show">', '<iframe src="' + a + '" frameborder="0" class="layadmin-iframe"></iframe>', "</div>"].join("")), y()
+        }, 10), t.index = u.length, i.tabAdd(o, {title: "<span>" + d + "</span>", id: a, attr: b})); else {
+            var m = n.tabsBody(n.tabsPage.index).find(".layadmin-iframe");
+            m[0].contentWindow.location.href = a
+        }
+        y()
+    },f = function (a, d, current, cur) {
+        var l, u = r("#LAY_app_tabsheader>li"), b = a.replace(/(^http(s*):)|(\?[\s\S]*$)/g, "");
+        u.each(function (e) {
+            var i = r(this), n = i.attr("lay-id");
+            n === a && (l = !0, t.index = e)
+        }), d = d || "新标签页";
+        var y = function () {
+            if (cur && current) {
+                i.tabChange(o, a)
+            }
+            n.tabsBodyChange(current, {url: a, text: d})
+        };
+        if (e.pageTabs) l || (setTimeout(function () {
+            r(s).append(['<div class="layadmin-tabsbody-item layui-show">', '<iframe src="' + a + '" frameborder="0" class="layadmin-iframe"></iframe>', "</div>"].join("")), y()
+        }, 10), t.index = u.length, i.tabAdd(o, {title: "<span>" + d + "</span>", id: a, attr: b})); else {
+            var m = n.tabsBody(n.tabsPage.index).find(".layadmin-iframe");
+            m[0].contentWindow.location.href = a
+        }
+        y()
+    }, s = "#LAY_app_body", o = "layadmin-layout-tabs", r = layui.$;
+    r(window);
+    n.screen() < 2 && n.sideFlexible(), layui.config({base: e.base + "modules/"}), layui.each(e.extend, function (a, i) {
+        var n = {};
+        n[i] = "{/}" + e.base + "lib/extend/" + i, layui.extend(n)
+    }), d().autoRender(), layui.use("common"), a("index", {openTabsPage: l, openTabsCurrentPage: f});
+    function layuiSetTabHtml(){
+        var myRouter = layui.data('layui-router-nav');
+        if(myRouter.nav && myRouter.nav.length){
+            var data = myRouter.nav;
+            var current = 0;
+            for(var i = 0; i < data.length; i++){
+                if (data[i].cur) {
+                    current = i+1;
+                }
+                layui.index.openTabsCurrentPage(data[i].url, data[i].name, current, data[i].cur);
+            }
+        }
+    }
+    layuiSetTabHtml();
+});

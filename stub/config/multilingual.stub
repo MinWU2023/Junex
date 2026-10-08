@@ -1,0 +1,542 @@
+<?php
+$seoTranslateField = [
+    [
+        'name' => 'title',
+        'label' => 'meta title',
+        'type' => 'text',
+        'require' => false
+    ],
+    [
+        'name' => 'keywords',
+        'label' => 'meta keywords',
+        'type' => 'text',
+        'require' => false
+    ],
+    [
+        'name' => 'description',
+        'label' => 'meta description',
+        'type' => 'text',
+        'require' => false
+    ]
+];
+return [
+    'setting' => [
+        'label' => '系统设置',
+        'value' => [
+            'translateField' => [
+                [
+                    'name' => 'name',
+                    'label' => '网站名称',
+                    'type' => 'text',
+                    'require' => true
+                ]
+            ],
+            'seoTranslateField' => $seoTranslateField,
+            'seoTemplateTranslateField' =>
+                [
+                    [
+                        'name' => 'seo_product_title',
+                        'label' => '产品详情标题模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
+                        'name' => 'seo_product_description',
+                        'label' => '产品详情描述模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
+                        'name' => 'seo_product_keywords',
+                        'label' => '产品详情关键词模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
+                        'name' => 'seo_products_title',
+                        'label' => '产品列表标题模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
+                        'name' => 'seo_products_description',
+                        'label' => '产品列表描述模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
+                        'name' => 'seo_products_keywords',
+                        'label' => '产品列表关键词模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
+                        'name' => 'seo_product_category_title',
+                        'label' => '产品分类标题模板 6201当前分类名称 6202上级分类 6203下级分类',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
+                        'name' => 'seo_product_category_description',
+                        'label' => '产品分类描述模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
+                        'name' => 'seo_product_category_keywords',
+                        'label' => '产品分类关键词模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+
+                    [
+                        'name' => 'seo_product_tag_title',
+                        'label' => '产品TAG标题模板 7201 tag名称',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
+                        'name' => 'seo_product_tag_description',
+                        'label' => '产品TAG描述模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
+                        'name' => 'seo_product_tag_keywords',
+                        'label' => '产品TAG关键词模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+
+
+                    [
+                        'name' => 'seo_articles_title',
+                        'label' => '新闻列表标题模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
+                        'name' => 'seo_articles_description',
+                        'label' => '新闻列表描述模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
+                        'name' => 'seo_articles_keywords',
+                        'label' => '新闻列表关键词模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+
+
+                    [
+                        'name' => 'seo_article_category_title',
+                        'label' => '新闻分类标题模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
+                        'name' => 'seo_article_category_description',
+                        'label' => '新闻分类描述模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
+                        'name' => 'seo_article_category_keywords',
+                        'label' => '新闻分类关键词模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+
+                    [
+                        'name' => 'seo_article_title',
+                        'label' => '新闻标题模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
+                        'name' => 'seo_article_description',
+                        'label' => '新闻详情模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
+                        'name' => 'seo_article_keywords',
+                        'label' => '新闻关键词模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
+                        'name' => 'seo_blogs_title',
+                        'label' => '博客列表标题模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
+                        'name' => 'seo_blogs_description',
+                        'label' => '博客列表描述模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
+                        'name' => 'seo_blogs_keywords',
+                        'label' => '博客列表关键词模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
+                        'name' => 'seo_blog_category_title',
+                        'label' => '博客分类标题模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
+                        'name' => 'seo_blog_category_description',
+                        'label' => '博客分类描述模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
+                        'name' => 'seo_blog_category_keywords',
+                        'label' => '博客分类关键词模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
+                        'name' => 'seo_blog_title',
+                        'label' => '博客标题模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
+                        'name' => 'seo_blog_description',
+                        'label' => '博客描述模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
+                        'name' => 'seo_blog_keywords',
+                        'label' => '博客关键词模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
+                        'name' => 'seo_blog_tag_title',
+                        'label' => '博客TAG标题模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
+                        'name' => 'seo_blog_tag_description',
+                        'label' => '博客TAG描述模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
+                        'name' => 'seo_blog_tag_keywords',
+                        'label' => '博客TAG关键词模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+
+                    [
+                         'name' => 'seo_sitemap_title',
+                         'label' => 'sitemap标题模板',
+                         'type' => 'text',
+                         'require' => false
+                    ],
+                    [
+                         'name' => 'seo_sitemap_description',
+                         'label' => 'sitemap描述模板',
+                         'type' => 'text',
+                         'require' => false
+                    ],
+                    [
+                         'name' => 'seo_sitemap_keywords',
+                         'label' => 'sitemap关键词模板',
+                         'type' => 'text',
+                         'require' => false
+                    ],
+
+                ]
+
+        ],
+        'model' => \App\Modules\Setting\Models\Setting::class
+    ],
+    'product_category' => [
+        'label' => '产品分类',
+        'value' => [
+            'translateField' => [
+                [
+                    'name' => 'name',
+                    'label' => '分类名',
+                    'type' => 'text',
+                    'require' => true
+                ],
+                [
+                    'name' => 'content',
+                    'label' => '分类描述',
+                    'type' => 'uedit',
+                    'require' => true
+                ],
+            ],
+            'seoTranslateField' => $seoTranslateField,
+        ],
+        'model' => \App\Modules\Product\Models\ProductCategory::class
+    ],
+    'product' => [
+        'label' => '产品列表',
+        'value' => [
+            'translateField' => [
+                [
+                    'name' => 'name',
+                    'label' => '产品名',
+                    'type' => 'text',
+                    'require' => true
+                ],
+                [
+                    'name' => 'brief_content',
+                    'label' => '产品简介',
+                    'type' => 'uedit',
+                    'require' => true
+                ],
+                [
+                    'name' => 'content',
+                    'label' => '产品详情',
+                    'type' => 'uedit',
+                    'require' => true
+                ],
+                [
+                    'name' => 'm_content',
+                    'label' => '产品详情(手机端)',
+                    'type' => 'uedit',
+                    'require' => true
+                ]
+            ],
+            'seoTranslateField' => $seoTranslateField,
+        ],
+        'model' => \App\Modules\Product\Models\Product::class
+    ],
+    'product_tag' => [
+        'label' => '产品关键词',
+        'value' => [
+            'translateField' => [
+                [
+                    'name' => 'name',
+                    'label' => '关键词名称',
+                    'type' => 'text',
+                    'require' => true
+                ],
+            ]
+        ],
+        'model' => \App\Modules\Product\Models\ProductTag::class
+    ],
+    'product_attribute' => [
+        'label' => '产品属性',
+        'value' => [
+            'translateField' => [
+                [
+                    'name' => 'name',
+                    'label' => '属性名称',
+                    'type' => 'text',
+                    'require' => true
+                ],
+            ]
+        ],
+        'model' => \App\Modules\Product\Models\ProductAttribute::class
+    ],
+    'page' => [
+        'label' => '单页面',
+        'value' => [
+            'translateField' => [
+                [
+                    'name' => 'name',
+                    'label' => '页面名称',
+                    'type' => 'text',
+                    'require' => true
+                ],
+                [
+                    'name' => 'brief_content',
+                    'label' => '页面内容简介',
+                    'type' => 'uedit',
+                    'require' => true
+                ],
+                [
+                    'name' => 'content',
+                    'label' => '页面内容',
+                    'type' => 'uedit',
+                    'require' => true
+                ],
+            ],
+            'seoTranslateField' => $seoTranslateField,
+        ],
+        'model' => \App\Modules\Page\Models\Page::class
+    ],
+    'article_category' => [
+        'label' => '文章分类',
+        'value' => [
+            'translateField' => [
+                [
+                    'name' => 'name',
+                    'label' => '分类名',
+                    'type' => 'text',
+                    'require' => true
+                ],
+                [
+                    'name' => 'content',
+                    'label' => '分类描述',
+                    'type' => 'uedit',
+                    'require' => true
+                ],
+            ],
+            'seoTranslateField' => $seoTranslateField
+        ],
+        'model' => \App\Modules\Article\Models\ArticleCategory::class
+    ],
+    'article' => [
+        'label' => '文章列表',
+        'value' => [
+            'translateField' => [
+                [
+                    'name' => 'name',
+                    'label' => '文章标题',
+                    'type' => 'text',
+                    'require' => true
+                ],
+                [
+                    'name' => 'content',
+                    'label' => '文章内容',
+                    'type' => 'uedit',
+                    'require' => true
+                ],
+            ],
+            'seoTranslateField' => $seoTranslateField
+        ],
+        'model' => \App\Modules\Article\Models\Article::class
+    ],
+    'blog_category' => [
+        'label' => '博客分类',
+        'value' => [
+            'translateField' => [
+                [
+                    'name' => 'name',
+                    'label' => '分类名',
+                    'type' => 'text',
+                    'require' => true
+                ],
+                [
+                    'name' => 'content',
+                    'label' => '分类描述',
+                    'type' => 'uedit',
+                    'require' => true
+                ],
+            ],
+            'seoTranslateField' => $seoTranslateField
+        ],
+        'model' => \App\Modules\Blog\Models\BlogCategory::class
+    ],
+    'blog' => [
+        'label' => '博客列表',
+        'value' => [
+            'translateField' => [
+                [
+                    'name' => 'name',
+                    'label' => '博客标题',
+                    'type' => 'text',
+                    'require' => true
+                ],
+                [
+                    'name' => 'content',
+                    'label' => '博客内容',
+                    'type' => 'uedit',
+                    'require' => true
+                ],
+            ],
+            'seoTranslateField' => $seoTranslateField
+        ],
+        'model' => \App\Modules\Blog\Models\Blog::class
+    ],
+    'blog_tag' => [
+        'label' => '博客关键词列表',
+        'value' => [
+            'translateField' => [
+                [
+                    'name' => 'name',
+                    'label' => '博客关键词',
+                    'type' => 'text',
+                    'require' => true
+                ],
+            ],
+        ],
+        'model' => \App\Modules\Blog\Models\BlogTag::class
+    ],
+    'slogan' =>[
+        'label' => 'slogan列表',
+        'value' => [
+            'translateField' => [
+                [
+                    'name' => 'name',
+                    'label' => 'slogan',
+                    'type' => 'text',
+                    'require' => true
+                ],
+            ],
+        ],
+        'model' => \App\Modules\Setting\Models\Slogan::class
+    ],
+    'banner' =>[
+        'label' => 'banner列表',
+        'value' => [
+            'translateField' => [
+                [
+                    'name' => 'name',
+                    'label' => '标题',
+                    'type' => 'text',
+                    'require' => true
+                ],
+                [
+                    'name' => 'description',
+                    'label' => '描述',
+                    'type' => 'text',
+                    'require' => false
+                ],
+            ],
+        ],
+        'model' => \App\Modules\Setting\Models\Banner::class
+    ],
+    'download' =>[
+        'label' => '下载列表',
+        'value' => [
+            'translateField' => [
+                [
+                    'name' => 'name',
+                    'label' => '分类名',
+                    'type' => 'text',
+                    'require' => true
+                ],
+                [
+                    'name' => 'content',
+                    'label' => '分类描述',
+                    'type' => 'text',
+                    'require' => true
+                ],
+            ],
+        ],
+        'model' => \App\Modules\Download\Models\Download::class
+    ],
+    'download_category' =>[
+        'label' => '下载分类',
+        'value' => [
+            'translateField' => [
+                [
+                    'name' => 'name',
+                    'label' => '分类',
+                    'type' => 'text',
+                    'require' => true
+                ],
+            ],
+            'seoTranslateField' => $seoTranslateField
+        ],
+        'model' => \App\Modules\Download\Models\DownloadCategory::class
+    ],
+];
