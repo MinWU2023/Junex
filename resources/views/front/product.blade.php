@@ -148,11 +148,9 @@
         <div class="pdp-info">
             <h1 class="pdp-title">{{ $product->name ?? '' }}</h1>
 
-            {{-- 暂时隐藏产品详情 Share SNS 分享板块
             <div class="pdp-share">
                 @include('front.partials.product-share-bar')
             </div>
-            --}}
 
             <dl class="pdp-specs">
                 @foreach(($productAttributesData ?? []) as $row)
