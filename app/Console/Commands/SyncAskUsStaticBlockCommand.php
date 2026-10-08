@@ -122,6 +122,7 @@ class SyncAskUsStaticBlockCommand extends Command
                 $this->info("[{$sign}/{$locale}] form HTML synced from template.");
             }
 
+            $this->unbindWrongAssociations($block, $sign);
             $this->bindRealPages($block, $this->realPageKeys[$sign] ?? [], $now);
             $this->bindVirtualKeys($block, $this->virtualPageKeys[$sign] ?? [], $now);
             $block->touch();
@@ -130,6 +131,50 @@ class SyncAskUsStaticBlockCommand extends Command
         $this->info('Done. Clear view cache if needed: php artisan view:clear');
 
         return 0;
+    }
+
+    /**
+     * 首页只留 ask_us_home；其它页只留 ask_us。清理错误关联。
+     */
+    private function unbindWrongAssociations(StaticBlock $block, string $sign): void
+    {
+        $allowed = $this->virtualPageKeys[$sign] ?? [];
+        $allowed = array_values(array_unique(array_map(static function ($k) {
+            return trim((string)$k, '/');
+        }, $allowed)));
+
+        if (Schema::hasTable('static_block_page_keys') && $allowed !== []) {
+            $removed = $block->pageKeys()
+                ->whereNotIn('page_key', $allowed)
+                ->delete();
+            if ($removed > 0) {
+                $this->warn("[{$sign}] removed {$removed} wrong page_key binding(s).");
+            }
+        }
+
+        if (!Schema::hasTable('static_block_page') || $allowed === []) {
+            return;
+        }
+
+        $allowedPageIds = Page::query()
+            ->where(function ($q) use ($allowed) {
+                $q->whereIn('url_key', $allowed);
+                foreach ($allowed as $key) {
+                    $q->orWhere('url_key', '/' . $key);
+                }
+            })
+            ->pluck('id')
+            ->all();
+
+        $query = DB::table('static_block_page')->where('static_block_id', $block->id);
+        if ($allowedPageIds !== []) {
+            $removed = (clone $query)->whereNotIn('page_id', $allowedPageIds)->delete();
+        } else {
+            $removed = $query->delete();
+        }
+        if ($removed > 0) {
+            $this->warn("[{$sign}] removed {$removed} wrong real-page binding(s).");
+        }
     }
 
     /**

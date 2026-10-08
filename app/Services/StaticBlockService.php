@@ -52,6 +52,17 @@ class StaticBlockService
             $this->resolveCurrentAssociation();
             $currentPageIds = $this->currentPageIds ?? [];
             $currentPageKeys = $this->currentPageKeys ?? [];
+            $isHome = $this->isHomePage($currentPageKeys);
+
+            // 首页只用 ask_us_home；其他页面只用 ask_us（防止 CMS 关联错乱互相串）
+            if ($sign === 'ask_us_home' && !$isHome) {
+                $this->requestCache[$sign] = '';
+                return '';
+            }
+            if ($sign === 'ask_us' && $isHome) {
+                $this->requestCache[$sign] = '';
+                return '';
+            }
 
             // Keep {!! static_block_html() !!} in templates; hide output when the current page is not associated.
             if ($currentPageIds === [] && $currentPageKeys === []) {
@@ -128,11 +139,19 @@ class StaticBlockService
                 }
             }
 
-            // Product list pages always show ask_us even if CMS association was cleared.
-            if ($html === '' && $sign === 'ask_us') {
+            // 首页：关联缺失时仍渲染 ask_us_home
+            if ($html === '' && $sign === 'ask_us_home' && $isHome) {
+                $html = $this->processPlaceholders($this->renderAskUsTemplate('ask_us_home'), $sign);
+            }
+
+            // 非首页常用页：关联缺失时仍渲染 ask_us
+            if ($html === '' && $sign === 'ask_us' && !$isHome) {
                 $keys = $this->currentPageKeys ?? [];
-                $productAskUsKeys = ['products', 'product-category', 'product-tag', 'product'];
-                if (array_intersect($keys, $productAskUsKeys) !== []) {
+                $askUsKeys = [
+                    'products', 'product-category', 'product-tag', 'product',
+                    'about-us', 'customer-services', 'search', 'reviews',
+                ];
+                if (array_intersect($keys, $askUsKeys) !== []) {
                     $html = $this->processPlaceholders($this->renderAskUsTemplate('ask_us'), $sign);
                 }
             }
@@ -147,6 +166,21 @@ class StaticBlockService
         $this->requestCache[$sign] = $html;
 
         return $html;
+    }
+
+    /**
+     * 是否首页（仅 home，不含其它路由误带的 path）。
+     *
+     * @param string[] $pageKeys
+     */
+    private function isHomePage(array $pageKeys): bool
+    {
+        if (in_array('home', $pageKeys, true)) {
+            return true;
+        }
+
+        $path = trim((string)(function_exists('request') ? request()->path() : ''), '/');
+        return $path === '' || $path === '/';
     }
 
     /**
