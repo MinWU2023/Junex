@@ -930,10 +930,8 @@ class HomeController extends Controller
             if ($productId > 0) {
                 $productExists = Product::query()->where('id', $productId)->exists();
                 if ($productExists) {
-                    $pivotQty = 1;
-                    if ($quantity !== '' && is_numeric($quantity)) {
-                        $pivotQty = max(1, (int)$quantity);
-                    }
+                    // quantity 为字符串区间（如 0~100），原样入库，不再强转 int
+                    $pivotQty = $quantity !== '' ? mb_substr($quantity, 0, 255) : '1';
                     $inquiry->products()->syncWithoutDetaching([
                         $productId => ['quantity' => $pivotQty],
                     ]);

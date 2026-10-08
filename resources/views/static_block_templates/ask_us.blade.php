@@ -31,11 +31,11 @@
                 <span class="text-f14 font-poppins-regular text-slate-700">Quantity</span>
                 <select name="quantity" class="mt-2 h-[50px] w-full rounded border border-slate-200 bg-white px-3 text-f14 text-slate-600 outline-none ring-0 focus:border-themeBg-d">
                     <option value="" selected>{{ $askUs['placeholder_quantity'] ?? 'Please Select Quantity' }}</option>
-                    <option value="100">100</option>
-                    <option value="200">200</option>
-                    <option value="300">300</option>
-                    <option value="500">500</option>
-                    <option value="1000">1000</option>
+                    <option value="0~100">0~100</option>
+                    <option value="101~500">101~500</option>
+                    <option value="501~1000">501~1000</option>
+                    <option value="1001~5000">1001~5000</option>
+                    <option value="5000+">5000+</option>
                 </select>
                 </label>
 

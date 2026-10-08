@@ -54,11 +54,11 @@
                     </button>
                     <ul class="inquiry-dropdown-menu" data-inquiry-select-menu role="listbox" hidden>
                         <li role="option" class="inquiry-dropdown-menu__item is-placeholder" data-value="" data-label="{{ $askUs['placeholder_quantity'] ?? 'Please Select Quantity' }}">{{ $askUs['placeholder_quantity'] ?? 'Please Select Quantity' }}</li>
-                        <li role="option" class="inquiry-dropdown-menu__item" data-value="100" data-label="100">100</li>
-                        <li role="option" class="inquiry-dropdown-menu__item" data-value="200" data-label="200">200</li>
-                        <li role="option" class="inquiry-dropdown-menu__item" data-value="300" data-label="300">300</li>
-                        <li role="option" class="inquiry-dropdown-menu__item" data-value="500" data-label="500">500</li>
-                        <li role="option" class="inquiry-dropdown-menu__item" data-value="1000" data-label="1000">1000</li>
+                        <li role="option" class="inquiry-dropdown-menu__item" data-value="0~100" data-label="0~100">0~100</li>
+                        <li role="option" class="inquiry-dropdown-menu__item" data-value="101~500" data-label="101~500">101~500</li>
+                        <li role="option" class="inquiry-dropdown-menu__item" data-value="501~1000" data-label="501~1000">501~1000</li>
+                        <li role="option" class="inquiry-dropdown-menu__item" data-value="1001~5000" data-label="1001~5000">1001~5000</li>
+                        <li role="option" class="inquiry-dropdown-menu__item" data-value="5000+" data-label="5000+">5000+</li>
                     </ul>
                 </div>
 

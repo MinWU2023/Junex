@@ -44,7 +44,7 @@ class MyInquiryController extends Controller
             'source_url' => ['nullable', 'string', 'max:2048'],
             'products' => ['nullable', 'array'],
             'products.*.id' => ['required_with:products', 'integer', 'min:1'],
-            'products.*.quantity' => ['nullable', 'integer', 'min:1'],
+            'products.*.quantity' => ['nullable', 'string', 'max:255'],
             'product_ids' => ['nullable', 'array'],
             'product_ids.*' => ['integer', 'min:1'],
         ], InquiryAttachmentService::validationRules()), [
@@ -64,17 +64,17 @@ class MyInquiryController extends Controller
                 if ($pid <= 0) {
                     continue;
                 }
-                $qty = (int)($row['quantity'] ?? 1);
-                if ($qty <= 0) {
-                    $qty = 1;
+                $qty = trim((string)($row['quantity'] ?? '1'));
+                if ($qty === '') {
+                    $qty = '1';
                 }
-                $syncData[$pid] = ['quantity' => $qty];
+                $syncData[$pid] = ['quantity' => mb_substr($qty, 0, 255)];
             }
         } elseif (!empty($validated['product_ids']) && is_array($validated['product_ids'])) {
             foreach ($validated['product_ids'] as $pid) {
                 $pid = (int)$pid;
                 if ($pid > 0) {
-                    $syncData[$pid] = ['quantity' => 1];
+                    $syncData[$pid] = ['quantity' => '1'];
                 }
             }
         }

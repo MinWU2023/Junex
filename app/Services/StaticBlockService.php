@@ -164,6 +164,16 @@ class StaticBlockService
         if (!preg_match('/\bname\s*=\s*["\']name["\']/i', $html)) {
             return true;
         }
+        // 附件上传区缺失时强制用模板重渲染（历史静态块 HTML 常缺少回显列表）
+        if (!preg_match('/js-inquiry-attachment/i', $html)) {
+            return true;
+        }
+        // quantity 仍是纯数字选项时，刷新为字符串区间（如 0~100）
+        if (preg_match('/name\s*=\s*["\']quantity["\']/i', $html)
+            && !preg_match('/0\s*~\s*100|0~100/i', $html)
+        ) {
+            return true;
+        }
 
         return false;
     }

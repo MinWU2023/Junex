@@ -175,7 +175,7 @@
                                     if ($img === '') {
                                         $img = '/front/imgs/index_rc_01.png';
                                     }
-                                    $qty = (int)($product->pivot->quantity ?? 1);
+                                    $qty = (string)($product->pivot->quantity ?? '1');
                                 @endphp
                                 <div class="product-row">
                                     <div class="thumb">
