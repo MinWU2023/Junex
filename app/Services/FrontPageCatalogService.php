@@ -168,16 +168,32 @@ class FrontPageCatalogService
             return $this->normalizePath($path);
         }, $paths)));
 
+        // 允许更新首页 path=''；不要因空串被 array_filter 清掉
         if ($paths === []) {
             return 0;
         }
 
         $this->sync();
+
+        // 确保每条 path 都有控制记录（含首页空 path）
+        foreach ($paths as $path) {
+            $row = FrontPageControl::query()->firstOrNew(['path' => $path]);
+            if (!$row->exists) {
+                $row->sitemap_on = 1;
+                $row->access_on = 1;
+                $row->name = $path === '' ? '首页' : $path;
+            }
+            $row->{$field} = $value ? 1 : 0;
+            $row->save();
+        }
+
         $count = FrontPageControl::query()
             ->whereIn('path', $paths)
-            ->update([$field => $value ? 1 : 0]);
+            ->where($field, $value ? 1 : 0)
+            ->count();
 
         $this->forgetAccessCache();
+        $this->forgetPageCaches($paths);
 
         return $count;
     }
@@ -191,13 +207,16 @@ class FrontPageCatalogService
             return [];
         }
 
-        return Cache::remember(self::CACHE_KEY, 300, function () {
+        return Cache::remember(self::CACHE_KEY, 60, function () {
             return FrontPageControl::query()
-                ->where('access_on', 0)
+                ->where(function ($q) {
+                    $q->where('access_on', 0)->orWhere('access_on', false);
+                })
                 ->pluck('path')
                 ->map(function ($path) {
                     return $this->normalizePath($path);
                 })
+                ->values()
                 ->all();
         });
     }
@@ -240,6 +259,29 @@ class FrontPageCatalogService
     public function forgetAccessCache(): void
     {
         Cache::forget(self::CACHE_KEY);
+    }
+
+    /**
+     * 关闭/开启访问后清掉整页缓存，避免 cachepage 继续吐旧 200。
+     *
+     * @param string[] $paths
+     */
+    public function forgetPageCaches(array $paths): void
+    {
+        $base = rtrim((string)config('app.url'), '/');
+        foreach ($paths as $path) {
+            $path = $this->normalizePath($path);
+            $urls = [];
+            if ($path === '') {
+                $urls[] = $base;
+                $urls[] = $base . '/';
+            } else {
+                $urls[] = $base . '/' . $path;
+            }
+            foreach ($urls as $url) {
+                Cache::forget($url);
+            }
+        }
     }
 
     public function normalizePath($path): string

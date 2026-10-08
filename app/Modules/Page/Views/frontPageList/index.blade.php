@@ -76,6 +76,11 @@
                                     </button>
                                 </td>
                                 <td>
+                                    @if($row['access_on'])
+                                        <span class="layui-badge layui-bg-green" style="margin-right:6px;">{{ __('可访问') }}</span>
+                                    @else
+                                        <span class="layui-badge" style="margin-right:6px;">{{ __('已关闭') }}</span>
+                                    @endif
                                     <button type="submit"
                                             class="layui-btn layui-btn-xs {{ $row['access_on'] ? 'layui-btn-danger' : 'layui-btn-normal' }}"
                                             form="front-page-toggle-form"

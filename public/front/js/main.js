@@ -1176,6 +1176,15 @@ $(function () {
         if (!fd.has('quantity')) {
             fd.set('quantity', ($form.find('[name="quantity"]').val() || '').trim());
         }
+        // 用附件区内存文件列表覆盖 FormData，保证回显删除后提交一致
+        fd.delete('attachments[]');
+        fd.delete('attachments');
+        formEl.querySelectorAll('.js-inquiry-attachment').forEach(function (wrap) {
+            var files = wrap._inquiryFiles || [];
+            files.forEach(function (f) {
+                fd.append('attachments[]', f, f.name);
+            });
+        });
 
         var $btn = $form.find('button[type="submit"]');
         $btn.prop('disabled', true);

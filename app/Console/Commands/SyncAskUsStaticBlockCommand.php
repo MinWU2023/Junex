@@ -96,11 +96,18 @@ class SyncAskUsStaticBlockCommand extends Command
                     ->where('locale', $locale)
                     ->first();
 
+                $existing = (string)($row->content ?? '');
                 $needsWrite = $force
                     || !$row
-                    || trim((string)($row->content ?? '')) === ''
-                    || stripos((string)($row->content ?? ''), '<form') === false
-                    || !preg_match('/\bname\s*=\s*["\']name["\']/i', (string)($row->content ?? ''));
+                    || trim($existing) === ''
+                    || stripos($existing, '<form') === false
+                    || !preg_match('/\bname\s*=\s*["\']name["\']/i', $existing)
+                    // 缺少附件上传区 / 文件列表回显容器时，强制用模板覆盖库内富文本
+                    || !preg_match('/js-inquiry-attachment/i', $existing)
+                    || !preg_match('/js-inquiry-attachment-list/i', $existing)
+                    || !preg_match('/attachments\[\]/i', $existing)
+                    || (preg_match('/name\s*=\s*["\']quantity["\']/i', $existing)
+                        && !preg_match('/0\s*~\s*100|0~100/i', $existing));
 
                 if (!$needsWrite) {
                     $this->line("[{$sign}/{$locale}] content OK; keep.");

@@ -29,6 +29,8 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         \App\Http\Middleware\ForceLowercaseUrls::class,
         \App\Http\Middleware\AddStaticAssetCacheHeaders::class,
+        // 全局拦截：页面管理「关闭访问」对所有前台入口生效
+        \App\Http\Middleware\FrontPageAccessMiddleware::class,
     ];
 
     /**
@@ -46,7 +48,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\CheckScheduledPublish::class,
-            \App\Http\Middleware\FrontPageAccessMiddleware::class,
+            // FrontPageAccessMiddleware 已挂全局，避免重复执行
         ],
 
         'api' => [

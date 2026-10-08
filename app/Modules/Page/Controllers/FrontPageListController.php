@@ -61,13 +61,33 @@ class FrontPageListController extends BaseController
         $path = (string)$request->get('path', '');
         $value = (int)$request->get('value', 0) === 1;
 
-        if (!in_array($field, ['sitemap_on', 'access_on'], true) || !$request->exists('path')) {
+        // 兼容：不依赖前端 JS，直接解析 toggle_payload=field|value|path
+        $payload = (string)$request->get('toggle_payload', '');
+        if ($payload !== '' && str_contains($payload, '|')) {
+            $parts = explode('|', $payload, 3);
+            $field = (string)($parts[0] ?? $field);
+            $value = (int)($parts[1] ?? 0) === 1;
+            $path = (string)($parts[2] ?? $path);
+        }
+
+        if (!in_array($field, ['sitemap_on', 'access_on'], true)) {
+            return back()->with('error', '参数错误');
+        }
+        // path 允许空串（首页），但不能缺省参数
+        if (!$request->exists('path') && !$request->exists('toggle_payload')) {
             return back()->with('error', '参数错误');
         }
 
-        $catalog->setFlags([$path], $field, $value);
+        $count = $catalog->setFlags([$path === '' ? '/' : $path], $field, $value);
+        if ($count < 1) {
+            return back()->with('error', '更新失败，未找到对应页面记录');
+        }
 
-        return back()->with('success', '已更新');
+        $label = $field === 'access_on'
+            ? ($value ? '已开启访问' : '已关闭访问')
+            : ($value ? '已开启 sitemap' : '已关闭 sitemap');
+
+        return back()->with('success', $label);
     }
 
     public function sitemap(FrontPageCatalogService $catalog)
