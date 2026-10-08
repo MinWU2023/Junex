@@ -15,6 +15,9 @@ class DatabaseBackupService
 {
     public const DIRECTORY = 'backup';
 
+    /** 备份保留天数（超过后自动删除文件与记录） */
+    public const RETENTION_DAYS = 7;
+
     /**
      * 执行全量数据库备份，并写入 database_backups 表。
      *
@@ -66,7 +69,69 @@ class DatabaseBackupService
             ]);
         }
 
+        try {
+            $this->purgeExpired(self::RETENTION_DAYS, (int) $record->id);
+        } catch (Throwable $e) {
+            Log::warning('Database backup purge failed: ' . $e->getMessage());
+        }
+
         return $record->fresh();
+    }
+
+    /**
+     * 删除超过保留天数的备份（文件 + 表记录），以及目录中无对应记录的过期 .sql。
+     *
+     * @return array{records:int, orphan_files:int}
+     */
+    public function purgeExpired(int $days = self::RETENTION_DAYS, ?int $keepId = null): array
+    {
+        $days = max(1, $days);
+        $cutoff = now()->subDays($days);
+        $deletedRecords = 0;
+        $deletedOrphans = 0;
+
+        $query = DatabaseBackup::query()->where('created_at', '<', $cutoff);
+        if ($keepId) {
+            $query->where('id', '!=', $keepId);
+        }
+
+        $query->orderBy('id')->chunkById(50, function ($rows) use (&$deletedRecords) {
+            foreach ($rows as $row) {
+                if ($this->deleteBackup($row)) {
+                    $deletedRecords++;
+                }
+            }
+        });
+
+        // 清理 backup/ 下无库记录的过期 sql（如手工拷入或记录已丢）
+        $dir = base_path(self::DIRECTORY);
+        if (is_dir($dir)) {
+            $cutoffTs = $cutoff->getTimestamp();
+            foreach (glob($dir . DIRECTORY_SEPARATOR . 'db_*.sql') ?: [] as $file) {
+                $mtime = @filemtime($file);
+                if ($mtime === false || $mtime >= $cutoffTs) {
+                    continue;
+                }
+                $relative = self::DIRECTORY . '/' . basename($file);
+                $basename = basename($file);
+                $stillReferenced = DatabaseBackup::query()
+                    ->where(function ($q) use ($relative, $basename) {
+                        $q->where('filepath', $relative)->orWhere('filename', $basename);
+                    })
+                    ->exists();
+                if ($stillReferenced) {
+                    continue;
+                }
+                if (@unlink($file)) {
+                    $deletedOrphans++;
+                }
+            }
+        }
+
+        return [
+            'records' => $deletedRecords,
+            'orphan_files' => $deletedOrphans,
+        ];
     }
 
     /**

@@ -19,7 +19,7 @@ class DatabaseBackupCommand extends Command
         $record = $service->backup($type);
 
         if ($record->status === 'success') {
-            $this->info("备份成功: {$record->filepath} ({$record->file_size_human})");
+            $this->info("备份成功: {$record->filepath} ({$record->file_size_human})，保留最近 " . DatabaseBackupService::RETENTION_DAYS . ' 天');
             return self::SUCCESS;
         }
 
