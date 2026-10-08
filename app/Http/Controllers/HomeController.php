@@ -908,9 +908,6 @@ class HomeController extends Controller
 
         $quantity = trim((string)($validated['quantity'] ?? ''));
         $content = (string)$validated['content'];
-        if ($quantity !== '') {
-            $content = "Quantity: {$quantity}\n\n" . $content;
-        }
 
         try {
             DB::beginTransaction();
@@ -918,6 +915,8 @@ class HomeController extends Controller
             $inquiry = Inquiry::create([
                 'title' => trim((string)$validated['name']) . ' - Ask Us',
                 'content' => $content,
+                'quantity' => $quantity !== '' ? mb_substr($quantity, 0, 255) : null,
+                'msg_name' => trim((string)$validated['name']),
                 'email' => $validated['email'],
                 'tel' => $validated['tel'],
                 'ip' => $ip,

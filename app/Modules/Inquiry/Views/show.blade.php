@@ -120,9 +120,31 @@
                     <button type="button" class="layui-btn title">{{ __('询盘标题') }}:</button>
                     <i class="text">{{ $model->title }}</i>
                 </p>
+                @php
+                    $displayQuantity = trim((string)($model->quantity ?? ''));
+                    $displayContent = (string)mb_convert_encoding($model->content, 'UTF-8', 'UTF-8');
+                    // 兼容旧数据：内容里拼过 Quantity: xxx 时拆出来单独显示
+                    if ($displayQuantity === '' && preg_match('/^\s*Quantity:\s*(.+?)(?:\r?\n\r?\n|\r?\n)(.*)$/is', $displayContent, $m)) {
+                        $displayQuantity = trim($m[1]);
+                        $displayContent = trim($m[2]);
+                    } elseif ($displayQuantity !== '') {
+                        $displayContent = preg_replace('/^\s*Quantity:\s*' . preg_quote($displayQuantity, '/') . '\s*(\r?\n)+/i', '', $displayContent);
+                        $displayContent = trim((string)$displayContent);
+                    }
+                    if ($displayQuantity === '' && preg_match('/Overall Quantity:\s*(.+)\s*$/i', $displayContent, $m2)) {
+                        $displayQuantity = trim($m2[1]);
+                        $displayContent = trim(preg_replace('/\s*Overall Quantity:\s*.+\s*$/i', '', $displayContent));
+                    }
+                @endphp
+                @if($displayQuantity !== '')
+                <p class="item">
+                    <button type="button" class="layui-btn title">{{ __('数量') }}:</button>
+                    <i class="text">{{ $displayQuantity }}</i>
+                </p>
+                @endif
                 <p class="item">
                     <button type="button" class="layui-btn title">{{ __('询盘内容') }}:</button>
-                    <i class="text">{{ mb_convert_encoding($model->content, 'UTF-8', 'UTF-8') }}</i>
+                    <i class="text">{{ $displayContent }}</i>
                 </p>
                 @if($model->msg_name)
                     <p class="item">

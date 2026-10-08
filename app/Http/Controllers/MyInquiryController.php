@@ -85,9 +85,7 @@ class MyInquiryController extends Controller
         }
 
         $content = (string)$validated['content'];
-        if (!empty($validated['quantity'])) {
-            $content .= "\n\nOverall Quantity: " . $validated['quantity'];
-        }
+        $quantity = trim((string)($validated['quantity'] ?? ''));
 
         $sourceUrl = trim((string)($validated['source_url'] ?? ''));
         if ($sourceUrl === '') {
@@ -103,6 +101,7 @@ class MyInquiryController extends Controller
             $inquiry = Inquiry::create([
                 'title' => 'Inquiry List',
                 'content' => $content,
+                'quantity' => $quantity !== '' ? mb_substr($quantity, 0, 255) : null,
                 'email' => (string)$validated['email'],
                 'tel' => (string)$validated['tel'],
                 'ip' => $request->ip(),

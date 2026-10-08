@@ -12,7 +12,7 @@ class Inquiry extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'title', 'content', 'email', 'tel', 'ip', 'location', 'source_url',
+        'title', 'content', 'quantity', 'email', 'tel', 'ip', 'location', 'source_url',
         'client','add_date','is_read','msg_name','msg_company','msg_country','msg_country1','send_emails',
          'source_data','is_send','is_unlock','gibberish_score','gibberish_details'
     ];

@@ -48,7 +48,7 @@
               </tr>
               <tr>
                 <td style="width:140px;font-family:Arial,Helvetica,sans-serif;color:#64748b;font-size:12px;">Quantity</td>
-                <td style="font-family:Arial,Helvetica,sans-serif;color:#0f172a;font-size:12px;">{{ $quantity !== '' ? $quantity : '-' }}</td>
+                <td style="font-family:Arial,Helvetica,sans-serif;color:#0f172a;font-size:12px;">{{ ($quantity ?? '') !== '' ? $quantity : (($inquiry->quantity ?? '') !== '' ? $inquiry->quantity : '-') }}</td>
               </tr>
             </table>
           </td>
