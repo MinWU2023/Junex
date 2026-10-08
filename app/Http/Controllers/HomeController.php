@@ -668,6 +668,7 @@ class HomeController extends Controller
                 ['label' => 'Inquiry', 'url' => null],
             ]),
             'tdk' => $tdk,
+            'inquirySuccessEmail' => $email,
         ];
 
         if (!$injectToView) {

@@ -2,8 +2,14 @@
 
 namespace App\Services;
 
+use App\Modules\Blog\Models\Blog;
+use App\Modules\Blog\Models\BlogCategory;
 use App\Modules\Page\Models\FrontPageControl;
 use App\Modules\Page\Models\Page;
+use App\Modules\Product\Models\Product;
+use App\Modules\Product\Models\ProductCategory;
+use App\Modules\Product\Models\ProductVideo;
+use App\Modules\Product\Models\ProductVideoCategory;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\LengthAwarePaginator as Paginator;
 use Illuminate\Support\Facades\Cache;
@@ -224,8 +230,12 @@ class FrontPageCatalogService
     public function generateSitemap(): int
     {
         $this->sync();
-        $enabled = FrontPageControl::query()
-            ->where('sitemap_on', 1)
+
+        // 仅排除「关闭 sitemap」的受管页面；内容详情/分类始终生成
+        $disabled = FrontPageControl::query()
+            ->where(function ($q) {
+                $q->where('sitemap_on', 0)->orWhere('sitemap_on', false);
+            })
             ->pluck('path')
             ->map(function ($path) {
                 return $this->normalizePath($path);
@@ -233,17 +243,109 @@ class FrontPageCatalogService
             ->flip();
 
         $locs = [];
+
+        // 1) 路由页 / 单页面：sitemap_on=1 才进
         foreach ($this->displayRows() as $row) {
-            if (!isset($enabled[$row['path']])) {
+            $path = $this->normalizePath($row['path']);
+            if (isset($disabled[$path])) {
                 continue;
             }
-            $loc = $this->absoluteUrl($row['path']);
-            $locs[$loc] = $loc;
+            $locs[$this->absoluteUrl($path)] = true;
+        }
+
+        // 2) 产品分类 + 产品详情
+        if (Schema::hasTable('product_categories')) {
+            ProductCategory::query()
+                ->with('url')
+                ->orderBy('id')
+                ->chunkById(200, function ($rows) use (&$locs) {
+                    foreach ($rows as $row) {
+                        $path = $this->modelFrontPath($row);
+                        if ($path !== null) {
+                            $locs[$this->absoluteUrl($path)] = true;
+                        }
+                    }
+                });
+        }
+        if (Schema::hasTable('products')) {
+            Product::query()
+                ->active()
+                ->with('url')
+                ->orderBy('id')
+                ->chunkById(200, function ($rows) use (&$locs) {
+                    foreach ($rows as $row) {
+                        $path = $this->modelFrontPath($row);
+                        if ($path !== null) {
+                            $locs[$this->absoluteUrl($path)] = true;
+                        }
+                    }
+                });
+        }
+
+        // 3) 博客分类 + 博客详情
+        if (Schema::hasTable('blog_categories')) {
+            BlogCategory::query()
+                ->with('url')
+                ->orderBy('id')
+                ->chunkById(200, function ($rows) use (&$locs) {
+                    foreach ($rows as $row) {
+                        $path = $this->modelFrontPath($row);
+                        if ($path !== null) {
+                            $locs[$this->absoluteUrl($path)] = true;
+                        }
+                    }
+                });
+        }
+        if (Schema::hasTable('blogs')) {
+            Blog::query()
+                ->active()
+                ->with('url')
+                ->orderBy('id')
+                ->chunkById(200, function ($rows) use (&$locs) {
+                    foreach ($rows as $row) {
+                        $path = $this->modelFrontPath($row);
+                        if ($path !== null) {
+                            $locs[$this->absoluteUrl($path)] = true;
+                        }
+                    }
+                });
+        }
+
+        // 4) 视频分类 + 视频详情
+        if (Schema::hasTable('product_video_categories')) {
+            ProductVideoCategory::query()
+                ->with('url')
+                ->orderBy('id')
+                ->chunkById(200, function ($rows) use (&$locs) {
+                    foreach ($rows as $row) {
+                        if (isset($row->active) && !(int)$row->active) {
+                            continue;
+                        }
+                        $path = $this->modelFrontPath($row);
+                        if ($path !== null) {
+                            $locs[$this->absoluteUrl($path)] = true;
+                        }
+                    }
+                });
+        }
+        if (Schema::hasTable('product_videos')) {
+            ProductVideo::query()
+                ->active()
+                ->with('url')
+                ->orderBy('id')
+                ->chunkById(200, function ($rows) use (&$locs) {
+                    foreach ($rows as $row) {
+                        $path = $this->modelFrontPath($row, 'video');
+                        if ($path !== null) {
+                            $locs[$this->absoluteUrl($path)] = true;
+                        }
+                    }
+                });
         }
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
         $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
-        foreach ($locs as $loc) {
+        foreach (array_keys($locs) as $loc) {
             $xml .= '  <url><loc>' . htmlspecialchars($loc, ENT_XML1) . '</loc></url>' . "\n";
         }
         $xml .= '</urlset>' . "\n";
@@ -254,6 +356,39 @@ class FrontPageCatalogService
         }
 
         return count($locs);
+    }
+
+    /**
+     * 从模型解析前台 path（不含域名）。
+     */
+    private function modelFrontPath($model, string $fallbackPrefix = ''): ?string
+    {
+        $path = '';
+        try {
+            if ($model->relationLoaded('url') && $model->url && !empty($model->url->url)) {
+                $path = (string)$model->url->url;
+            } elseif (!empty($model->url_key)) {
+                $path = (string)$model->url_key;
+            }
+        } catch (\Throwable $e) {
+            $path = (string)($model->url_key ?? '');
+        }
+
+        $path = $this->normalizePath($path);
+        if ($path === '') {
+            return null;
+        }
+
+        // 视频详情固定路由兜底：/video/{slug}
+        if ($fallbackPrefix === 'video' && !str_starts_with($path, 'video/')) {
+            $prefix = trim((string)config('url.product_video', 'video/'), '/');
+            if ($prefix !== '' && str_starts_with($path, $prefix . '/')) {
+                $path = substr($path, strlen($prefix) + 1);
+            }
+            $path = 'video/' . ltrim($path, '/');
+        }
+
+        return $path;
     }
 
     public function forgetAccessCache(): void
