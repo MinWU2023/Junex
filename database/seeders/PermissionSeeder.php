@@ -499,6 +499,14 @@ class PermissionSeeder extends Seeder
             ],
             [
                 'pg_id' => 3,
+                'name' => 'admin.databaseBackup.restore',
+                'display_name' => '恢复备份',
+                'guard_name' => 'web',
+                'created_at' => $created_at,
+                'updated_at' => $updated_at
+            ],
+            [
+                'pg_id' => 3,
                 'name' => 'admin.databaseBackup.destroy',
                 'display_name' => '删除备份',
                 'guard_name' => 'web',

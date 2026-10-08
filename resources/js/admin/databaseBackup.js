@@ -39,7 +39,7 @@ layui.config({
             {field: "created_at", title: "备份时间", width: 170},
             {
                 title: "操作",
-                minWidth: 180,
+                minWidth: 260,
                 align: "center",
                 toolbar: "#table-content-list"
             }
@@ -59,6 +59,37 @@ layui.config({
         switch (obj.event) {
             case "download":
                 window.location.href = layui.setter.prefix + 'databaseBackup/' + data.id + '/download'
+                break
+            case "restore":
+                layer.confirm(
+                    '【高风险】将用该 SQL 覆盖当前数据库，现有数据会被替换！恢复前会自动再备份一次。确定继续？',
+                    {icon: 3, title: '确认恢复数据库'},
+                    function (index) {
+                        layer.confirm(
+                            '请再次确认：真的要用「' + data.filename + '」覆盖当前库吗？',
+                            {icon: 0, title: '二次确认'},
+                            function (index2) {
+                                var loading = layer.load(1, {shade: 0.3})
+                                admin.req({
+                                    url: layui.setter.prefix + 'databaseBackup/' + data.id + '/restore',
+                                    type: 'post',
+                                    data: {_token: token},
+                                    done: function (res) {
+                                        layer.close(loading)
+                                        layer.msg(res.message || '恢复成功', {icon: 1, time: 2500}, function () {
+                                            table.reload('LAY-app-content-list')
+                                        })
+                                    },
+                                    error: function () {
+                                        layer.close(loading)
+                                    }
+                                })
+                                layer.close(index2)
+                            }
+                        )
+                        layer.close(index)
+                    }
+                )
                 break
             case "del":
                 layer.confirm('确定删除该备份记录及文件吗？', function (index) {
@@ -94,7 +125,7 @@ layui.config({
             })
         },
         backup: function () {
-            layer.confirm('确定立即执行一次全量数据库备份吗？', function (index) {
+            layer.confirm('确定立即执行一次手动全量数据库备份吗？', function (index) {
                 var loading = layer.load(1, {shade: 0.2})
                 admin.req({
                     url: layui.setter.prefix + 'databaseBackup',
@@ -102,7 +133,7 @@ layui.config({
                     data: {_token: token},
                     done: function (res) {
                         layer.close(loading)
-                        layer.msg(res.message || '备份成功', {icon: 1, time: 1200}, function () {
+                        layer.msg(res.message || '手动全量备份成功', {icon: 1, time: 1200}, function () {
                             table.reload('LAY-app-content-list')
                         })
                     },

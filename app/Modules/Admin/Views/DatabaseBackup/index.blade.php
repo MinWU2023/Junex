@@ -43,7 +43,7 @@
                                     <i class="layui-icon layui-icon-search"></i>{{ __('搜索') }}
                                 </button>
                                 <button class="layui-btn layui-btn-normal layuiadmin-btn-list" data-type="backup">
-                                    <i class="layui-icon layui-icon-upload-drag"></i>{{ __('立即备份') }}
+                                    <i class="layui-icon layui-icon-upload-drag"></i>{{ __('手动全量备份') }}
                                 </button>
                             </div>
                         </div>
@@ -51,11 +51,14 @@
                 </div>
                 <table id="LAY-app-content-list" lay-filter="LAY-app-content-list"></table>
                 <script type="text/html" id="table-content-list">
-                    {{# if(d.status === 'success'){ }}
+                    @{{# if(d.status === 'success'){ }}
                     <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="download">
                         <i class="layui-icon layui-icon-download-circle"></i>{{ __('下载') }}
                     </a>
-                    {{# } }}
+                    <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="restore">
+                        <i class="layui-icon layui-icon-refresh"></i>{{ __('恢复') }}
+                    </a>
+                    @{{# } }}
                     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">
                         <i class="icon-trash"></i>{{ __('删除') }}
                     </a>
@@ -64,7 +67,7 @@
         </div>
     </div>
     @section('scripts')
-        <script src="{{ asset('/js/admin/admin.databaseBackup.js') }}"></script>
+        <script src="{{ asset('/js/admin/admin.databaseBackup.js') }}?v=2"></script>
     @endsection
     @section('css')
         <link rel="stylesheet" href="{{ mix('/css/admin/admin.form.css') }}" media="all">

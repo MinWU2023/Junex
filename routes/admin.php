@@ -187,6 +187,8 @@ Route::group(['middleware' => ['auth', 'admin.permission']], function () {
 
     Route::get('databaseBackup/{id}/download', [\App\Modules\Admin\Controllers\DatabaseBackupController::class, 'download'])
         ->name('admin.databaseBackup.download');
+    Route::post('databaseBackup/{id}/restore', [\App\Modules\Admin\Controllers\DatabaseBackupController::class, 'restore'])
+        ->name('admin.databaseBackup.restore');
     Route::resource('/databaseBackup', \App\Modules\Admin\Controllers\DatabaseBackupController::class)
         ->only(['index', 'store', 'destroy'])
         ->names('admin.databaseBackup');

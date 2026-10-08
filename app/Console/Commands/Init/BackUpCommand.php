@@ -10,7 +10,7 @@ use STS\ZipStream\ZipStreamFacade ;
 use Spatie\DbDumper\Databases\MySql;
 
 class BackUpCommand extends Command
-{
+{ 
     /**
      * The name and signature of the console command.
      *

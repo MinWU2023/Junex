@@ -71,8 +71,9 @@ class InitDatabaseBackupMenu extends Command
 
         $permissions = [
             'admin.databaseBackup.index' => '数据备份列表',
-            'admin.databaseBackup.store' => '手动创建备份',
+            'admin.databaseBackup.store' => '手动全量备份',
             'admin.databaseBackup.download' => '下载备份',
+            'admin.databaseBackup.restore' => '恢复备份',
             'admin.databaseBackup.destroy' => '删除备份',
         ];
 

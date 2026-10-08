@@ -43,6 +43,8 @@ class DatabaseBackupController extends BaseController
 
     public function store(Request $request)
     {
+        @set_time_limit(0);
+
         /** @var DatabaseBackupService $service */
         $service = app(DatabaseBackupService::class);
         $record = $service->backup('manual');
@@ -55,7 +57,7 @@ class DatabaseBackupController extends BaseController
             'id' => $record->id,
             'filename' => $record->filename,
             'file_size_human' => $record->file_size_human,
-        ], 0, '备份成功');
+        ], 0, '手动全量备份成功');
     }
 
     public function download($id): BinaryFileResponse
@@ -68,6 +70,25 @@ class DatabaseBackupController extends BaseController
         }
 
         return response()->download($backup->absolutePath(), $backup->filename);
+    }
+
+    public function restore($id)
+    {
+        @set_time_limit(0);
+
+        /** @var DatabaseBackup $backup */
+        $backup = DatabaseBackup::query()->findOrFail($id);
+        $result = app(DatabaseBackupService::class)->restore($backup);
+
+        if (empty($result['ok'])) {
+            return $this->badRequest($result['message'] ?? '恢复失败');
+        }
+
+        $safety = $result['safety_backup'] ?? null;
+
+        return $this->data([
+            'safety_backup' => $safety ? $safety->filename : null,
+        ], 0, $result['message'] ?? '恢复成功');
     }
 
     public function destroy($id)
