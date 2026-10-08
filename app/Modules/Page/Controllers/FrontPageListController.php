@@ -8,8 +8,12 @@ use Illuminate\Http\Request;
 
 class FrontPageListController extends BaseController
 {
-    public function index(Request $request, FrontPageCatalogService $catalog)
+    public function index()
     {
+        $request = request();
+        /** @var FrontPageCatalogService $catalog */
+        $catalog = app(FrontPageCatalogService::class);
+
         $tabs = $catalog->tabs();
         $tab = (string)$request->get('tab', 'all');
         if (!isset($tabs[$tab])) {
