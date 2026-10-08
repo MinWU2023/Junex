@@ -76,12 +76,13 @@ class BlogController extends Controller
             ->paginate($perPage)
             ->appends($request->query());
 
+        // Product Videos：显示最新发布的 6 个启用视频
         $productVideos = ProductVideo::query()
             ->with(['translations'])
             ->active()
-            ->where('is_recommend', 1)
-            ->orderByDesc('sort')
-            ->limit(8)
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
+            ->limit(6)
             ->get();
 
         $blogsCollection = $blogs->getCollection();

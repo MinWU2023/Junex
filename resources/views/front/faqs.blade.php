@@ -109,9 +109,9 @@
                     </svg>
                 </button>
                 <div class="faq-content hidden pb-4">
-                    <p class="text-f16 font-poppins-regular text-themeText-g leading-relaxed">
-                        {{ $faq['content'] ?? '' }}
-                    </p>
+                    <div class="faq-answer prose prose-sm max-w-none text-f16 font-poppins-regular text-themeText-g leading-relaxed [&_p]:mb-2 [&_p:last-child]:mb-0 [&_br]:block">
+                        {!! $faq['content'] ?? '' !!}
+                    </div>
                 </div>
             </div>
         @endforeach
