@@ -81,7 +81,11 @@
     </div>
 </section>
  
-{!! static_block_html('inquiry_success') !!}
+<section class="inquiry-success w-full bg-themeBg-a py-10 sm6:py-12 md1:py-16 md4:py-20">
+    <div class="mx-auto w-full max-w-[1440px] px-[15px] sm2:px-5 md1:px-6 lg1:px-0">
+        {!! static_block_html('inquiry_success') !!}
+    </div>
+</section>
 @endsection 
 
 @section('page-css-footer')
