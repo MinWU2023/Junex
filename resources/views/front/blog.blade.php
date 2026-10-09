@@ -99,16 +99,7 @@
         <main class="w-full md4:w-[860px]">
         <article class="bg-white">
             <div class="text-center">
-            <div class="inline-flex items-center justify-center gap-2 text-f14 text-themeText-p font-poppins-regular">
-                <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M8 7V3m8 4V3" />
-                <path d="M4 11h16" />
-                <path d="M5 5h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z" />
-                </svg>
-                <span>{{ $blogDate ?? '' }}</span>
-            </div>
-
-            <h1 class="mx-auto mt-4 max-w-[720px] leading-snug font-poppins-medium text-f28 text-themeText-f">
+            <h1 class="mx-auto max-w-[720px] leading-snug font-poppins-medium text-f28 text-themeText-f">
                 {{ $blogTitle ?? '' }}
             </h1>
             </div>

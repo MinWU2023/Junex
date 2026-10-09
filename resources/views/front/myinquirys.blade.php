@@ -89,8 +89,8 @@
             </select>
             </div>
             <div class="flex flex-1 flex-col gap-2">
-            <label class="form-field-label text-f14 font-poppins-regular text-themeText-g">Tel/WhatsAPP <x-front.form-required /></label>
-            <input type="tel" name="tel" required placeholder="Please enter your phone number" class="h-[42px] sm6:h-[46px] md1:h-[51px] w-full rounded border border-themeBg-h bg-white px-3 text-f14 font-poppins-regular text-themeText-a placeholder-themeText-i outline-none transition focus:border-themeBg-d" />
+            <label class="form-field-label text-f14 font-poppins-regular text-themeText-g">Tel/WhatsAPP</label>
+            <input type="tel" name="tel" placeholder="Please enter your phone number" class="h-[42px] sm6:h-[46px] md1:h-[51px] w-full rounded border border-themeBg-h bg-white px-3 text-f14 font-poppins-regular text-themeText-a placeholder-themeText-i outline-none transition focus:border-themeBg-d" />
             </div>
         </div>
 

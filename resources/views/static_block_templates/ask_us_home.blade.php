@@ -62,16 +62,14 @@
                     </ul>
                 </div>
 
-                {{-- Tel / WhatsApp --}}
+                {{-- Tel / WhatsApp（可选） --}}
                 <div class="relative">
                     <input
                         type="tel"
                         name="tel"
-                        required
                         placeholder="{{ $askUs['placeholder_tel'] ?? 'Please Enter Your Telephone Number Or WhatsApp Number' }}"
-                        class="peer ask-us-input h-[50px] w-full px-4 py-3 pl-7 text-slate-900"
+                        class="ask-us-input h-[50px] w-full px-4 py-3 text-slate-900"
                     />
-                    <span class="ask-us-req absolute left-4 top-1/2 -translate-y-1/2 text-sm opacity-0 peer-placeholder-shown:opacity-100" aria-hidden="true">*</span>
                 </div>
 
                 {{-- Content --}}

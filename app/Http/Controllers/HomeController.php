@@ -877,7 +877,7 @@ class HomeController extends Controller
         $validated = $request->validate(array_merge([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
-            'tel' => 'required|string|max:255',
+            'tel' => 'nullable|string|max:255',
             'content' => 'required|string',
             'quantity' => 'nullable|string|max:255',
             'source_url' => 'nullable|string|max:2048',
@@ -919,7 +919,7 @@ class HomeController extends Controller
                 'quantity' => $quantity !== '' ? mb_substr($quantity, 0, 255) : null,
                 'msg_name' => trim((string)$validated['name']),
                 'email' => $validated['email'],
-                'tel' => $validated['tel'],
+                'tel' => trim((string)($validated['tel'] ?? '')),
                 'ip' => $ip,
                 'location' => $location,
                 'source_url' => $sourceUrl,

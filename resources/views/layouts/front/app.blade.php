@@ -1921,7 +1921,7 @@
     @yield('page-css-footer')
     <script type="text/javascript" src="/front/js/jquery.min.js"></script>
     <script type="text/javascript" src="/front/js/inquiry-cart.js?v=20260316c"></script>
-    <script type="text/javascript" src="/front/js/main.js?v=20261009a"></script>
+    <script type="text/javascript" src="/front/js/main.js?v=20261009b"></script>
     <script type="text/javascript" src="/front/js/sns-share.js?v=20260923a"></script>
     <script type="text/javascript" src="/front/js/section-spacing.js?v=20260915b"></script>
     <script src="/front/js/swiper-bundle.min.js" defer></script>

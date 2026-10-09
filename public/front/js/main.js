@@ -1140,12 +1140,10 @@ $(function () {
 
         var name = ($form.find('[name="name"]').val() || '').trim();
         var email = ($form.find('[name="email"]').val() || '').trim();
-        var $tel = $form.find('[name="tel"]');
-        var tel = ($tel.val() || '').trim();
-        // contact_us 等：input 无 required 时电话可选；ask_us 带 required 仍必填
-        var telRequired = $tel.length > 0 && $tel.is('[required]');
+        var tel = ($form.find('[name="tel"]').val() || '').trim();
         var content = ($form.find('[name="content"]').val() || '').trim();
-        if (!name || !email || (telRequired && !tel) || !content) {
+        // tel 全站询盘可选，仅校验 name / email / content
+        if (!name || !email || !content) {
             if (typeof showMessage === 'function') {
                 showMessage({ type: 'warning', message: 'Please fill in required fields.' });
             }

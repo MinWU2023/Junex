@@ -40,8 +40,8 @@
                 </label>
 
                 <label class="block">
-                <span class="form-field-label text-f14 font-poppins-regular text-slate-700">Tel / WhatsAPP<x-front.form-required /></span>
-                <input type="tel" name="tel" required placeholder="{{ $askUs['placeholder_tel'] ?? 'Please Enter Your Telephone Number Or WhatsApp Number' }}" class="mt-2 h-[50px] w-full rounded border border-slate-200 bg-white px-3 text-f14 text-slate-900 outline-none ring-0 placeholder:text-slate-400 focus:border-themeBg-d" />
+                <span class="form-field-label text-f14 font-poppins-regular text-slate-700">Tel / WhatsAPP</span>
+                <input type="tel" name="tel" placeholder="{{ $askUs['placeholder_tel'] ?? 'Please Enter Your Telephone Number Or WhatsApp Number' }}" class="mt-2 h-[50px] w-full rounded border border-slate-200 bg-white px-3 text-f14 text-slate-900 outline-none ring-0 placeholder:text-slate-400 focus:border-themeBg-d" />
                 </label>
             </div>
 
