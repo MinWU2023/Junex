@@ -270,6 +270,10 @@ body,html{width:100%;padding:0px;margin:0px;overflow-x:clip !important;}
   flex-direction: column;
   height: 100%;
 }
+/* 暂时隐藏博客卡片日期（列表 / 分类 / 标签 / 首页轮播） */
+.blog-card__date {
+  display: none !important;
+}
 .blog-card__body {
   display: flex;
   flex-direction: column;
