@@ -92,9 +92,7 @@
             <img class="w-full object-cover" src="{{ $featuredBlog['image'] }}" alt="Blog cover" loading="lazy" />
         </div>
         <div class="flex w-full flex-col justify-center px-6 py-6 md2:w-[42%] md2:px-10 md2:py-10">
-            <div class="text-f14 font-poppins-regular text-themeText-p">{{ $featuredBlog['date'] }}</div>
-            
-            <h2 class="mt-4 text-f34 font-poppins-semibold leading-snug font-themeText-f">
+            <h2 class="text-f34 font-poppins-semibold leading-snug font-themeText-f">
             {{ $featuredBlog['title'] }}
             </h2>
             <p class="mt-3 text-f16leading-5 font-poppins-regular text-themeText-g">
@@ -116,8 +114,7 @@
             <img class="h-[180px] w-full object-cover md1:h-[200px]" src="{{ $item['image'] }}" alt="Blog cover" loading="lazy" />
             </a>
             <div class="px-5 py-5">
-            <div class="text-f14 font-poppins-regular text-themeText-p">{{ $item['date'] }}</div>
-            <div class="mt-2 h-[5px] w-[34px] bg-themeBg-d rounded-[3px]" aria-hidden="true"></div>
+            <div class="h-[5px] w-[34px] bg-themeBg-d rounded-[3px]" aria-hidden="true"></div>
             <a href="{{ $item['url'] }}" class="mt-3 block text-f18 font-poppins-medium leading-[26px] text-themeText-f transition hover:text-slate-700">
                 {{ $item['title'] }}
             </a>

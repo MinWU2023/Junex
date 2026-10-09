@@ -91,9 +91,7 @@
             <img class="w-full object-cover" src="{{ $featuredBlog['image'] }}" alt="Blog cover" loading="lazy" />
         </div>
         <div class="flex w-full flex-col justify-center px-6 py-6 md2:w-[42%] md2:px-10 md2:py-10">
-            <div class="text-f14 font-poppins-regular text-themeText-p">{{ $featuredBlog['date'] }}</div>
-            
-            <h2 class="mt-4 text-f34 font-poppins-semibold leading-snug font-themeText-f">
+            <h2 class="text-f34 font-poppins-semibold leading-snug font-themeText-f">
             {{ $featuredBlog['title'] }}
             </h2>
             <p class="mt-3 text-f16leading-5 font-poppins-regular text-themeText-g">
