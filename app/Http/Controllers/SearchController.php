@@ -43,10 +43,23 @@ class SearchController extends Controller
             //     ]);
             // }
 
+            // 模糊搜索：多词 AND，每词对 name / brief / url_key 做 LIKE %term%
+            $terms = preg_split('/\s+/u', $keyword, -1, PREG_SPLIT_NO_EMPTY) ?: [$keyword];
             $products = Product::query()
                 ->with(['translations', 'productMainImage', 'url'])
                 ->active()
-                ->whereTranslationLike('name', '%' . $keyword . '%')
+                ->where(function ($query) use ($terms) {
+                    foreach ($terms as $term) {
+                        $like = '%' . addcslashes($term, '%_\\') . '%';
+                        $query->where(function ($q) use ($like) {
+                            $q->whereTranslationLike('name', $like)
+                                ->orWhereTranslationLike('brief_content', $like)
+                                ->orWhereTranslationLike('title', $like)
+                                ->orWhereTranslationLike('keywords', $like)
+                                ->orWhere('url_key', 'like', $like);
+                        });
+                    }
+                })
                 ->orderByDesc('updated_at')
                 ->paginate($perPage)
                 ->appends($request->query());
