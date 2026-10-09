@@ -1512,13 +1512,16 @@ nav .group:hover > div {
   color: #fff;
   transition: background-color 150ms;
 }
-.pdp-btn-quote { background: #D92B28; }
-.pdp-btn-quote:hover {
-  background: #D92B28;
-  color: #000;
+.pdp-btn-quote,
+#quoteNowBtn.pdp-btn-quote { background: #D92B28; }
+.pdp-btn-quote:hover,
+#quoteNowBtn.pdp-btn-quote:hover {
+  background: #D92B28 !important;
+  color: #000 !important;
 }
-.pdp-btn-quote:hover img {
-  filter: brightness(0);
+.pdp-btn-quote:hover img,
+#quoteNowBtn.pdp-btn-quote:hover img {
+  filter: brightness(0) !important;
 }
 .pdp-btn-fav { background: #000; }
 .pdp-btn-fav:hover { background: #1f2937; }

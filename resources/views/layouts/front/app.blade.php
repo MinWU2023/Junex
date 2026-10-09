@@ -183,6 +183,14 @@
         color: #ffffff !important;
         fill: #ffffff !important;
       }
+
+      /* Quote Now：悬停红底保持，文案/图标改为黑色（覆盖全局 button:hover 红字） */
+      button.pdp-btn-quote:hover,
+      button#quoteNowBtn:hover,
+      button.pdp-btn-quote:hover *,
+      button#quoteNowBtn:hover * {
+        color: #000000 !important;
+      }
     </style>
     <style type="text/tailwindcss">
       @layer components {
@@ -207,7 +215,7 @@
         .attr-label { @apply min-w-0 text-f15 font-semibold text-gray-700 font-poppins-medium; }
         .attr-value { @apply min-w-0 break-words text-[15px] text-themeText-p font-poppins-regular; }
         .pdp-actions { @apply mt-6 flex flex-wrap items-center gap-6; }
-        .pdp-btn-quote { @apply inline-flex h-[50px] items-center justify-center gap-2 bg-themeBg-d px-6 text-f14 font-poppins-medium text-white transition hover:bg-red-700; }
+        .pdp-btn-quote { @apply inline-flex h-[50px] items-center justify-center gap-2 bg-themeBg-d px-6 text-f14 font-poppins-medium text-white transition hover:bg-themeBg-d hover:text-black; }
         .pdp-btn-fav { @apply inline-flex h-[50px] items-center justify-center gap-2 bg-black px-6 text-f14 font-poppins-medium text-white transition hover:bg-gray-800; }
         .pdp-section-head { @apply relative flex items-center gap-3 bg-themeBg-g py-2 pl-[62px]; }
         .pdp-section-icon { @apply absolute left-0 top-[-8px] flex h-[50px] w-[50px] items-center justify-center bg-themeBg-d; }
@@ -819,7 +827,7 @@
     <!-- Tailwind Css -->
 
     <link rel="stylesheet" href="/front/css/swiper-bundle.min.css" />
-    <link type="text/css" rel="stylesheet" href="/front/css/style.css?v=20261009f" />
+    <link type="text/css" rel="stylesheet" href="/front/css/style.css?v=20261009g" />
     <style id="sec-space-css">
       /* White/image adjacent edges: 2rem + 2rem = 64px visual gap (not 4rem+4rem) */
       body.sec-space-on section.sec-bg-white:has(+ section.sec-bg-white) .sec-pad,

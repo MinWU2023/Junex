@@ -168,8 +168,8 @@
             </dl>
 
             <div class="pdp-actions">
-                <button id="quoteNowBtn" type="button" class="pdp-btn-quote">
-                <img src="{{ front_webp_url('/front/icons/QuoteNow.svg') }}" class="w-[19px] h-[18px] brightness-0 invert" alt="" />
+                <button id="quoteNowBtn" type="button" class="pdp-btn-quote group">
+                <img src="{{ front_webp_url('/front/icons/QuoteNow.svg') }}" class="w-[19px] h-[18px] brightness-0 invert group-hover:invert-0" alt="" />
                 QUOTE NOW
                 </button>
                 @php
