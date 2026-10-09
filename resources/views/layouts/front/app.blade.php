@@ -191,6 +191,13 @@
       button#quoteNowBtn:hover * {
         color: #000000 !important;
       }
+
+      /* Product Tag：悬停主题红底 + 白字（覆盖全局 a:hover 红字） */
+      a.product-tag-link:hover,
+      a.product-tag-link:hover * {
+        color: #ffffff !important;
+        background-color: #D92B28 !important;
+      }
     </style>
     <style type="text/tailwindcss">
       @layer components {
