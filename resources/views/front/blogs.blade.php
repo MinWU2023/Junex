@@ -82,9 +82,27 @@
 </section>
 
 
+@php
+    $blogListItems = $blogsListData ?? [];
+    $hasFeaturedBlog = !empty($featuredBlog);
+    $hasBlogList = count($blogListItems) > 0;
+    $isBlogEmpty = !$hasFeaturedBlog && !$hasBlogList;
+    $onlyFeaturedBlog = $hasFeaturedBlog && !$hasBlogList;
+@endphp
+
+@if($isBlogEmpty)
+@include('front.partials.blog-empty-state', [
+    'eyebrow' => __('No Blogs'),
+    'title' => __('No Matching Blogs'),
+    'description' => __('Sorry, there are no blog posts to show right now. Please check back later or browse our products.'),
+    'secondaryUrl' => route('products'),
+    'secondaryLabel' => __('View Products'),
+])
+@else
     <section class="w-full blogs blogs-list-section bg-white sec-bg-white">
-    <div class="sec-pad mx-auto w-full max-w-[1200px] px-4 pt-14 pb-6 sm2:px-5 md1:px-6 md1:pt-16 md1:pb-10 lg1:px-0">
-    @if(!empty($featuredBlog))
+    {{-- 仅一篇时底部 padding 相对原 pb-6/pb-10 各减 30px --}}
+    <div class="sec-pad mx-auto w-full max-w-[1200px] px-4 pt-14 sm2:px-5 md1:px-6 md1:pt-16 lg1:px-0 {{ $onlyFeaturedBlog ? 'pb-0 md1:pb-2.5' : 'pb-6 md1:pb-10' }}">
+    @if($hasFeaturedBlog)
     <article class="w-full bg-themeBg-g">
         <a href="{{ $featuredBlog['url'] }}" class="flex flex-col md2:flex-row md2:items-stretch">
         <div class="relative flex w-full items-center justify-center md2:w-[48%]">
@@ -98,20 +116,25 @@
             {{ $featuredBlog['excerpt'] }}
             </p>
             <div class="mt-6">
-            <span class="inline-flex py-2.5 items-center justify-center bg-black px-4 text-f14 font-poppins-regular uppercase tracking-wide text-white">Learn More</span>
+            <span class="inline-flex py-2.5 items-center justify-center bg-black px-4 text-f14 font-poppins-regular uppercase tracking-wide text-white">{{ __('Learn More') }}</span>
             </div>
         </div>
         </a>
     </article>
     @endif
 
+    @if($hasBlogList)
     <div class="mt-8 flex flex-wrap gap-y-5 md1:mt-10">
-        @foreach(($blogsListData ?? []) as $item)
+        @foreach($blogListItems as $item)
         <div class="w-full px-0 md2:w-1/2 md2:px-2 md4:w-1/3">
             @include('front.partials.blog-card', ['item' => $item])
         </div>
         @endforeach
     </div>
+    @elseif($onlyFeaturedBlog)
+    {{-- 无第二篇：列表区原 mt-8(32)/mt-10(40) 各减 30px --}}
+    <div class="mt-[2px] md1:mt-[10px]" aria-hidden="true"></div>
+    @endif
 
     @if(isset($blogs) && $blogs->hasPages())
     <div class="blogs-pagination mt-8 [&_>div]:!mt-0 md1:mt-10">
@@ -120,6 +143,7 @@
     @endif
     </div>
 </section>
+@endif
 
 <section class="w-full videos blogs-videos-section bg-white sec-bg-white">
     <div class="sec-pad mx-auto w-full max-w-[1200px] px-4 pt-4 pb-14 sm2:px-5 md1:px-6 md1:pt-10 md1:pb-16 lg1:px-0">

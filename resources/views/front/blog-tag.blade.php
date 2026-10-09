@@ -83,9 +83,30 @@
 </section>
 
 
+@php
+    $blogListItems = $blogsListData ?? [];
+    $hasFeaturedBlog = !empty($featuredBlog);
+    $hasBlogList = count($blogListItems) > 0;
+    $isBlogEmpty = !$hasFeaturedBlog && !$hasBlogList;
+    $onlyFeaturedBlog = $hasFeaturedBlog && !$hasBlogList;
+    $tagName = (string)(($tag->name ?? null) ?: ($breadcrumbs[count($breadcrumbs ?? []) - 1]['label'] ?? ''));
+@endphp
+
+@if($isBlogEmpty)
+@include('front.partials.blog-empty-state', [
+    'eyebrow' => __('No Blogs'),
+    'title' => __('No Matching Blogs'),
+    'description' => $tagName !== ''
+        ? __('Sorry, there are no blog posts under ":tag" right now. Please browse other tags or return to the blog list.', ['tag' => $tagName])
+        : __('Sorry, there are no blog posts under this tag right now. Please browse other tags or return to the blog list.'),
+    'secondaryUrl' => route('blogs'),
+    'secondaryLabel' => __('View Blogs'),
+])
+@else
     <section class="w-full blogs bg-white">
-    <div class="mx-auto w-full max-w-[1200px] px-4 py-10 sm2:px-5 md1:px-6 md4:py-14 lg1:px-0">
-    @if(!empty($featuredBlog))
+    {{-- 仅一篇时底部 padding 相对原 pb-10/pb-14 各减 30px --}}
+    <div class="mx-auto w-full max-w-[1200px] px-4 pt-10 sm2:px-5 md1:px-6 md4:pt-14 lg1:px-0 {{ $onlyFeaturedBlog ? 'pb-[10px] md4:pb-[26px]' : 'pb-10 md4:pb-14' }}">
+    @if($hasFeaturedBlog)
     <article class="w-full bg-themeBg-g">
         <a href="{{ $featuredBlog['url'] }}" class="flex flex-col md2:flex-row">
         <div class="relative w-full md2:w-[48%]">
@@ -99,15 +120,16 @@
             {{ $featuredBlog['excerpt'] }}
             </p>
             <div class="mt-6">
-            <span class="inline-flex py-2.5 items-center justify-center bg-black px-4 text-f14 font-poppins-regular uppercase tracking-wide text-white">Learn More</span>
+            <span class="inline-flex py-2.5 items-center justify-center bg-black px-4 text-f14 font-poppins-regular uppercase tracking-wide text-white">{{ __('Learn More') }}</span>
             </div>
         </div>
         </a>
     </article>
     @endif
 
+    @if($hasBlogList)
     <div class="mt-8 flex flex-wrap gap-y-5 md1:mt-10">
-        @foreach(($blogsListData ?? []) as $item)
+        @foreach($blogListItems as $item)
         <article class="w-full px-0 md2:w-1/2 md2:px-2 md4:w-1/3">
         <div class="h-full bg-themeBg-g">
             <a href="{{ $item['url'] }}" class="block">
@@ -126,14 +148,21 @@
         </article>
         @endforeach
     </div>
+    @elseif($onlyFeaturedBlog)
+    {{-- 无第二篇：列表区原 mt-8(32)/mt-10(40) 各减 30px --}}
+    <div class="mt-[2px] md1:mt-[10px]" aria-hidden="true"></div>
+    @endif
     </div>
 </section>
 
+@if(isset($blogs) && $blogs->hasPages())
 <section class="w-full paginations bg-white">
     <div class="mx-auto w-full max-w-[1200px] px-4 pb-12 sm2:px-5 md1:px-6 md4:pb-16 lg1:px-0">
         @include('pagination.common', ['paginator' => $blogs])
     </div>
 </section>
+@endif
+@endif
 
 <section class="w-full videos bg-white">
     <div class="mx-auto w-full max-w-[1200px] px-4 pb-12 sm2:px-5 md1:px-6 md4:pb-16 lg1:px-0">

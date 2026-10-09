@@ -94,7 +94,8 @@
  
 
 <section class="w-full blog_main bg-white sec-bg-white">
-    <div class="sec-pad mx-auto w-full max-w-[1200px] px-4 py-16 sm2:px-5 md1:px-6 lg1:px-0">
+    {{-- 移动端标题与面包屑间距相对 py-16 减小 30px --}}
+    <div class="sec-pad mx-auto w-full max-w-[1200px] px-4 pt-[34px] pb-16 sm2:px-5 md1:px-6 md1:py-16 lg1:px-0">
     <div class="flex flex-col gap-8 md4:flex-row md4:gap-[26px]">
         <main class="w-full md4:w-[860px]">
         <article class="bg-white">
