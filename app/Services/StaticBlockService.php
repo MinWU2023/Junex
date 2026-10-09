@@ -398,11 +398,15 @@ class StaticBlockService
             $html
         ) ?? $html;
 
-        // tel 不在必填列表：联系我们等静态块 Label 无 * 时不应被运行时强制追加
+        // 仅 name / email / content 补 *；tel 永不补（contact_us 等为可选）
+        // 标签内部禁止跨 label，避免误给 Tel 打星
         $requiredFields = ['name', 'email', 'content'];
+        $labelInner = '(?:[^<]|<(?!\/label\b)[^<]*)*';
         foreach ($requiredFields as $field) {
+            $nameAttr = preg_quote($field, '/');
+
             $html = preg_replace_callback(
-                '/(<label\b(?![^>]*\bform-field-label\b)[^>]*class=")([^"]*)(">)(.*?)(<\/label>\s*(?:<div[^>]*>\s*)?(?:<input\b|<textarea\b)[^>]*\bname="' . preg_quote($field, '/') . '")/is',
+                '/(<label\b(?![^>]*\bform-field-label\b)[^>]*class=")([^"]*)(">)(' . $labelInner . ')(<\/label>\s*(?:<div[^>]*>\s*)?(?:<input\b|<textarea\b)[^>]*\bname="' . $nameAttr . '")/is',
                 static function (array $m): string {
                     if (str_contains($m[4], 'form-required-mark')) {
                         return $m[0];
@@ -413,7 +417,7 @@ class StaticBlockService
             ) ?? $html;
 
             $html = preg_replace_callback(
-                '/(<label\b[^>]*>)(.*?)(<\/label>\s*(?:<div[^>]*>\s*)?(?:<input\b|<textarea\b)[^>]*\bname="' . preg_quote($field, '/') . '")/is',
+                '/(<label\b[^>]*>)(' . $labelInner . ')(<\/label>\s*(?:<div[^>]*>\s*)?(?:<input\b|<textarea\b)[^>]*\bname="' . $nameAttr . '")/is',
                 static function (array $m): string {
                     if (str_contains($m[2], 'form-required-mark')) {
                         return $m[0];
@@ -424,7 +428,7 @@ class StaticBlockService
             ) ?? $html;
 
             $html = preg_replace_callback(
-                '/(<span class="([^"]*text-f14[^"]*)">)(.*?)(<\/span>\s*<(?:input|textarea)\b[^>]*\bname="' . preg_quote($field, '/') . '")/is',
+                '/(<span class="([^"]*text-f14[^"]*)">)((?:[^<]|<(?!\/span\b)[^<]*)*)(<\/span>\s*<(?:input|textarea)\b[^>]*\bname="' . $nameAttr . '")/is',
                 static function (array $m): string {
                     if (str_contains($m[3], 'form-required-mark')) {
                         return $m[0];
@@ -438,20 +442,19 @@ class StaticBlockService
             ) ?? $html;
         }
 
-        // contact_us 等：Tel 为可选项，去掉库内旧 HTML 残留的必填星号
+        // 强制去掉 tel 标签上的 *（无论库内或旧逻辑残留）
         $stripTelStar = static function (string $inner): string {
             $inner = preg_replace(
                 '/\s*<span class="(?:form-required-mark|text-themeBg-d)"[^>]*>\s*\*\s*<\/span>/i',
                 '',
                 $inner
             ) ?? $inner;
-            $inner = preg_replace('/\s*\*\s*(?=$)/u', '', $inner) ?? $inner;
 
-            return $inner;
+            return preg_replace('/\s*\*\s*(?=$)/u', '', $inner) ?? $inner;
         };
 
         $html = preg_replace_callback(
-            '/(<label\b[^>]*>)(.*?)(<\/label>\s*(?:<div[^>]*>\s*)?<input\b[^>]*\bname="tel")/is',
+            '/(<label\b[^>]*>)(' . $labelInner . ')(<\/label>\s*(?:<div[^>]*>\s*)?<input\b[^>]*\bname="tel")/is',
             static function (array $m) use ($stripTelStar): string {
                 return $m[1] . $stripTelStar($m[2]) . $m[3];
             },
@@ -459,7 +462,7 @@ class StaticBlockService
         ) ?? $html;
 
         $html = preg_replace_callback(
-            '/(<span class="[^"]*form-field-label[^"]*"[^>]*>)(.*?)(<\/span>\s*<input\b[^>]*\bname="tel")/is',
+            '/(<span class="[^"]*(?:form-field-label|text-f14)[^"]*"[^>]*>)((?:[^<]|<(?!\/span\b)[^<]*)*)(<\/span>\s*<input\b[^>]*\bname="tel")/is',
             static function (array $m) use ($stripTelStar): string {
                 return $m[1] . $stripTelStar($m[2]) . $m[3];
             },
