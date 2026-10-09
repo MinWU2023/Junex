@@ -149,8 +149,8 @@
         @endforeach
     </div>
     @elseif($onlyFeaturedBlog)
-    {{-- 无第二篇：列表区原 mt-8(32)/mt-10(40) 各减 30px --}}
-    <div class="mt-[2px] md1:mt-[10px]" aria-hidden="true"></div>
+    {{-- 无第二篇：相对原 mt-8/mt-10 共减 50px（先减30再减20） --}}
+    <div class="mt-[-18px] md1:mt-[-10px]" aria-hidden="true"></div>
     @endif
     </div>
 </section>
