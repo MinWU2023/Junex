@@ -119,7 +119,7 @@
                 {{ $item['title'] }}
             </a>
             <div class="mt-4">
-                <span class="inline-flex h-[44px] items-center justify-center bg-black px-4 text-f14 font-poppins-regular uppercase tracking-wide text-white">Learn More</span>
+                <a href="{{ $item['url'] }}" class="inline-flex h-[44px] items-center justify-center bg-black px-4 text-f14 font-poppins-regular uppercase tracking-wide text-white transition hover:bg-black/90">{{ __('Learn More') }}</a>
             </div>
             </div>
         </div>
