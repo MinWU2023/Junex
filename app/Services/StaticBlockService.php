@@ -398,7 +398,8 @@ class StaticBlockService
             $html
         ) ?? $html;
 
-        $requiredFields = ['name', 'email', 'tel', 'content'];
+        // tel 不在必填列表：联系我们等静态块 Label 无 * 时不应被运行时强制追加
+        $requiredFields = ['name', 'email', 'content'];
         foreach ($requiredFields as $field) {
             $html = preg_replace_callback(
                 '/(<label\b(?![^>]*\bform-field-label\b)[^>]*class=")([^"]*)(">)(.*?)(<\/label>\s*(?:<div[^>]*>\s*)?(?:<input\b|<textarea\b)[^>]*\bname="' . preg_quote($field, '/') . '")/is',
@@ -436,6 +437,34 @@ class StaticBlockService
                 $html
             ) ?? $html;
         }
+
+        // contact_us 等：Tel 为可选项，去掉库内旧 HTML 残留的必填星号
+        $stripTelStar = static function (string $inner): string {
+            $inner = preg_replace(
+                '/\s*<span class="(?:form-required-mark|text-themeBg-d)"[^>]*>\s*\*\s*<\/span>/i',
+                '',
+                $inner
+            ) ?? $inner;
+            $inner = preg_replace('/\s*\*\s*(?=$)/u', '', $inner) ?? $inner;
+
+            return $inner;
+        };
+
+        $html = preg_replace_callback(
+            '/(<label\b[^>]*>)(.*?)(<\/label>\s*(?:<div[^>]*>\s*)?<input\b[^>]*\bname="tel")/is',
+            static function (array $m) use ($stripTelStar): string {
+                return $m[1] . $stripTelStar($m[2]) . $m[3];
+            },
+            $html
+        ) ?? $html;
+
+        $html = preg_replace_callback(
+            '/(<span class="[^"]*form-field-label[^"]*"[^>]*>)(.*?)(<\/span>\s*<input\b[^>]*\bname="tel")/is',
+            static function (array $m) use ($stripTelStar): string {
+                return $m[1] . $stripTelStar($m[2]) . $m[3];
+            },
+            $html
+        ) ?? $html;
 
         return $html;
     }

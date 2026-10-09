@@ -58,8 +58,8 @@
                 </div>
 
                 <div class="flex w-full flex-col gap-1">
-                    <label class="form-field-label text-f14 font-poppins-regular text-themeText-g">{{ $form['label_tel'] ?? 'Tel/ WhatsApp' }}<x-front.form-required /></label>
-                    <input name="tel" required class="h-11 w-full rounded bg-white px-4 text-f14 font-poppins-regular text-themeText-p ring-1 ring-themeBg-c placeholder:text-themeText-a focus:outline-none focus:ring-2 focus:ring-themeBg-d" type="text" placeholder="{{ $form['placeholder_tel'] ?? $defaults['form']['placeholder_tel'] }}" />
+                    <label class="form-field-label text-f14 font-poppins-regular text-themeText-g">{{ $form['label_tel'] ?? 'Tel/ WhatsApp' }}</label>
+                    <input name="tel" class="h-11 w-full rounded bg-white px-4 text-f14 font-poppins-regular text-themeText-p ring-1 ring-themeBg-c placeholder:text-themeText-a focus:outline-none focus:ring-2 focus:ring-themeBg-d" type="text" placeholder="{{ $form['placeholder_tel'] ?? $defaults['form']['placeholder_tel'] }}" />
                 </div>
 
                 <div class="flex w-full flex-col gap-1">
