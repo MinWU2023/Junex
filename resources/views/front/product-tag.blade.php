@@ -89,14 +89,6 @@
                 <a href="{{ $p['url'] }}" class="group block">
                     <div class="relative overflow-hidden bg-themeBg-f">
                         <img class="h-auto w-full object-cover transition-transform duration-300 group-hover:scale-110" src="{{ $p['image'] }}" alt="{{ $p['name'] }}" loading="lazy" />
-                        <button type="button"
-                                class="collect-btn js-prefer-toggle absolute top-[16px] right-[16px] z-10 flex h-[30px] w-[30px] items-center justify-center rounded-full bg-white cursor-pointer"
-                                aria-label="Collect"
-                                data-product-id="{{ $p['id'] }}"
-                                data-favorite="{{ $p['is_favorited'] ? '1' : '0' }}">
-                            <img class="uncollect-icon h-[15px] w-[16px] {{ $p['is_favorited'] ? 'hidden' : '' }}" src="{{ front_webp_url('/front/icons/uncollect.png') }}" alt="Uncollect" />
-                            <img class="collect-icon h-[15px] w-[16px] {{ $p['is_favorited'] ? '' : 'hidden' }}" src="{{ front_webp_url('/front/icons/collect.png') }}" alt="Collect" />
-                        </button>
                     </div>
                     <div class="py-3">
                         <h4 class="text-f16 font-poppins-medium text-themeText-f leading-6">{{ $p['name'] }}</h4>
