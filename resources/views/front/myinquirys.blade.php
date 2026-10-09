@@ -222,16 +222,22 @@
       }).then(function (result) {
         if (result.ok && result.data && result.data.success) {
           InquiryCart.clear();
-          window.location.href = result.data.redirect || '/inquirysuccess';
+          if (typeof showMessage === 'function') {
+            showMessage({ type: 'success', message: 'Message successfully!', duration: 2000 });
+          }
+          var redirectUrl = (result.data && result.data.redirect) ? result.data.redirect : '/inquirysuccess';
+          setTimeout(function () {
+            window.location.href = redirectUrl;
+          }, 2000);
           return;
         }
         var msg = (result.data && result.data.message) ? result.data.message : 'Submit failed';
         if (typeof showMessage === 'function') showMessage({ type: 'error', message: msg });
         else alert(msg);
+        if (submitBtn) submitBtn.disabled = false;
       }).catch(function () {
         if (typeof showMessage === 'function') showMessage({ type: 'error', message: 'Network error' });
         else alert('Network error');
-      }).finally(function () {
         if (submitBtn) submitBtn.disabled = false;
       });
     });
