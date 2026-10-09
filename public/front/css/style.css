@@ -1761,9 +1761,21 @@ nav .group:hover > div {
     color: #fff !important;
     pointer-events: none;
   }
-  .product-list-sidebar .pls-title-chevron svg {
+  .product-list-sidebar .pls-title-chevron svg,
+  .product-list-sidebar .pls-title-chevron .pls-chevron-up,
+  .product-list-sidebar .pls-title-chevron .pls-chevron-down,
+  .product-list-sidebar .pls-block.is-expanded .pls-title-chevron svg,
+  .product-list-sidebar .pls-block.is-collapsed .pls-title-chevron svg {
     width: 20px;
     height: 20px;
+    color: #fff !important;
+    stroke: #fff !important;
+    fill: none !important;
+  }
+  .product-list-sidebar .pls-title-chevron path,
+  .product-list-sidebar .pls-block.is-expanded .pls-title-chevron path,
+  .product-list-sidebar .pls-block.is-collapsed .pls-title-chevron path {
+    stroke: #fff !important;
   }
   .product-list-sidebar .pls-title-chevron .pls-chevron-up {
     display: none;
