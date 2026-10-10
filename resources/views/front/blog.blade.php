@@ -125,19 +125,19 @@
                 {!! $blogContent ?? '' !!}
             </div>
 
-            <div class="mt-10">
-            <div class="flex flex-wrap items-center gap-3">
-                <div class="inline-flex items-center gap-2">
-                <img src="{{ front_webp_url('/front/icons/blog-tags.svg') }}" alt="Hot Tags" class="h-4 w-4" loading="lazy" />
-                <span class="text-f18 font-poppins-medium uppercase tracking-wide text-themeText-h">Hot Tags :</span>
+            <div class="blog-detail-tags mt-5 md1:mt-6">
+            <div class="flex flex-wrap items-center gap-2 md1:gap-2.5">
+                <div class="inline-flex items-center gap-1.5">
+                <img src="{{ front_webp_url('/front/icons/blog-tags.svg') }}" alt="Hot Tags" class="h-3.5 w-3.5" loading="lazy" />
+                <span class="text-f14 font-poppins-medium uppercase tracking-wide text-themeText-h md1:text-f16">Hot Tags :</span>
                 </div>
 
                 @foreach(($blogTagsData ?? []) as $tag)
-                    <a href="{{ $tag['url'] ?? 'javascript:void(0);' }}" class="inline-flex h-10 items-center bg-themeBg-g px-5 text-[14px] text-themeText-p transition hover:bg-slate-200">{{ $tag['name'] ?? '' }}</a>
+                    <a href="{{ $tag['url'] ?? 'javascript:void(0);' }}" class="inline-flex h-8 items-center bg-themeBg-g px-3 text-[13px] leading-none text-themeText-p transition hover:bg-slate-200 md1:h-9 md1:px-4 md1:text-[14px]">{{ $tag['name'] ?? '' }}</a>
                 @endforeach
             </div>
 
-            <div class="mt-8 h-px w-full bg-slate-200" aria-hidden="true"></div>
+            <div class="mt-5 h-px w-full bg-slate-200 md1:mt-6" aria-hidden="true"></div>
 
             <div class="mt-8 space-y-4">
                 @if(!empty($prevBlogData))
