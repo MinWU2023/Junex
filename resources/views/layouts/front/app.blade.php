@@ -834,7 +834,7 @@
     <!-- Tailwind Css -->
 
     <link rel="stylesheet" href="/front/css/swiper-bundle.min.css" />
-    <link type="text/css" rel="stylesheet" href="/front/css/style.css?v=20261009h" />
+    <link type="text/css" rel="stylesheet" href="/front/css/style.css?v=20261009i" />
     <style id="sec-space-css">
       /* White/image adjacent edges: 2rem + 2rem = 64px visual gap (not 4rem+4rem) */
       body.sec-space-on section.sec-bg-white:has(+ section.sec-bg-white) .sec-pad,
@@ -848,7 +848,6 @@
       body.sec-space-on section.sec-bg-white.sec-pad:has(+ section.sec-bg-white) {
         padding-bottom: 2rem !important;
       }
-      body.sec-space-on section.sec-bg-white + section.sec-bg-white .sec-pad,
       body.sec-space-on section.sec-bg-white + section.sec-bg-white .cs-cert-inner,
       body.sec-space-on section.sec-bg-white + section.sec-bg-white .cs-stages-inner,
       body.sec-space-on section.sec-bg-white + section.sec-bg-white .product-details-inner,
@@ -859,6 +858,7 @@
       body.sec-space-on section.sec-bg-white + section.sec-bg-white.sec-pad {
         padding-top: 2rem !important;
       }
+      /* .sec-pad 不再强制 padding-top: 2rem */
     </style>
     @yield('page-css-header')
     {{-- After product-highlights.css: force CMS tables to stay within column --}}

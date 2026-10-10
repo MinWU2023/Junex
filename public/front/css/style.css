@@ -2283,7 +2283,6 @@ body.sec-space-on section.sec-bg-white:has(+ section.sec-bg-white) .about-us-lay
 body.sec-space-on section.sec-bg-white.sec-pad:has(+ section.sec-bg-white) {
   padding-bottom: 2rem !important;
 }
-body.sec-space-on section.sec-bg-white + section.sec-bg-white .sec-pad,
 body.sec-space-on section.sec-bg-white + section.sec-bg-white .cs-cert-inner,
 body.sec-space-on section.sec-bg-white + section.sec-bg-white .cs-stages-inner,
 body.sec-space-on section.sec-bg-white + section.sec-bg-white .product-details-inner,
@@ -2294,3 +2293,4 @@ body.sec-space-on section.sec-bg-white + section.sec-bg-white .about-us-layout,
 body.sec-space-on section.sec-bg-white + section.sec-bg-white.sec-pad {
   padding-top: 2rem !important;
 }
+/* .sec-pad 不再强制 padding-top: 2rem，保留页面自身间距 */
