@@ -84,7 +84,7 @@
 
 @if(!empty(trim(strip_tags((string)($category->content ?? '')))))
 <section class="w-full bg-themeBg-a category-description sec-bg-white js-cat-desc-section" data-max-lines="6">
-    <div class="sec-pad mx-auto w-[calc(100%-30px)] max-w-[1200px] py-16 font-poppins-regular text-f16 text-themeText-g leading-7 [&_img]:max-w-full [&_a]:text-themeText-h">
+    <div class="sec-pad mx-auto w-[calc(100%-30px)] max-w-[1200px] pb-16 font-poppins-regular text-f16 text-themeText-g leading-7 [&_img]:max-w-full [&_a]:text-themeText-h">
         <div class="js-cat-desc-body cat-desc-body is-pending">
             {!! front_html_prefer_webp($category->content) !!}
         </div>
@@ -122,7 +122,7 @@
 
 @if(!empty(trim(strip_tags((string)($category->content2 ?? '')))))
 <section class="w-full bg-white category-description-2 sec-bg-white js-cat-desc-section" data-max-lines="10">
-    <div class="sec-pad mx-auto w-[calc(100%-30px)] max-w-[1200px] py-16 font-poppins-regular text-f16 text-themeText-g leading-7 [&_img]:max-w-full [&_a]:text-themeText-h">
+    <div class="sec-pad mx-auto w-[calc(100%-30px)] max-w-[1200px] pb-16 font-poppins-regular text-f16 text-themeText-g leading-7 [&_img]:max-w-full [&_a]:text-themeText-h">
         <div class="js-cat-desc-body cat-desc-body is-pending">
             {!! front_html_prefer_webp($category->content2) !!}
         </div>
