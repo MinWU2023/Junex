@@ -108,8 +108,8 @@
     <div class="mx-auto w-full max-w-[1200px] px-4 pt-10 sm2:px-5 md1:px-6 md4:pt-14 lg1:px-0 {{ $onlyFeaturedBlog ? 'pb-[10px] md4:pb-[26px]' : 'pb-10 md4:pb-14' }}">
     @if($hasFeaturedBlog)
     <article class="w-full bg-themeBg-g">
-        <a href="{{ $featuredBlog['url'] }}" class="flex flex-col md2:flex-row">
-        <div class="relative w-full md2:w-[48%]">
+        <a href="{{ $featuredBlog['url'] }}" class="flex flex-col md2:flex-row md2:items-center">
+        <div class="relative flex w-full items-center justify-center md2:w-[48%]">
             <img class="w-full object-cover" src="{{ $featuredBlog['image'] }}" alt="Blog cover" loading="lazy" />
         </div>
         <div class="flex w-full flex-col justify-center px-6 py-6 md2:w-[42%] md2:px-10 md2:py-10">
