@@ -78,7 +78,7 @@
             </div>
 
             <div class="mt-10 text-center">
-            <img class="mx-auto h-auto w-auto max-w-[60px] mb-[30px]" src="/front/imgs/blog-detail-icon.png" alt="Quote" loading="lazy" aria-hidden="true" />
+            <!-- <img class="mx-auto h-auto w-auto max-w-[60px] mb-[30px]" src="/front/imgs/blog-detail-icon.png" alt="Quote" loading="lazy" aria-hidden="true" /> -->
             <p class="mx-auto max-w-[680px] text-f20 font-poppins-medium leading-6 text-themeText-f mb-[30px]">
                 Very Comfortable Easy To Keep Clean. Small Enough To Put In Any Room In Your House But Yet Big Enough For A Big Person.
             </p>
