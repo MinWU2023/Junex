@@ -108,9 +108,9 @@
             </h1>
             </div>
 
-            <div class="mt-6 overflow-hidden bg-slate-200 md1:mt-8">
-            {{-- 移动端：宽 100%、高自适应；桌面端再固定高度裁切 --}}
-            <img class="h-auto w-full md1:h-[320px] md1:object-cover md2:h-[360px]" src="{{ $blogCover ?? '' }}" alt="Blog cover" loading="lazy" />
+            <div class="mt-6 md1:mt-8">
+            {{-- 封面：宽 100%、高自适应，完整展示不裁剪 --}}
+            <img class="block h-auto w-full max-w-full object-contain" src="{{ $blogCover ?? '' }}" alt="Blog cover" loading="lazy" />
             </div>
 
             <!-- <div class="mt-10 text-center">
