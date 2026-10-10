@@ -834,7 +834,7 @@
     <!-- Tailwind Css -->
 
     <link rel="stylesheet" href="/front/css/swiper-bundle.min.css" />
-    <link type="text/css" rel="stylesheet" href="/front/css/style.css?v=20261009g" />
+    <link type="text/css" rel="stylesheet" href="/front/css/style.css?v=20261009h" />
     <style id="sec-space-css">
       /* White/image adjacent edges: 2rem + 2rem = 64px visual gap (not 4rem+4rem) */
       body.sec-space-on section.sec-bg-white:has(+ section.sec-bg-white) .sec-pad,

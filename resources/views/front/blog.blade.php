@@ -116,7 +116,7 @@
             </p>
             </div>
 
-            <div class="mt-8 space-y-5 text-[14px] leading-6 text-themeText-g font-poppins-regular">
+            <div class="blog-detail-content mt-8 space-y-5 text-[14px] leading-6 text-themeText-g font-poppins-regular">
                 {!! $blogContent ?? '' !!}
             </div>
 
