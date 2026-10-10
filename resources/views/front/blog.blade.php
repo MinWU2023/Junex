@@ -5,6 +5,9 @@
 
 @section('page-css-header')
 <link type="text/css" rel="stylesheet" href="/front/css/pages/home.css" />
+{{-- 与产品详情一致：后台 TinyMCE 模板样式（已作用域到 .product-details-content） --}}
+<link type="text/css" rel="stylesheet" href="/front/css/product-highlights.css" />
+<link type="text/css" rel="stylesheet" href="/tinymce/tpl/css/det_font-awesome.min.css" />
 @endsection
 
 @section('page-js-header')
@@ -116,7 +119,8 @@
             </p>
             </div> -->
 
-            <div class="blog-detail-content mt-8 space-y-5 text-[14px] leading-6 text-themeText-g font-poppins-regular">
+            {{-- 不加 text-/leading-/font- 等工具类，避免盖掉后台富文本原有样式 --}}
+            <div class="blog-detail-content product-details-content mt-8">
                 {!! $blogContent ?? '' !!}
             </div>
 

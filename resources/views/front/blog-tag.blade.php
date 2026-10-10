@@ -164,45 +164,7 @@
 @endif
 @endif
 
-<section class="w-full videos bg-white">
-    <div class="mx-auto w-full max-w-[1200px] px-4 pb-12 sm2:px-5 md1:px-6 md4:pb-16 lg1:px-0">
-    <div class="text-center">
-        <div class="text-f32 font-poppins-semibold uppercase tracking-wide text-themeText-f">PRODUCT VIDEO</div>
-        <div class="mx-auto mt-3 h-[7px] w-[46px] rounded bg-themeBg-d" aria-hidden="true"></div>
-    </div>
-
-    <div class="mt-4 md1:mt-6">
-        <div class="swiper blog-tag-product-video-swiper">
-            <div class="swiper-wrapper">
-                @foreach(($productVideosData ?? []) as $v)
-                <article class="swiper-slide w-full px-0 md2:w-1/2 md2:px-2 md4:w-1/3">
-                <div class="h-full bg-themeBg-g">
-                    <a href="{{ $v['video_url'] ?: '#' }}" data-video-url="{{ $v['video_url'] ?: '' }}" class="group block js-video-modal">
-                    <div class="relative">
-                        <img class="h-[190px] w-full object-cover md1:h-[210px]" src="{{ $v['image'] }}" alt="Product video cover" loading="lazy" />
-                        <div class="absolute inset-0 bg-black/10 transition group-hover:bg-black/15" aria-hidden="true"></div>
-                        <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-                        <span class="inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/70 bg-white/20 text-white backdrop-blur-[1px]">
-                            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor" aria-hidden="true">
-                            <path d="M8 5v14l11-7L8 5z" />
-                            </svg>
-                        </span>
-                        </div>
-                    </div>
-                    <div class="px-5 py-4">
-                        <div class="text-f18 font-poppins-medium leading-5 text-themeText-f">
-                        {{ $v['title'] }}
-                        </div>
-                    </div>
-                    </a>
-                </div>
-                </article>
-                @endforeach
-            </div>
-        </div>
-    </div>
-    </div>
-</section>
+{{-- 博客标签列表不展示 Product Video；博客列表 / 分类列表仍保留 --}}
 @endsection 
 
 @section('page-css-footer')
@@ -211,21 +173,6 @@
 
 @section('page-js-footer')
 <script type="text/javascript" src="/front/js/pages/home.js" defer></script>
-<script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', function () {
-        var el = document.querySelector('.blog-tag-product-video-swiper');
-        if (!el || typeof Swiper === 'undefined') return;
-        new Swiper(el, {
-            slidesPerView: 1,
-            spaceBetween: 0,
-            watchOverflow: true,
-            breakpoints: {
-                768: { slidesPerView: 2 },
-                992: { slidesPerView: 3 },
-            },
-        });
-    });
-</script>
 @endsection 
 </x-layout>
 

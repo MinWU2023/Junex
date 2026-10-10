@@ -1541,42 +1541,44 @@ nav .group:hover > div {
 .product-details-content tr { height: auto !important; }
 .product-details-content table p { margin: 0 !important; line-height: 1.5 !important; }
 
-/* 博客详情富文本表格：恢复边框（覆盖 Tailwind preflight 对 table 的重置） */
-.blog-detail-content table {
-  float: none !important;
-  display: table !important;
-  width: 100%;
+/* 博客详情富文本：仅兜底布局；撤销对单元格的强制边框/内边距，保留后台 inline / border 属性 */
+.blog-detail-content {
   max-width: 100%;
-  height: auto !important;
-  margin: 1em 0;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  border-collapse: collapse;
-  border-spacing: 0;
-}
-.blog-detail-content table td,
-.blog-detail-content table th {
-  border: 1px solid #ccc;
-  padding: 8px 12px;
-  vertical-align: top;
-  height: auto !important;
-  min-height: 0 !important;
-  overflow: visible !important;
-}
-.blog-detail-content table tr {
-  height: auto !important;
-}
-.blog-detail-content table p {
-  margin: 0 !important;
-  line-height: 1.5 !important;
-}
-.blog-detail-content table[border="0"] td,
-.blog-detail-content table[border="0"] th {
-  border: none;
+  overflow-x: auto;
 }
 .blog-detail-content img {
   max-width: 100%;
   height: auto;
+}
+.blog-detail-content.product-details-content table {
+  width: auto;
+  max-width: 100%;
+  border-collapse: collapse;
+}
+.blog-detail-content.product-details-content td,
+.blog-detail-content.product-details-content th {
+  border: revert-layer;
+  padding: revert-layer;
+  height: auto;
+  min-height: 0;
+  overflow: visible;
+  vertical-align: revert-layer;
+}
+.blog-detail-content.product-details-content table p {
+  margin: revert-layer;
+  line-height: revert-layer;
+}
+/* Tailwind preflight 会清掉 border 属性视觉效果：有 border 且非 0 时补回实线边框 */
+.blog-detail-content table[border]:not([border="0"]) td,
+.blog-detail-content table[border]:not([border="0"]) th {
+  border-width: 1px;
+  border-style: solid;
+  border-color: #ccc;
+}
+.blog-detail-content table[border]:not([border="0"]) {
+  border-width: 1px;
+  border-style: solid;
+  border-color: #ccc;
 }
 
 @media (min-width: 480px) {
