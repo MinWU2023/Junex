@@ -109,12 +109,12 @@
             <img class="h-[240px] w-full object-cover md1:h-[320px] md2:h-[360px]" src="{{ $blogCover ?? '' }}" alt="Blog cover" loading="lazy" />
             </div>
 
-            <div class="mt-10 text-center">
+            <!-- <div class="mt-10 text-center">
             <img class="mx-auto h-auto w-auto max-w-[60px] mb-[30px]" src="{{ front_webp_url('/front/imgs/blog-detail-icon.png') }}" alt="Quote" loading="lazy" aria-hidden="true" />
             <p class="mx-auto max-w-[680px] text-f20 font-poppins-medium leading-6 text-themeText-f mb-[30px]">
                 Very Comfortable Easy To Keep Clean. Small Enough To Put In Any Room In Your House But Yet Big Enough For A Big Person.
             </p>
-            </div>
+            </div> -->
 
             <div class="blog-detail-content mt-8 space-y-5 text-[14px] leading-6 text-themeText-g font-poppins-regular">
                 {!! $blogContent ?? '' !!}
