@@ -109,7 +109,8 @@
             </div>
 
             <div class="mt-6 overflow-hidden bg-slate-200 md1:mt-8">
-            <img class="h-[240px] w-full object-cover md1:h-[320px] md2:h-[360px]" src="{{ $blogCover ?? '' }}" alt="Blog cover" loading="lazy" />
+            {{-- 移动端：宽 100%、高自适应；桌面端再固定高度裁切 --}}
+            <img class="h-auto w-full md1:h-[320px] md1:object-cover md2:h-[360px]" src="{{ $blogCover ?? '' }}" alt="Blog cover" loading="lazy" />
             </div>
 
             <!-- <div class="mt-10 text-center">
@@ -211,6 +212,7 @@
             </div>
             </section>
 
+            {{-- 右侧 Hot Tags 暂时隐藏
             <section class="w-full">
             <div class="text-f18 font-poppins-medium uppercase tracking-wide">Hot Tags</div>
             <div class="mt-5 flex flex-wrap gap-3">
@@ -219,6 +221,7 @@
                 @endforeach
             </div>
             </section>
+            --}}
         </div>
         </aside>
     </div>
