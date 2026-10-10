@@ -1938,7 +1938,7 @@
     <script type="text/javascript" src="/front/js/inquiry-cart.js?v=20260316c"></script>
     <script type="text/javascript" src="/front/js/main.js?v=20261009b"></script>
     <script type="text/javascript" src="/front/js/sns-share.js?v=20260923a"></script>
-    <script type="text/javascript" src="/front/js/section-spacing.js?v=20260915b"></script>
+    <script type="text/javascript" src="/front/js/section-spacing.js?v=20261010a"></script>
     <script src="/front/js/swiper-bundle.min.js" defer></script>
     <script src="/front/js/swiper-common.js?v=20260915d" defer></script>
     @yield('page-js-footer')

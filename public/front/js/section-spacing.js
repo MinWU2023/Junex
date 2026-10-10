@@ -230,14 +230,10 @@
         ? (window.innerWidth <= 991 ? '0.5rem' : '1.5rem')
         : PAD_HALF;
 
-      // Force adjacent edges (default 2rem); never leave 4rem+4rem
+      // 仅压缩上一区块底边距；不再给下一区块 .sec-pad 写 padding-top（保留页面自身间距）
       if (a.pad) {
         a.pad.style.setProperty('padding-bottom', edgePad, 'important');
         a.pad.dataset.secEdgeBottom = '1';
-      }
-      if (b.pad) {
-        b.pad.style.setProperty('padding-top', edgePad, 'important');
-        b.pad.dataset.secEdgeTop = '1';
       }
     }
   }
