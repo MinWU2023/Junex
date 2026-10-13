@@ -2,7 +2,6 @@
 
 namespace App\Modules\Page\Models;
 
-use App\Traits\EnsuresTranslateName;
 use App\Traits\ModelBoot;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
@@ -10,27 +9,40 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Translate 插件 getData 要求：
- * - Translatable + translations 关系
- * - 可读 name（与 Banner 一致，走翻译表 name）
- * - multilingual.static_block 含 name 字段
+ * Translate 插件 GetDataCollection 读取顶层 $model->name。
+ * name 放在主表（非翻译字段），避免翻译表缺列/空值导致拉取异常；
+ * 翻译表另保留可空 name 列供云端结构校验。前台只渲染 content，不受影响。
  */
 class StaticBlock extends Model implements TranslatableContract
 {
-    use HasFactory, Translatable, ModelBoot, EnsuresTranslateName;
+    use HasFactory, Translatable, ModelBoot;
 
     const MODEL_TYPE = 'static_block';
 
-    // 与 Banner 对齐：name 必须在 translatedAttributes 中，供 GetDataCollection 读取
-    public $translatedAttributes = ['name', 'title', 'content'];
+    // name 不在翻译属性中：GetDataCollection 直接读主表 name
+    public $translatedAttributes = ['title', 'content'];
 
     protected $fillable = [
         'sign',
+        'name',
         'sort',
         'active',
         'remark',
         'is_translate',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saving(function (self $model) {
+            $sign = trim((string)($model->getAttributes()['sign'] ?? ''));
+            $name = trim((string)($model->getAttributes()['name'] ?? ''));
+            if ($name === '' && $sign !== '') {
+                $model->setAttribute('name', mb_substr($sign, 0, 255));
+            }
+        });
+    }
 
     public function scopeActive($query)
     {

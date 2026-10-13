@@ -120,14 +120,8 @@ class StaticBlockController extends BaseController
             return back()->withErrors($validator)->withInput();
         }
 
-        $payload = [
-            'sign' => trim((string)$request->get('sign')),
-            'sort' => (int)$request->get('sort', 0),
-            'active' => (int)$request->get('active', 1),
-            'remark' => trim((string)$request->get('remark', '')) ?: null,
-        ];
-
-        $translate = (array)$request->get('translate', []);
+        $payload = $this->buildStaticBlockPayload($request);
+        $translate = $this->normalizeTranslateInput((array)$request->get('translate', []));
         $model = StaticBlock::create(array_merge($payload, $translate));
         $this->syncPages($model, $request->get('page_ids', []));
         $this->syncPageKeys($model, $request->get('page_keys', []));
@@ -194,19 +188,42 @@ class StaticBlockController extends BaseController
             return back()->withErrors($validator)->withInput();
         }
 
-        $payload = [
-            'sign' => trim((string)$request->get('sign')),
-            'sort' => (int)$request->get('sort', 0),
-            'active' => (int)$request->get('active', 1),
-            'remark' => trim((string)$request->get('remark', '')) ?: null,
-        ];
-
-        $translate = (array)$request->get('translate', []);
+        $payload = $this->buildStaticBlockPayload($request);
+        $translate = $this->normalizeTranslateInput((array)$request->get('translate', []));
         $model->update(array_merge($payload, $translate));
         $this->syncPages($model, $request->get('page_ids', []));
         $this->syncPageKeys($model, $request->get('page_keys', []));
 
         return redirect()->route('admin.staticBlock.index')->with('success', __('保存成功'));
+    }
+
+    /**
+     * 主表 name 供 Translate GetDataCollection 读取；默认等于 sign。
+     */
+    protected function buildStaticBlockPayload(Request $request): array
+    {
+        $sign = trim((string)$request->get('sign'));
+        return [
+            'sign' => $sign,
+            'name' => mb_substr($sign, 0, 255),
+            'sort' => (int)$request->get('sort', 0),
+            'active' => (int)$request->get('active', 1),
+            'remark' => trim((string)$request->get('remark', '')) ?: null,
+        ];
+    }
+
+    /**
+     * name 在主表，不进翻译写入，避免与 translatedAttributes 混淆。
+     */
+    protected function normalizeTranslateInput(array $translate): array
+    {
+        foreach ($translate as $locale => $fields) {
+            if (!is_array($fields)) {
+                continue;
+            }
+            unset($translate[$locale]['name']);
+        }
+        return $translate;
     }
 
     public function destroy($id)

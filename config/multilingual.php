@@ -555,8 +555,8 @@ return [
         'label' => '静态块',
         'value' => [
             'translateField' => [
-                // 与 Banner 一致：首字段 name + require，供云端/Translate structure 校验
-                // hidden：后台不展示，避免强制填写；保存时 EnsuresTranslateName 用 title/sign 回填
+                // 云端/structure 需要 name；实际展示名在主表 static_blocks.name（=sign）
+                // 翻译表保留可空 name 列；hidden 避免后台误改业务正文流程
                 [
                     'name' => 'name',
                     'label' => '名称',

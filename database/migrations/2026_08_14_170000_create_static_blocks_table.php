@@ -12,6 +12,7 @@ class CreateStaticBlocksTable extends Migration
             Schema::create('static_blocks', function (Blueprint $table) {
                 $table->id();
                 $table->string('sign', 100)->unique()->comment('标识');
+                $table->string('name')->nullable()->comment('Translate拉取展示名(默认=sign)');
                 $table->unsignedInteger('sort')->default(0)->comment('排序');
                 $table->boolean('active')->default(1)->comment('是否启用');
                 $table->string('remark', 255)->nullable()->comment('备注');
