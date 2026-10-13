@@ -101,6 +101,24 @@ return [
                         'require' => false
                     ],
                     [
+                        'name' => 'seo_product_category_bottom_title',
+                        'label' => '产品分类底部标题模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
+                        'name' => 'seo_product_category_bottom_description',
+                        'label' => '产品分类底部描述模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
+                        'name' => 'seo_product_category_bottom_keywords',
+                        'label' => '产品分类底部关键词模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
                         'name' => 'seo_product_tag_title',
                         'label' => '产品TAG标题模板 7201 tag名称',
                         'type' => 'text',
@@ -280,6 +298,30 @@ return [
                         'type' => 'text',
                         'require' => false
                     ],
+                    [
+                        'name' => 'seo_home_title',
+                        'label' => '首页标题模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
+                        'name' => 'seo_home_description',
+                        'label' => '首页描述模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
+                        'name' => 'seo_home_keywords',
+                        'label' => '首页关键词模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
+                    [
+                        'name' => 'product_alt_template',
+                        'label' => '产品图片alt模板',
+                        'type' => 'text',
+                        'require' => false
+                    ],
                 ]
         ],
         'model' => \App\Modules\Setting\Models\Setting::class
@@ -351,6 +393,82 @@ return [
                     'label' => 'Product Details',
                     'type' => 'uedit',
                     'require' => false
+                ],
+                [
+                    'name' => 'attribute',
+                    'label' => '产品属性文案',
+                    'type' => 'uedit',
+                    'require' => false
+                ],
+                [
+                    'name' => 'content_1',
+                    'label' => '产品详情扩展1',
+                    'type' => 'uedit',
+                    'require' => false,
+                    'hidden' => true,
+                ],
+                [
+                    'name' => 'content_2',
+                    'label' => '产品详情扩展2',
+                    'type' => 'uedit',
+                    'require' => false,
+                    'hidden' => true,
+                ],
+                [
+                    'name' => 'content_3',
+                    'label' => '产品详情扩展3',
+                    'type' => 'uedit',
+                    'require' => false,
+                    'hidden' => true,
+                ],
+                [
+                    'name' => 'content_4',
+                    'label' => '产品详情扩展4',
+                    'type' => 'uedit',
+                    'require' => false,
+                    'hidden' => true,
+                ],
+                [
+                    'name' => 'content_5',
+                    'label' => '产品详情扩展5',
+                    'type' => 'uedit',
+                    'require' => false,
+                    'hidden' => true,
+                ],
+                [
+                    'name' => 'content_6',
+                    'label' => '产品详情扩展6',
+                    'type' => 'uedit',
+                    'require' => false,
+                    'hidden' => true,
+                ],
+                [
+                    'name' => 'content_7',
+                    'label' => '产品详情扩展7',
+                    'type' => 'uedit',
+                    'require' => false,
+                    'hidden' => true,
+                ],
+                [
+                    'name' => 'content_8',
+                    'label' => '产品详情扩展8',
+                    'type' => 'uedit',
+                    'require' => false,
+                    'hidden' => true,
+                ],
+                [
+                    'name' => 'content_9',
+                    'label' => '产品详情扩展9',
+                    'type' => 'uedit',
+                    'require' => false,
+                    'hidden' => true,
+                ],
+                [
+                    'name' => 'content_10',
+                    'label' => '产品详情扩展10',
+                    'type' => 'uedit',
+                    'require' => false,
+                    'hidden' => true,
                 ]
             ],
             'seoTranslateField' => $seoTranslateField,
@@ -367,7 +485,8 @@ return [
                     'type' => 'text',
                     'require' => true
                 ],
-            ]
+            ],
+            'seoTranslateField' => $seoTranslateField,
         ],
         'model' => \App\Modules\Product\Models\ProductTag::class
     ],
@@ -384,6 +503,26 @@ return [
             ]
         ],
         'model' => \App\Modules\Product\Models\ProductAttribute::class
+    ],
+    'product_attribute_value' => [
+        'label' => '产品属性值',
+        'value' => [
+            'translateField' => [
+                [
+                    'name' => 'name',
+                    'label' => '属性值',
+                    'type' => 'text',
+                    'require' => true
+                ],
+                [
+                    'name' => 'value',
+                    'label' => '属性值补充',
+                    'type' => 'text',
+                    'require' => false
+                ],
+            ]
+        ],
+        'model' => \App\Modules\Product\Models\ProductAttributeValue::class
     ],
     'page' => [
         'label' => '单页面',
@@ -690,6 +829,12 @@ return [
                     'label' => '标题',
                     'type' => 'text',
                     'require' => true
+                ],
+                [
+                    'name' => 'alt',
+                    'label' => '图片Alt',
+                    'type' => 'text',
+                    'require' => false
                 ],
                 [
                     'name' => 'description',

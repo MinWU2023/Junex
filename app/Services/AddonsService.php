@@ -277,8 +277,17 @@ class AddonsService
 
     public function install($sign)
     {
+        $this->prepareAddonFilesystem($sign);
         $this->registerAddonsServiceProvidersNow($sign);
-        Artisan::call($sign . ' install');
+        try {
+            Artisan::call($sign . ' install');
+        } catch (\Throwable $exception) {
+            if (!$this->isSymlinkException($exception)) {
+                throw $exception;
+            }
+            $this->linkOrCopyAddonPublic($sign);
+        }
+        $this->linkOrCopyAddonPublic($sign);
     }
 
     public function uninstall($sign)
@@ -289,8 +298,72 @@ class AddonsService
 
     public function upgrade($sign)
     {
+        $this->prepareAddonFilesystem($sign);
         $this->registerAddonsServiceProvidersNow($sign);
-        Artisan::call($sign, ['action' => 'upgrade']);
+        try {
+            Artisan::call($sign, ['action' => 'upgrade']);
+        } catch (\Throwable $exception) {
+            if (!$this->isSymlinkException($exception)) {
+                throw $exception;
+            }
+            $this->linkOrCopyAddonPublic($sign);
+        }
+        $this->linkOrCopyAddonPublic($sign);
+    }
+
+    /**
+     * 插件安装前补齐目录，避免 symlink() 因父目录不存在报 No such file or directory。
+     */
+    protected function prepareAddonFilesystem(string $sign): void
+    {
+        foreach ([
+            base_path('addons'),
+            storage_path('app/addons'),
+            public_path('addons'),
+            base_path('addons/' . $sign),
+        ] as $dir) {
+            if (!$this->file->isDirectory($dir)) {
+                $this->file->makeDirectory($dir, 0755, true);
+            }
+        }
+
+        $addonPublic = base_path('addons/' . $sign . '/public');
+        if (!$this->file->isDirectory($addonPublic)) {
+            $this->file->makeDirectory($addonPublic, 0755, true);
+        }
+    }
+
+    /**
+     * 优先软链 public/addons/{sign} -> addons/{sign}/public；失败则复制静态资源。
+     */
+    protected function linkOrCopyAddonPublic(string $sign): void
+    {
+        $target = base_path('addons/' . $sign . '/public');
+        $link = public_path('addons/' . $sign);
+
+        if (!$this->file->isDirectory($target)) {
+            return;
+        }
+        if (!$this->file->isDirectory(public_path('addons'))) {
+            $this->file->makeDirectory(public_path('addons'), 0755, true);
+        }
+        if ($this->file->exists($link) || is_link($link)) {
+            return;
+        }
+
+        try {
+            $this->file->link($target, $link);
+        } catch (\Throwable $exception) {
+            if (!$this->isSymlinkException($exception)) {
+                throw $exception;
+            }
+            $this->file->copyDirectory($target, $link);
+        }
+    }
+
+    protected function isSymlinkException(\Throwable $exception): bool
+    {
+        return stripos($exception->getMessage(), 'symlink') !== false;
     }
 
     /**
@@ -326,15 +399,20 @@ class AddonsService
 
     private function downloadAddons($sign, $zipPath)
     {
-        $storagePath = storage_path('app/addons/' . $sign . '_' . time() . random_int(0, 100) . '.zip');
+        $zipDir = storage_path('app/addons');
+        if (!$this->file->isDirectory($zipDir)) {
+            $this->file->makeDirectory($zipDir, 0755, true);
+        }
+        if (!$this->file->isDirectory(base_path('addons'))) {
+            $this->file->makeDirectory(base_path('addons'), 0755, true);
+        }
+
+        $storagePath = $zipDir . '/' . $sign . '_' . time() . random_int(0, 100) . '.zip';
         $http = new Client(['verify'=> false]);
         $http->get($zipPath, [
             'sink' => $storagePath,
         ]);
-        try {
-            $zip = new ZipFile();
-            $zip->openFile($storagePath)->extractTo(base_path('addons'));
-        } catch (\Exception $exception) {
-        }
+        $zip = new ZipFile();
+        $zip->openFile($storagePath)->extractTo(base_path('addons'));
     }
 }
