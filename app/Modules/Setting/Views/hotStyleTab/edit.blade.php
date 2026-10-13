@@ -22,6 +22,8 @@
                         @csrf
                         @method('PUT')
 
+                        <x-admin.is-translate-switch :model="$model" :tr-success-at="$tr_success_at ?? ''" />
+
                         <x-admin.multilingualism
                             :translateField="config('multilingual.hot_style_tab.value.translateField')"
                             :value="$model"

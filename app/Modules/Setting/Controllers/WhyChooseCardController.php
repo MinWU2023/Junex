@@ -13,6 +13,7 @@ class WhyChooseCardController extends BaseController
     {
         $this->modelName = 'WhyChooseCard';
         $this->model = $whyChooseCard;
+        $this->modelSource = $whyChooseCard;
         $this->viewPath = 'Setting.Views.whyChooseCard';
         $this->orderBy = 'sort';
     }
@@ -46,8 +47,15 @@ class WhyChooseCardController extends BaseController
      */
     public function editCenter()
     {
-        $model = WhyChooseSetting::singleton();
-        return view($this->viewPath . '.center', compact('model'));
+        $setting = WhyChooseSetting::singleton();
+        $prevModel = $this->model;
+        $prevSource = $this->modelSource;
+        $this->model = $setting;
+        $this->modelSource = $setting;
+        $data = $this->checkTranslate($setting->id);
+        $this->model = $prevModel;
+        $this->modelSource = $prevSource;
+        return view($this->viewPath . '.center', $data);
     }
 
     public function updateCenter(Request $request)
@@ -114,8 +122,9 @@ class WhyChooseCardController extends BaseController
 
     public function edit($id)
     {
-        $model = WhyChooseCard::query()->with(['translations'])->findOrFail($id);
-        return view($this->viewPath . '.edit', compact('model'));
+        $data = $this->checkTranslate($id);
+        $data['model']->load(['translations']);
+        return view($this->viewPath . '.edit', $data);
     }
 
     public function update($id, Request $request)

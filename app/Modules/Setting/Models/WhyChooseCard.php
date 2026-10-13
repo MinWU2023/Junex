@@ -22,6 +22,7 @@ class WhyChooseCard extends Model implements TranslatableContract
         'url',
         'sort',
         'active',
+        'is_translate',
     ];
 
     public function scopeActive($query)

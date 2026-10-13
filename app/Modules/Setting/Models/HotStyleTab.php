@@ -36,6 +36,7 @@ class HotStyleTab extends Model implements TranslatableContract
         'product_category_id',
         'sort',
         'active',
+        'is_translate',
     ];
 
     public function scopeActive($query)

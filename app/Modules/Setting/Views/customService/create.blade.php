@@ -12,6 +12,8 @@
 
                 <form class="layui-form" method="post" action="{{ route('admin.customService.store') }}" id="cs-form">
                     @csrf
+                    <x-admin.is-translate-switch />
+
                     <x-admin.multilingualism
                         :translateField="config('multilingual.custom_service.value.translateField')"
                         value=""

@@ -14,6 +14,7 @@ class SnsIconController extends BaseController
     {
         $this->modelName = 'SnsIcon';
         $this->model = $snsIcon;
+        $this->modelSource = $snsIcon;
         $this->viewPath = 'Setting.Views.snsIcon';
         $this->orderBy = 'sort';
     }
@@ -81,8 +82,9 @@ class SnsIconController extends BaseController
 
     public function edit($id)
     {
-        $model = SnsIcon::query()->with(['translations'])->findOrFail($id);
-        return view($this->viewPath . '.edit', compact('model'));
+        $data = $this->checkTranslate($id);
+        $data['model']->load(['translations']);
+        return view($this->viewPath . '.edit', $data);
     }
 
     public function update($id, Request $request)

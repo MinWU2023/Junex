@@ -21,6 +21,7 @@ class HomeProductCategory extends Model implements TranslatableContract
         'button_url',
         'sort',
         'active',
+        'is_translate',
     ];
 
     public function scopeActive($query)

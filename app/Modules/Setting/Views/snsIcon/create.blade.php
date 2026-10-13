@@ -68,6 +68,8 @@
                             </div>
                         </div>
 
+                        <x-admin.is-translate-switch />
+
                         <x-admin.multilingualism
                             :translateField="config('multilingual.sns_icon.value.translateField')"
                             value=""

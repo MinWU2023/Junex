@@ -22,6 +22,7 @@ class CustomService extends Model implements TranslatableContract
         'layout',
         'sort',
         'active',
+        'is_translate',
     ];
 
     public function items()

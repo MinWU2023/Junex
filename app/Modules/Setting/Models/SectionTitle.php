@@ -21,6 +21,7 @@ class SectionTitle extends Model implements TranslatableContract
         'name',
         'sort',
         'active',
+        'is_translate',
     ];
 
     public function scopeActive($query)

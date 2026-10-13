@@ -22,9 +22,11 @@ trait ModelBoot
                 //保存翻译记录
                 $translate_content = [];
                 foreach ($model->translatedAttributes as $translatedAttribute) {
-                    if ($model->$translatedAttribute){ //空值不推送
-                        $translate_content[$translatedAttribute] = $model->$translatedAttribute;
+                    $attrValue = $model->$translatedAttribute;
+                    if ($attrValue === null || $attrValue === '' || $attrValue === []) { //空值不推送
+                        continue;
                     }
+                    $translate_content[$translatedAttribute] = $attrValue;
                 }
                 $request_url = trim(config("cloud_api") ?? env('MIX_API_CLOUD'), '/') . '/api/customerWebsite/translateOne';
                 $translateFields = [];
@@ -57,24 +59,21 @@ trait ModelBoot
                 } catch (\Exception $exception) {
                     $error_msg = '推送异常:' . $exception->getMessage();
                 }
-                foreach ($model->translatedAttributes as $translatedAttribute) {
-                    if ($model->$translatedAttribute){
-                        TranslateJob::query()->updateOrInsert([
-                            'source_id' => $model->id,
-                            'model' => self::class,
-                            'field' => $translatedAttribute,
-                        ], [
-                            'default_locale' => 'en',
-                            'translate_locales' => 'en',
-                            'content' => $model->$translatedAttribute,
-                            'status' => $status,
-                            'created_at' => now()->toDateTime(),
-                            'updated_at' => now()->toDateTime(),
-                            'model_type' => self::MODEL_TYPE,
-                            'error_msg' => $error_msg
-                        ]);
-                    }
-
+                foreach ($translate_content as $translatedAttribute => $attrValue) {
+                    TranslateJob::query()->updateOrInsert([
+                        'source_id' => $model->id,
+                        'model' => self::class,
+                        'field' => $translatedAttribute,
+                    ], [
+                        'default_locale' => 'en',
+                        'translate_locales' => 'en',
+                        'content' => is_array($attrValue) ? json_encode($attrValue, JSON_UNESCAPED_UNICODE) : $attrValue,
+                        'status' => $status,
+                        'created_at' => now()->toDateTime(),
+                        'updated_at' => now()->toDateTime(),
+                        'model_type' => self::MODEL_TYPE,
+                        'error_msg' => $error_msg
+                    ]);
                 }
                 //推送翻译
             }

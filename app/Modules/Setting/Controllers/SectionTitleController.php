@@ -13,6 +13,7 @@ class SectionTitleController extends BaseController
     {
         $this->modelName = 'SectionTitle';
         $this->model = $sectionTitle;
+        $this->modelSource = $sectionTitle;
         $this->viewPath = 'Setting.Views.sectionTitle';
         $this->orderBy = 'sort';
     }
@@ -34,12 +35,14 @@ class SectionTitleController extends BaseController
 
     public function edit($id)
     {
-        $model = SectionTitle::query()
-            ->with(['translations'])
+        SectionTitle::query()
             ->whereIn('sign', array_keys(SectionTitleService::DEFINITIONS))
             ->findOrFail($id);
 
-        return view($this->viewPath . '.edit', compact('model'));
+        $data = $this->checkTranslate($id);
+        $data['model']->load(['translations']);
+
+        return view($this->viewPath . '.edit', $data);
     }
 
     public function update($id, Request $request)

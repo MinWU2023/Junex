@@ -13,6 +13,8 @@
                 <form class="layui-form" method="post" action="{{ route('admin.customService.update', $model->id) }}" id="cs-form">
                     @csrf
                     @method('PUT')
+                    <x-admin.is-translate-switch :model="$model" :tr-success-at="$tr_success_at ?? ''" />
+
                     <x-admin.multilingualism
                         :translateField="config('multilingual.custom_service.value.translateField')"
                         :value="$model"

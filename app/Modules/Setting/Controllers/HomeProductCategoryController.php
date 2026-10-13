@@ -12,6 +12,7 @@ class HomeProductCategoryController extends BaseController
     {
         $this->modelName = 'HomeProductCategory';
         $this->model = $homeProductCategory;
+        $this->modelSource = $homeProductCategory;
         $this->viewPath = 'Setting.Views.homeProductCategory';
         $this->orderBy = 'sort';
     }
@@ -78,8 +79,9 @@ class HomeProductCategoryController extends BaseController
 
     public function edit($id)
     {
-        $model = HomeProductCategory::query()->with(['translations'])->findOrFail($id);
-        return view($this->viewPath . '.edit', compact('model'));
+        $data = $this->checkTranslate($id);
+        $data['model']->load(['translations']);
+        return view($this->viewPath . '.edit', $data);
     }
 
     public function update($id, Request $request)

@@ -21,6 +21,8 @@
                     <form class="test-table-reload-btn layui-form" method="post" action="{{ route('admin.whyChooseCard.store') }}">
                         @csrf
 
+                        <x-admin.is-translate-switch />
+
                         <x-admin.multilingualism
                             :translateField="config('multilingual.why_choose_card.value.translateField')"
                             value=""

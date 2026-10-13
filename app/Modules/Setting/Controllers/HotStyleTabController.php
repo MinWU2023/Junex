@@ -16,6 +16,7 @@ class HotStyleTabController extends BaseController
     {
         $this->modelName = 'HotStyleTab';
         $this->model = $hotStyleTab;
+        $this->modelSource = $hotStyleTab;
         $this->viewPath = 'Setting.Views.hotStyleTab';
         $this->orderBy = 'sort';
     }
@@ -92,7 +93,8 @@ class HotStyleTabController extends BaseController
 
     public function edit($id)
     {
-        $model = HotStyleTab::query()->with(['translations', 'products'])->findOrFail($id);
+        $data = $this->checkTranslate($id);
+        $model = $data['model']->load(['translations', 'products']);
         $productSources = HotStyleTab::PRODUCT_SOURCES;
         $sourceTypes = HotStyleTab::SOURCE_TYPES;
         $categories = $this->categoryOptions();
@@ -103,9 +105,9 @@ class HotStyleTabController extends BaseController
         $categoryId = (int)old('product_category_id', $model->product_category_id);
         $categoryProducts = $categoryId > 0 ? $this->productsOfCategory($categoryId) : collect();
 
-        return view($this->viewPath . '.edit', compact(
-            'model', 'productSources', 'sourceTypes', 'categories', 'selectedProductIds', 'categoryProducts'
-        ));
+        return view($this->viewPath . '.edit', array_merge($data, compact(
+            'productSources', 'sourceTypes', 'categories', 'selectedProductIds', 'categoryProducts'
+        )));
     }
 
     public function update($id, Request $request)

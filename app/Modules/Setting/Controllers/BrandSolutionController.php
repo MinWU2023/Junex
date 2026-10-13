@@ -12,6 +12,7 @@ class BrandSolutionController extends BaseController
     {
         $this->modelName = 'BrandSolution';
         $this->model = $brandSolution;
+        $this->modelSource = $brandSolution;
         $this->viewPath = 'Setting.Views.brandSolution';
         $this->orderBy = 'sort';
     }
@@ -79,8 +80,9 @@ class BrandSolutionController extends BaseController
 
     public function edit($id)
     {
-        $model = BrandSolution::query()->with(['translations'])->findOrFail($id);
-        return view($this->viewPath . '.edit', compact('model'));
+        $data = $this->checkTranslate($id);
+        $data['model']->load(['translations']);
+        return view($this->viewPath . '.edit', $data);
     }
 
     public function update($id, Request $request)

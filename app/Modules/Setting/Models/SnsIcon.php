@@ -24,6 +24,7 @@ class SnsIcon extends Model implements TranslatableContract
         'active',
         'link_active',
         'share_active',
+        'is_translate',
     ];
 
     public function scopeActive($query)

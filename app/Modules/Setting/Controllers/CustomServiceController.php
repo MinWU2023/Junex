@@ -14,6 +14,7 @@ class CustomServiceController extends BaseController
     {
         $this->modelName = 'CustomService';
         $this->model = $customService;
+        $this->modelSource = $customService;
         $this->viewPath = 'Setting.Views.customService';
         $this->orderBy = 'sort';
     }
@@ -71,11 +72,10 @@ class CustomServiceController extends BaseController
 
     public function edit($id)
     {
-        $model = CustomService::query()
-            ->with(['translations', 'items.translations'])
-            ->findOrFail($id);
-        $locales = config('translatable.locales', ['en']);
-        return view($this->viewPath . '.edit', compact('model', 'locales'));
+        $data = $this->checkTranslate($id);
+        $data['model']->load(['translations', 'items.translations']);
+        $data['locales'] = config('translatable.locales', ['en']);
+        return view($this->viewPath . '.edit', $data);
     }
 
     public function update($id, Request $request)

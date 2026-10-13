@@ -22,6 +22,7 @@ class WhyChooseSetting extends Model implements TranslatableContract
 
     protected $fillable = [
         'logo',
+        'is_translate',
     ];
 
     /**
