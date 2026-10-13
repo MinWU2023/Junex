@@ -1934,7 +1934,26 @@
     </div>
 
     @yield('page-css-footer')
-    @include('front.partials.front-i18n')
+    @php
+        try {
+            $frontI18n = app(\App\Services\FrontJsI18nService::class)->pack();
+        } catch (\Throwable $e) {
+            $frontI18n = [
+                'locale' => app()->getLocale(),
+                'messages' => [],
+            ];
+        }
+    @endphp
+    <script>
+    window.__LOCALE__ = @json($frontI18n['locale']);
+    </script>
+    <script type="text/javascript" src="/front/js/i18n.js?v=20261010c"></script>
+    <script>
+    window.FrontI18n && window.FrontI18n.setLocale(
+        @json($frontI18n['locale']),
+        @json($frontI18n['messages'])
+    );
+    </script>
     <script type="text/javascript" src="/front/js/jquery.min.js"></script>
     <script type="text/javascript" src="/front/js/inquiry-cart.js?v=20261010g"></script>
     <script type="text/javascript" src="/front/js/main.js?v=20261010g"></script>
