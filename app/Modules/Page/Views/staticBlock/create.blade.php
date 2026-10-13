@@ -20,6 +20,8 @@
                 <form class="layui-form" method="post" action="{{ route('admin.staticBlock.store') }}">
                     @csrf
 
+                    <x-admin.is-translate-switch />
+
                     <x-admin.multilingualism
                         :translateField="config('multilingual.static_block.value.translateField')"
                         value=""

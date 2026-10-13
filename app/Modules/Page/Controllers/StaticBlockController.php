@@ -16,6 +16,7 @@ class StaticBlockController extends BaseController
     {
         $this->modelName = 'StaticBlock';
         $this->model = $staticBlock;
+        $this->modelSource = $staticBlock;
         $this->viewPath = 'Page.Views.staticBlock';
         $this->orderBy = 'sort';
     }
@@ -108,6 +109,7 @@ class StaticBlockController extends BaseController
             'page_keys' => ['nullable', 'array'],
             'page_keys.*' => ['string', 'max:100'],
             'translate' => ['array'],
+            'translate.*.name' => ['nullable', 'string', 'max:255'],
             'translate.*.title' => ['nullable', 'string', 'max:255'],
             'translate.*.content' => ['nullable', 'string'],
         ], [
@@ -135,11 +137,12 @@ class StaticBlockController extends BaseController
 
     public function edit($id)
     {
+        $data = $this->checkTranslate($id);
         $with = ['translations', 'pages'];
         if (Schema::hasTable('static_block_page_keys')) {
             $with[] = 'pageKeys';
         }
-        $model = StaticBlock::query()->with($with)->findOrFail($id);
+        $model = $data['model']->load($with);
         $virtualPages = $this->virtualPageOptions();
         $categoryPages = $this->categoryPageOptions();
         $allPages = $this->realPageOptions();
@@ -151,14 +154,13 @@ class StaticBlockController extends BaseController
                 : []
         );
 
-        return view($this->viewPath . '.edit', compact(
-            'model',
+        return view($this->viewPath . '.edit', array_merge($data, compact(
             'allPages',
             'virtualPages',
             'categoryPages',
             'selectedPageIds',
             'selectedPageKeys'
-        ));
+        )));
     }
 
     public function update($id, Request $request)
@@ -181,6 +183,7 @@ class StaticBlockController extends BaseController
             'page_keys' => ['nullable', 'array'],
             'page_keys.*' => ['string', 'max:100'],
             'translate' => ['array'],
+            'translate.*.name' => ['nullable', 'string', 'max:255'],
             'translate.*.title' => ['nullable', 'string', 'max:255'],
             'translate.*.content' => ['nullable', 'string'],
         ], [

@@ -556,6 +556,12 @@ return [
         'value' => [
             'translateField' => [
                 [
+                    'name' => 'name',
+                    'label' => '名称',
+                    'type' => 'text',
+                    'require' => false
+                ],
+                [
                     'name' => 'title',
                     'label' => '标题',
                     'type' => 'text',

@@ -12,6 +12,7 @@ class StaticBlockTranslation extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'name',
         'title',
         'content',
     ];

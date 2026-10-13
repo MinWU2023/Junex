@@ -2,6 +2,7 @@
 
 namespace App\Modules\Page\Models;
 
+use App\Traits\EnsuresTranslateName;
 use App\Traits\ModelBoot;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
@@ -10,17 +11,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class StaticBlock extends Model implements TranslatableContract
 {
-    use HasFactory, Translatable, ModelBoot;
+    use HasFactory, Translatable, ModelBoot, EnsuresTranslateName;
 
     const MODEL_TYPE = 'static_block';
 
-    public $translatedAttributes = ['title', 'content'];
+    public $translatedAttributes = ['name', 'title', 'content'];
 
     protected $fillable = [
         'sign',
         'sort',
         'active',
         'remark',
+        'is_translate',
     ];
 
     public function scopeActive($query)
