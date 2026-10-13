@@ -25,20 +25,21 @@ body{
 .fontRed{color:red;}
 .clearfix:before, .clearfix:after{content:" ";display:table;}
 .clearfix:after{clear:both;}
-/* 富文本正文需显示列表符；模板装饰列表仍用下方 .adv_list 等单独 none */
+/* 富文本列表：勿使用 ul,li{list-style:none}，会隐藏编辑器/前台列表符号 */
 ul, ol {
-  padding-left: 1.5em;
-  list-style-position: outside;
+  margin-bottom: 10px;
+  padding-left: 1.5em !important;
+  list-style-position: outside !important;
 }
 ul {
-  list-style-type: disc;
+  list-style: disc outside !important;
 }
 ol {
-  list-style-type: decimal;
+  list-style: decimal outside !important;
 }
 ul > li, ol > li {
-  list-style-type: inherit !important;
-  list-style-position: outside !important;
+  display: list-item !important;
+  list-style: inherit !important;
 }
 
 

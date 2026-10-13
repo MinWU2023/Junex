@@ -142,7 +142,7 @@ use \App\Modules\Setting\Models\LandPage;
     @section('scripts')
         <script src="{{ asset('/js/admin/admin.landpage.js') }}"></script>
         <script charset="utf-8" src="{{ asset('tinymce/js/tinymce/tinymce.js') }}"></script>
-        <script charset="utf-8" src="{{ asset('tinymce/js/tinymce/content.js') }}?v=2026101315"></script>
+        <script charset="utf-8" src="{{ asset('tinymce/js/tinymce/content.js') }}?v=2026101316"></script>
     @endsection
     @section('css')
         <link rel="stylesheet" href="{{  mix('/css/admin/admin.form.css') }}" media="all">

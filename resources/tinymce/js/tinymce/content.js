@@ -113,7 +113,7 @@ layui.use(['jquery', 'layer'], function () {
                                 convert_urls: false,  //自动转换URL
                                 custom_undo_redo_levels: 30,  //撤销次数
                                 //toolbar_sticky: true, //工具栏浮动
-                                content_css: '/images/moban.css,/tinymce/tpl/css/det_bootstrap.css,/tinymce/tpl/css/det_font-awesome.min.css,/tinymce/tpl/css/det_style.css,/tinymce/tpl/css/editor-lists.css?v=2026101315',
+                                content_css: '/images/moban.css?v=2026101316,/tinymce/tpl/css/det_bootstrap.css,/tinymce/tpl/css/det_font-awesome.min.css,/tinymce/tpl/css/det_style.css?v=2026101316,/tinymce/tpl/css/editor-lists.css?v=2026101316',
                                 content_style: '.mce-content-body ul,.mce-content-body ol{margin-top:0;margin-bottom:10px;padding-left:2em!important;list-style-position:outside!important;}.mce-content-body ul{list-style-type:disc;}.mce-content-body ol{list-style-type:decimal;}.mce-content-body ul>li,.mce-content-body ol>li{display:list-item!important;list-style-type:inherit!important;list-style-position:outside!important;}',
                                 fix_list_elements: false,
                                 plugins: 'gpt print preview searchreplace autolink directionality visualblocks visualchars fullscreen image link media template code codesample table charmap hr pagebreak nonbreaking insertdatetime advlist lists wordcount imagetools textpattern help autosave axupimgs',
