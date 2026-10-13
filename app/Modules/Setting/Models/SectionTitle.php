@@ -14,7 +14,9 @@ class SectionTitle extends Model implements TranslatableContract
 
     const MODEL_TYPE = 'section_title';
 
-    public $translatedAttributes = ['name', 'title', 'subtitle'];
+    // name 仅在主表（后台板块标识），不进翻译属性，避免覆盖主表 name 导致前后台异常。
+    // 翻译表仍保留可空 name 列，满足云端 Translate 插件表结构要求。
+    public $translatedAttributes = ['title', 'subtitle'];
 
     protected $fillable = [
         'sign',

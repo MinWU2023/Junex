@@ -2,6 +2,7 @@
 
 namespace App\Modules\Setting\Models;
 
+use App\Traits\EnsuresTranslateName;
 use App\Traits\ModelBoot;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class HomeProductCategory extends Model implements TranslatableContract
 {
-    use HasFactory, Translatable, ModelBoot;
+    use HasFactory, Translatable, ModelBoot, EnsuresTranslateName;
 
     const MODEL_TYPE = 'home_product_category';
 

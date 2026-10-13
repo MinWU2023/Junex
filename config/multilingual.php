@@ -1134,6 +1134,7 @@ return [
         'label' => '板块标题',
         'value' => [
             'translateField' => [
+                // 翻译表保留可空 name 列供云端校验；业务名称在主表，不走翻译回写
                 [
                     'name' => 'name',
                     'label' => '名称',

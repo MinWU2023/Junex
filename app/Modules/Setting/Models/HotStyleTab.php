@@ -4,6 +4,7 @@ namespace App\Modules\Setting\Models;
 
 use App\Modules\Product\Models\Product;
 use App\Modules\Product\Models\ProductCategory;
+use App\Traits\EnsuresTranslateName;
 use App\Traits\ModelBoot;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
@@ -12,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class HotStyleTab extends Model implements TranslatableContract
 {
-    use HasFactory, Translatable, ModelBoot;
+    use HasFactory, Translatable, ModelBoot, EnsuresTranslateName;
 
     const MODEL_TYPE = 'hot_style_tab';
 
