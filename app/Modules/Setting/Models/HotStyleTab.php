@@ -27,7 +27,7 @@ class HotStyleTab extends Model implements TranslatableContract
         'recommend' => '推荐(is_recommend)',
     ];
 
-    public $translatedAttributes = ['label'];
+    public $translatedAttributes = ['name', 'label'];
 
     protected $fillable = [
         'tab_key',

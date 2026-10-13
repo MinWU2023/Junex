@@ -14,7 +14,7 @@ class WhyChooseCard extends Model implements TranslatableContract
 
     const MODEL_TYPE = 'why_choose_card';
 
-    public $translatedAttributes = ['label', 'value', 'value_suffix', 'description'];
+    public $translatedAttributes = ['name', 'label', 'value', 'value_suffix', 'description'];
 
     protected $fillable = [
         'image_mobile',

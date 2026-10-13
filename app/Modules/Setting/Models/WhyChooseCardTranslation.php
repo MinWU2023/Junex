@@ -12,6 +12,7 @@ class WhyChooseCardTranslation extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'name',
         'label',
         'value',
         'value_suffix',

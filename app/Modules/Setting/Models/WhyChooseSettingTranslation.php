@@ -12,6 +12,7 @@ class WhyChooseSettingTranslation extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'name',
         'title',
         'subtitle',
         'description_desktop',

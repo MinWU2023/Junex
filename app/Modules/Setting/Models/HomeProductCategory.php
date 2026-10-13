@@ -14,7 +14,7 @@ class HomeProductCategory extends Model implements TranslatableContract
 
     const MODEL_TYPE = 'home_product_category';
 
-    public $translatedAttributes = ['title', 'description', 'button_text', 'alt'];
+    public $translatedAttributes = ['name', 'title', 'description', 'button_text', 'alt'];
 
     protected $fillable = [
         'path',

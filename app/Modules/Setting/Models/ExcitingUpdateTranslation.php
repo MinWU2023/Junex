@@ -12,6 +12,7 @@ class ExcitingUpdateTranslation extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'name',
         'title',
         'button_text',
         'alt',

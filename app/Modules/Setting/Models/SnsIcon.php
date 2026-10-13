@@ -14,7 +14,7 @@ class SnsIcon extends Model implements TranslatableContract
 
     const MODEL_TYPE = 'sns_icon';
 
-    public $translatedAttributes = ['alt'];
+    public $translatedAttributes = ['name', 'alt'];
 
     protected $fillable = [
         'sign',

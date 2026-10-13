@@ -15,6 +15,7 @@ class WhyChooseSetting extends Model implements TranslatableContract
     const MODEL_TYPE = 'why_choose_setting';
 
     public $translatedAttributes = [
+        'name',
         'title',
         'subtitle',
         'description_desktop',

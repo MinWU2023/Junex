@@ -14,7 +14,7 @@ class SectionTitle extends Model implements TranslatableContract
 
     const MODEL_TYPE = 'section_title';
 
-    public $translatedAttributes = ['title', 'subtitle'];
+    public $translatedAttributes = ['name', 'title', 'subtitle'];
 
     protected $fillable = [
         'sign',

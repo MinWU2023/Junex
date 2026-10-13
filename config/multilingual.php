@@ -908,6 +908,12 @@ return [
         'value' => [
             'translateField' => [
                 [
+                    'name' => 'name',
+                    'label' => '名称',
+                    'type' => 'text',
+                    'require' => false
+                ],
+                [
                     'name' => 'title',
                     'label' => '标题',
                     'type' => 'text',
@@ -940,6 +946,12 @@ return [
         'label' => '首页产品分类',
         'value' => [
             'translateField' => [
+                [
+                    'name' => 'name',
+                    'label' => '名称',
+                    'type' => 'text',
+                    'require' => false
+                ],
                 [
                     'name' => 'title',
                     'label' => '标题',
@@ -976,6 +988,12 @@ return [
         'value' => [
             'translateField' => [
                 [
+                    'name' => 'name',
+                    'label' => '名称',
+                    'type' => 'text',
+                    'require' => false
+                ],
+                [
                     'name' => 'label',
                     'label' => 'Tab文案',
                     'type' => 'text',
@@ -990,6 +1008,12 @@ return [
         'label' => '精彩动态',
         'value' => [
             'translateField' => [
+                [
+                    'name' => 'name',
+                    'label' => '名称',
+                    'type' => 'text',
+                    'require' => false
+                ],
                 [
                     'name' => 'title',
                     'label' => '标题',
@@ -1017,6 +1041,12 @@ return [
         'label' => '为何选择我们',
         'value' => [
             'translateField' => [
+                [
+                    'name' => 'name',
+                    'label' => '名称',
+                    'type' => 'text',
+                    'require' => false
+                ],
                 [
                     'name' => 'label',
                     'label' => '标签',
@@ -1051,6 +1081,12 @@ return [
         'value' => [
             'translateField' => [
                 [
+                    'name' => 'name',
+                    'label' => '名称',
+                    'type' => 'text',
+                    'require' => false
+                ],
+                [
                     'name' => 'title_prefix',
                     'label' => '标题前缀(红色)',
                     'type' => 'text',
@@ -1078,6 +1114,12 @@ return [
         'value' => [
             'translateField' => [
                 [
+                    'name' => 'name',
+                    'label' => '名称',
+                    'type' => 'text',
+                    'require' => false
+                ],
+                [
                     'name' => 'title',
                     'label' => '卡片标题',
                     'type' => 'text',
@@ -1092,6 +1134,12 @@ return [
         'label' => '板块标题',
         'value' => [
             'translateField' => [
+                [
+                    'name' => 'name',
+                    'label' => '名称',
+                    'type' => 'text',
+                    'require' => false
+                ],
                 [
                     'name' => 'title',
                     'label' => '板块标题',
@@ -1114,6 +1162,12 @@ return [
         'value' => [
             'translateField' => [
                 [
+                    'name' => 'name',
+                    'label' => '名称',
+                    'type' => 'text',
+                    'require' => false
+                ],
+                [
                     'name' => 'alt',
                     'label' => 'Alt属性',
                     'type' => 'text',
@@ -1128,6 +1182,12 @@ return [
         'label' => '为何选择我们-中间板块',
         'value' => [
             'translateField' => [
+                [
+                    'name' => 'name',
+                    'label' => '名称',
+                    'type' => 'text',
+                    'require' => false
+                ],
                 [
                     'name' => 'title',
                     'label' => '中间标题(移动端)',

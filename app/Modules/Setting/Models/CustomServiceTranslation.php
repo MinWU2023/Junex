@@ -12,6 +12,7 @@ class CustomServiceTranslation extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'name',
         'title_prefix',
         'title_suffix',
         'subtitle',

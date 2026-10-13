@@ -14,7 +14,7 @@ class CustomServiceItem extends Model implements TranslatableContract
 
     const MODEL_TYPE = 'custom_service_item';
 
-    public $translatedAttributes = ['title'];
+    public $translatedAttributes = ['name', 'title'];
 
     protected $fillable = [
         'custom_service_id',

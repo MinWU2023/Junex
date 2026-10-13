@@ -12,6 +12,7 @@ class SectionTitleTranslation extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'name',
         'title',
         'subtitle',
     ];

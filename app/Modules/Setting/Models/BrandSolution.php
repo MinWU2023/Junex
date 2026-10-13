@@ -14,7 +14,7 @@ class BrandSolution extends Model implements TranslatableContract
 
     const MODEL_TYPE = 'brand_solution';
 
-    public $translatedAttributes = ['title', 'description', 'button_text', 'features'];
+    public $translatedAttributes = ['name', 'title', 'description', 'button_text', 'features'];
 
     protected $fillable = [
         'path',

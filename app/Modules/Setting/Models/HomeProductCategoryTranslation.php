@@ -12,6 +12,7 @@ class HomeProductCategoryTranslation extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'name',
         'title',
         'description',
         'button_text',
