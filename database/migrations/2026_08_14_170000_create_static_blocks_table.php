@@ -26,6 +26,7 @@ class CreateStaticBlocksTable extends Migration
                 $table->id();
                 $table->unsignedBigInteger('static_block_id');
                 $table->string('locale')->index();
+                $table->string('name')->nullable()->comment('名称(Translate插件兼容，对齐Banner)');
                 $table->string('title')->nullable()->comment('标题');
                 $table->longText('content')->nullable()->comment('内容');
                 $table->unique(['static_block_id', 'locale'], 'static_block_locale_unique');

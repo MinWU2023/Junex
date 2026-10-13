@@ -555,11 +555,14 @@ return [
         'label' => '静态块',
         'value' => [
             'translateField' => [
+                // 与 Banner 一致：首字段 name + require，供云端/Translate structure 校验
+                // hidden：后台不展示，避免强制填写；保存时 EnsuresTranslateName 用 title/sign 回填
                 [
                     'name' => 'name',
                     'label' => '名称',
                     'type' => 'text',
-                    'require' => false
+                    'require' => true,
+                    'hidden' => true,
                 ],
                 [
                     'name' => 'title',

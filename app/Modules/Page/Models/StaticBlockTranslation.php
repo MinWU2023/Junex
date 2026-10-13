@@ -11,7 +11,10 @@ class StaticBlockTranslation extends Model
 
     public $timestamps = false;
 
+    // 与 BannerTranslation 对齐：含外键/locale/name
     protected $fillable = [
+        'static_block_id',
+        'locale',
         'name',
         'title',
         'content',

@@ -9,12 +9,19 @@ use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Translate 插件 getData 要求：
+ * - Translatable + translations 关系
+ * - 可读 name（与 Banner 一致，走翻译表 name）
+ * - multilingual.static_block 含 name 字段
+ */
 class StaticBlock extends Model implements TranslatableContract
 {
     use HasFactory, Translatable, ModelBoot, EnsuresTranslateName;
 
     const MODEL_TYPE = 'static_block';
 
+    // 与 Banner 对齐：name 必须在 translatedAttributes 中，供 GetDataCollection 读取
     public $translatedAttributes = ['name', 'title', 'content'];
 
     protected $fillable = [
