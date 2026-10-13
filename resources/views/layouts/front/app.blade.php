@@ -883,8 +883,19 @@
       }
       .product-details-content ul,
       .product-details-content ol {
-        margin: 0 !important;
-        padding: 0 !important;
+        margin: 0 0 0.65rem !important;
+        padding-left: 1.5em !important;
+        list-style: revert !important;
+      }
+      .product-details-content ul {
+        list-style-type: disc !important;
+      }
+      .product-details-content ol {
+        list-style-type: decimal !important;
+      }
+      .product-details-content li {
+        list-style: inherit !important;
+        list-style-position: outside !important;
       }
       .product-details-content {
         overflow-x: hidden !important;

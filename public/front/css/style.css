@@ -1562,12 +1562,21 @@ nav .group:hover > div {
 .blog-detail-content.product-details-content ul,
 .blog-detail-content.product-details-content ol {
   margin: 0 0 clamp(0.4rem, 0.7vw, 0.65rem) !important;
-  padding-left: 1.2em;
+  padding-left: 1.5em !important;
+  list-style: revert !important;
+}
+.blog-detail-content.product-details-content ul {
+  list-style-type: disc !important;
+}
+.blog-detail-content.product-details-content ol {
+  list-style-type: decimal !important;
 }
 .blog-detail-content.product-details-content li {
   margin: 0 0 clamp(0.15rem, 0.3vw, 0.28rem) !important;
   font-size: clamp(15px, 0.3vw + 14px, 16px) !important;
   line-height: clamp(1.42, 0.1vw + 1.4, 1.5) !important;
+  list-style: inherit !important;
+  list-style-position: outside !important;
 }
 .blog-detail-content.product-details-content li:last-child {
   margin-bottom: 0 !important;

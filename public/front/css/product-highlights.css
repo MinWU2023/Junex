@@ -5869,7 +5869,8 @@
 }
 .product-highlights-content :focus, .product-details-content :focus {outline:0;}
 .product-highlights-content h1, .product-details-content h1, .product-highlights-content h2, .product-details-content h2, .product-highlights-content h3, .product-details-content h3, .product-highlights-content h4, .product-details-content h4, .product-highlights-content h5, .product-details-content h5, .product-highlights-content h6, .product-details-content h6 { margin:0px; padding:0; line-height:normal}
-.product-highlights-content, .product-details-content, .product-highlights-content ul, .product-details-content ul, .product-highlights-content img, .product-details-content img, .product-highlights-content p, .product-details-content p, .product-highlights-content input, .product-details-content input, .product-highlights-content dl, .product-details-content dl, .product-highlights-content dd, .product-details-content dd, .product-highlights-content tr, .product-details-content tr, .product-highlights-content th, .product-details-content th, .product-highlights-content td, .product-details-content td {margin:0;padding:0;}
+/* 不含 ul/ol：富文本列表需要 padding-left 显示符号 */
+.product-highlights-content, .product-details-content, .product-highlights-content img, .product-details-content img, .product-highlights-content p, .product-details-content p, .product-highlights-content input, .product-details-content input, .product-highlights-content dl, .product-details-content dl, .product-highlights-content dd, .product-details-content dd, .product-highlights-content tr, .product-details-content tr, .product-highlights-content th, .product-details-content th, .product-highlights-content td, .product-details-content td {margin:0;padding:0;}
 .product-highlights-content img, .product-details-content img {border:none; max-width:100%}
 .product-highlights-content /*li, .product-details-content /*li, .product-highlights-content ul, .product-details-content ul, .product-highlights-content ol, .product-details-content ol {list-style:none;}
 .product-highlights-content */
@@ -6267,8 +6268,19 @@ a:hover, .product-highlights-content img:hover, .product-details-content img:hov
 /* Undo common Tailwind preflight conflicts inside editor HTML */
 .product-details-content ul,
 .product-details-content ol {
-  margin: 0;
-  padding: 0;
+  margin: 0 0 0.65rem;
+  padding-left: 1.5em;
+  list-style: revert;
+}
+.product-details-content ul {
+  list-style-type: disc;
+}
+.product-details-content ol {
+  list-style-type: decimal;
+}
+.product-details-content li {
+  list-style: inherit;
+  list-style-position: outside;
 }
 .product-details-content p {
   margin: 0;

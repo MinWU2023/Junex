@@ -1,7 +1,7 @@
 /*reset*/
 :focus{outline:0;}
 h1,h2,h3,h4,h5,h6{ margin:0px; padding:0; line-height:normal}
-body,ul,img,p,input,dl,dd,tr,th,td{margin:0;padding:0;}
+body,img,p,input,dl,dd,tr,th,td{margin:0;padding:0;}
 em{font-style:normal;}
 img{border:none; max-width:100%}
 /*li,ul,ol{list-style:none;}*/
@@ -25,7 +25,14 @@ body{
 .fontRed{color:red;}
 .clearfix:before, .clearfix:after{content:" ";display:table;}
 .clearfix:after{clear:both;}
-ul,li{ list-style:none}
+/* 富文本正文需显示列表符；模板装饰列表仍用下方 .adv_list 等单独 none */
+ul, ol {
+  padding-left: 1.5em;
+  list-style: revert;
+}
+li {
+  list-style: revert;
+}
 
 
 
