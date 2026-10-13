@@ -190,7 +190,7 @@
           '  <div class="min-w-0 flex-1 text-[12px] leading-4 text-slate-700">' +
           titleHtml +
           '  </div>' +
-          '  <button type="button" class="js-inquiry-float-remove flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full text-slate-400 transition hover:bg-slate-100 hover:text-themeBg-d" data-product-id="' + id + '" aria-label="Remove">' +
+          '  <button type="button" class="js-inquiry-float-remove flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full text-slate-400 transition hover:bg-slate-100 hover:text-themeBg-d" data-product-id="' + id + '" aria-label="' + (typeof __ === 'function' ? __('Remove') : 'Remove') + '">' +
           '    <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>' +
           '  </button>' +
           '</div>'
@@ -205,10 +205,14 @@
       var id = normalizeId(btn.getAttribute('data-product-id'));
       var inInquiry = id ? has(id) : false;
       btn.setAttribute('data-in-inquiry', inInquiry ? '1' : '0');
-      btn.setAttribute('aria-label', inInquiry ? 'Remove from inquiry' : 'Add to inquiry');
+      btn.setAttribute('aria-label', inInquiry
+        ? (typeof __ === 'function' ? __('Remove from inquiry') : 'Remove from inquiry')
+        : (typeof __ === 'function' ? __('Add to inquiry') : 'Add to inquiry'));
       var text = btn.querySelector('.inquiry-pdp-text');
       if (text) {
-        text.textContent = inInquiry ? 'REMOVE FROM INQUIRY' : 'ADD TO INQUIRY';
+        text.textContent = inInquiry
+          ? (typeof __ === 'function' ? __('REMOVE FROM INQUIRY') : 'REMOVE FROM INQUIRY')
+          : (typeof __ === 'function' ? __('ADD TO INQUIRY') : 'ADD TO INQUIRY');
       }
     });
   }
@@ -282,7 +286,7 @@
         var inInquiry = has(btn.getAttribute('data-product-id'));
         showMessage({
           type: 'success',
-          message: inInquiry ? 'Added to inquiry list.' : 'Removed from inquiry list.',
+          message: inInquiry ? (typeof __ === 'function' ? __('Added to inquiry list.') : 'Added to inquiry list.') : (typeof __ === 'function' ? __('Removed from inquiry list.') : 'Removed from inquiry list.'),
         });
       }
     });

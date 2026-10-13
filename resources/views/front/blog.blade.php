@@ -26,7 +26,7 @@
  <section class="w-full breadcrumb bg-[#f7f8fa]">
     <div>
     <div class="mx-auto w-full max-w-[1200px] px-4 py-4 sm2:px-5 md1:px-6 lg1:px-0">
-        <nav aria-label="Breadcrumb">
+        <nav aria-label="{{ __('Breadcrumb') }}">
         <ol class="flex flex-wrap items-center gap-x-3 gap-y-1">
             @if(isset($breadcrumbs) && count($breadcrumbs))
                 @foreach($breadcrumbs as $index => $crumb)
@@ -34,12 +34,12 @@
                         <li class="inline-flex items-center">
                             @if(!empty($crumb['url']))
                                 <a href="{{ $crumb['url'] }}" class="inline-flex items-center gap-2 transition hover:text-themeText-h">
-                                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="Home" class="w-[14px] h-[14px]" />
+                                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
                                     <span class="font-poppins-regular  text-f14 text-themeText-p">{{ $crumb['label'] }}</span>
                                 </a>
                             @else
                                 <span class="inline-flex items-center gap-2">
-                                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="Home" class="w-[14px] h-[14px]" />
+                                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
                                     <span class="font-poppins-regular  text-f14 text-themeText-p">{{ $crumb['label'] }}</span>
                                 </span>
                             @endif
@@ -64,8 +64,8 @@
             @else
             <li class="inline-flex items-center">
             <a href="#" class="inline-flex items-center gap-2 transition hover:text-themeText-h">
-                <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="Home" class="w-[14px] h-[14px]" />
-                <span class="font-poppins-regular  text-f14 text-themeText-p">Home</span>
+                <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
+                <span class="font-poppins-regular  text-f14 text-themeText-p">{{ __('Home') }}</span>
             </a>
             </li>
 
@@ -76,7 +76,7 @@
             </li>
 
             <li class="inline-flex items-center">
-            <span class="font-poppins-regular text-f14 text-themeText-g" aria-current="page">Blog</span>
+            <span class="font-poppins-regular text-f14 text-themeText-g" aria-current="page">{{ __('Blog') }}</span>
             </li>
 
             <li class="inline-flex items-center text-themeText-h" aria-hidden="true">
@@ -86,7 +86,7 @@
             </li>
 
             <li class="inline-flex items-center">
-            <span class="font-poppins-regular text-f14 text-themeText-g" aria-current="page">Types of Vacuums: Everything You Need to Know to Choose the Best Cleaner</span>
+            <span class="font-poppins-regular text-f14 text-themeText-g" aria-current="page">{{ __('Types of Vacuums: Everything You Need to Know to Choose the Best Cleaner') }}</span>
             </li>
             @endif
         </ol>
@@ -110,11 +110,11 @@
 
             <div class="mt-6 md1:mt-8">
             {{-- 封面：宽 100%、高自适应，完整展示不裁剪 --}}
-            <img class="block h-auto w-full max-w-full object-contain" src="{{ $blogCover ?? '' }}" alt="Blog cover" loading="lazy" />
+            <img class="block h-auto w-full max-w-full object-contain" src="{{ $blogCover ?? '' }}" alt="{{ __('Blog cover') }}" loading="lazy" />
             </div>
 
             <!-- <div class="mt-10 text-center">
-            <img class="mx-auto h-auto w-auto max-w-[60px] mb-[30px]" src="{{ front_webp_url('/front/imgs/blog-detail-icon.png') }}" alt="Quote" loading="lazy" aria-hidden="true" />
+            <img class="mx-auto h-auto w-auto max-w-[60px] mb-[30px]" src="{{ front_webp_url('/front/imgs/blog-detail-icon.png') }}" alt="{{ __('Quote') }}" loading="lazy" aria-hidden="true" />
             <p class="mx-auto max-w-[680px] text-f20 font-poppins-medium leading-6 text-themeText-f mb-[30px]">
                 Very Comfortable Easy To Keep Clean. Small Enough To Put In Any Room In Your House But Yet Big Enough For A Big Person.
             </p>
@@ -128,8 +128,8 @@
             <div class="blog-detail-tags mt-5 md1:mt-6">
             <div class="flex flex-wrap items-center gap-2 md1:gap-2.5">
                 <div class="inline-flex items-center gap-1.5">
-                <img src="{{ front_webp_url('/front/icons/blog-tags.svg') }}" alt="Hot Tags" class="h-3.5 w-3.5" loading="lazy" />
-                <span class="text-f14 font-poppins-medium uppercase tracking-wide text-themeText-h md1:text-f16">Hot Tags :</span>
+                <img src="{{ front_webp_url('/front/icons/blog-tags.svg') }}" alt="{{ __('Hot Tags') }}" class="h-3.5 w-3.5" loading="lazy" />
+                <span class="text-f14 font-poppins-medium uppercase tracking-wide text-themeText-h md1:text-f16">{{ __('Hot Tags :') }}</span>
                 </div>
 
                 @foreach(($blogTagsData ?? []) as $tag)
@@ -149,7 +149,7 @@
                     </svg>
                     </div>
                     <div class="min-w-0">
-                    <div class="text-f18 font-poppins-medium uppercase tracking-wide">Previous Post</div>
+                    <div class="text-f18 font-poppins-medium uppercase tracking-wide">{{ __('Previous Post') }}</div>
                     <div class="truncate text-[14px] text-themeText-p font-poppins-regular">{{ $prevBlogData['title'] ?? '' }}</div>
                     </div>
                 </div>
@@ -165,7 +165,7 @@
                     </svg>
                     </div>
                     <div class="min-w-0">
-                    <div class="text-f18 font-poppins-medium uppercase tracking-wide">Next Post</div>
+                    <div class="text-f18 font-poppins-medium uppercase tracking-wide">{{ __('Next Post') }}</div>
                     <div class="truncate text-[14px] text-themeText-p font-poppins-regular">{{ $nextBlogData['title'] ?? '' }}</div>
                     </div>
                 </div>
@@ -179,7 +179,7 @@
         <aside class="w-full md4:w-[314px]">
         <div class="space-y-10 md4:pt-0">
             <section class="w-full">
-            <div class="text-f18 font-poppins-medium uppercase tracking-wide">Share</div>
+            <div class="text-f18 font-poppins-medium uppercase tracking-wide">{{ __('Share') }}</div>
             <div class="mt-4 flex flex-wrap items-center gap-3">
                 @php
                     $blogShareTitle = (string)($blogTitle ?? ($blog->name ?? ''));
@@ -199,11 +199,11 @@
             </section>
 
             <section class="w-full">
-            <div class="text-f18 font-poppins-medium uppercase tracking-wide">New Blog</div>
+            <div class="text-f18 font-poppins-medium uppercase tracking-wide">{{ __('New Blog') }}</div>
             <div class="mt-5 space-y-4">
                 @foreach(($latestBlogsData ?? []) as $item)
                     <a href="{{ $item['url'] ?? 'javascript:void(0);' }}" class="block bg-themeBg-g p-4 transition hover:bg-slate-200">
-                        <img class="h-auto w-full object-cover" src="{{ $item['image'] ?? '' }}" alt="{{ $item['title'] ?? 'Blog thumbnail' }}" loading="lazy" />
+                        <img class="h-auto w-full object-cover" src="{{ $item['image'] ?? '' }}" alt="{{ $item['title'] ?? __('Blog thumbnail') }}" loading="lazy" />
                         <div class="mt-3 text-f16 font-poppins-regular leading-6 text-themeText-f">
                             {{ $item['title'] ?? '' }}
                         </div>

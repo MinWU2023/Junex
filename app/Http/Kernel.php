@@ -48,6 +48,8 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\CheckScheduledPublish::class,
+            // 按域名解析语种（前台 / 后台 web 路由均生效）
+            \App\Http\Middleware\LocaleMiddleware::class,
             // FrontPageAccessMiddleware 已挂全局，避免重复执行
         ],
 

@@ -24,7 +24,7 @@
 <section class="w-full breadcrumb bg-themeBg-a md4:bg-themeBg-g">
     <div >
         <div class="mx-auto w-full max-w-[1200px] px-4 py-4 sm2:px-5 md1:px-6 lg1:px-0">
-            <nav aria-label="Breadcrumb">
+            <nav aria-label="{{ __('Breadcrumb') }}">
             <ol class="flex flex-wrap items-center gap-x-3 gap-y-1">
                 @if(isset($breadcrumbs) && count($breadcrumbs))
                     @foreach($breadcrumbs as $index => $crumb)
@@ -32,12 +32,12 @@
                             <li class="inline-flex items-center">
                                 @if(!empty($crumb['url']))
                                     <a href="{{ $crumb['url'] }}" class="inline-flex items-center gap-2 transition hover:text-themeText-h">
-                                        <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="Home" class="w-[14px] h-[14px]" />
+                                        <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
                                         <span class="font-poppins-regular  text-f14 text-themeText-p">{{ $crumb['label'] }}</span>
                                     </a>
                                 @else
                                     <span class="inline-flex items-center gap-2">
-                                        <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="Home" class="w-[14px] h-[14px]" />
+                                        <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
                                         <span class="font-poppins-regular  text-f14 text-themeText-p">{{ $crumb['label'] }}</span>
                                     </span>
                                 @endif
@@ -62,8 +62,8 @@
                 @else
                 <li class="inline-flex items-center">
                 <a href="#" class="inline-flex items-center gap-2 transition hover:text-themeText-h">
-                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="Home" class="w-[14px] h-[14px]" />
-                    <span class="font-poppins-regular  text-f14 text-themeText-p">Home</span>
+                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
+                    <span class="font-poppins-regular  text-f14 text-themeText-p">{{ __('Home') }}</span>
                 </a>
                 </li>
 
@@ -74,7 +74,7 @@
                 </li>
 
                 <li class="inline-flex items-center">
-                <span class="font-poppins-regular text-f14 text-themeText-g" aria-current="page">Customer Services</span>
+                <span class="font-poppins-regular text-f14 text-themeText-g" aria-current="page">{{ __('Customer Services') }}</span>
                 </li>
                 @endif
             </ol>
@@ -118,7 +118,7 @@
         @endforeach
         <div class="flex items-center justify-center bg-themeBg-d py-10 text-center text-white">
             <div>
-            <img class="mx-auto h-14 w-14 object-contain" src="{{ $whyChoose['center']['logo_url'] ?? '' }}" alt="Junex" loading="lazy" />
+            <img class="mx-auto h-14 w-14 object-contain" src="{{ $whyChoose['center']['logo_url'] ?? '' }}" alt="{{ __('Junex') }}" loading="lazy" />
             <div class="mt-3 text-[16px] font-poppins-semibold uppercase tracking-[3px]">{{ $whyChoose['center']['title'] ?? '' }}</div>
             <div class="mx-auto mt-3 h-[1px] w-[40px] bg-white/60"></div>
             <div class="mt-3 text-[11px] leading-5 text-white px-4 font-poppins-regular">{{ $whyChoose['center']['subtitle'] ?? '' }}</div>
@@ -177,7 +177,7 @@
         </div>
         <!-- Center Red Block -->
         <div class="absolute z-10 flex flex-col items-center justify-center bg-themeBg-d text-center text-white" style="left:39%;top:33.33%;width:22%;height:33.34%;">
-            <img class="h-auto w-[200px] object-contain" src="{{ $whyChoose['center']['logo_url'] ?? '' }}" alt="Junex" loading="lazy" />
+            <img class="h-auto w-[200px] object-contain" src="{{ $whyChoose['center']['logo_url'] ?? '' }}" alt="{{ __('Junex') }}" loading="lazy" />
             <div class="mt-3 text-f12 leading-5 text-white px-4 font-poppins-regular">{{ $whyChoose['center']['description_desktop'] ?? '' }}</div>
         </div>
         </div>
@@ -259,7 +259,7 @@
             prev = document.createElement('button');
             prev.type = 'button';
             prev.className = 'cs-cert-nav cs-cert-prev';
-            prev.setAttribute('aria-label', 'Previous certificates');
+            prev.setAttribute('aria-label', typeof __ === 'function' ? __('Previous certificates') : 'Previous certificates');
             prev.innerHTML = NAV_PREV_SVG;
             carousel.insertBefore(prev, viewport);
         }
@@ -268,7 +268,7 @@
             next = document.createElement('button');
             next.type = 'button';
             next.className = 'cs-cert-nav cs-cert-next';
-            next.setAttribute('aria-label', 'Next certificates');
+            next.setAttribute('aria-label', typeof __ === 'function' ? __('Next certificates') : 'Next certificates');
             next.innerHTML = NAV_NEXT_SVG;
             carousel.appendChild(next);
         }
@@ -276,7 +276,7 @@
         if (!pagination) {
             pagination = document.createElement('div');
             pagination.className = 'cs-cert-pagination';
-            pagination.setAttribute('aria-label', 'Certificate slides');
+            pagination.setAttribute('aria-label', typeof __ === 'function' ? __('Certificate slides') : 'Certificate slides');
             carousel.appendChild(pagination);
         }
 

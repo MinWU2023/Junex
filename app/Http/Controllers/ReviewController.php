@@ -53,8 +53,8 @@ class ReviewController extends Controller
         $tdk = $this->resolveCmsPageTdkByPath($setting, 'reviews');
 
         $breadcrumbs = $this->buildBreadcrumbs([
-            ['label' => 'Home', 'url' => '/'],
-            ['label' => 'Reviews', 'url' => null],
+            ['label' => __('Home'), 'url' => '/'],
+            ['label' => __('Reviews'), 'url' => null],
         ]);
 
         $data = [

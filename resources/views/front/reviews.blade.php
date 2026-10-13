@@ -28,7 +28,7 @@
 <section class="w-full breadcrumb bg-themeBg-a md4:bg-themeBg-g">
     <div >
     <div class="mx-auto w-full max-w-[1200px] px-4 py-4 sm2:px-5 md1:px-6 lg1:px-0">
-        <nav aria-label="Breadcrumb">
+        <nav aria-label="{{ __('Breadcrumb') }}">
         <ol class="flex flex-wrap items-center gap-x-3 gap-y-1">
             @if(isset($breadcrumbs) && count($breadcrumbs))
                 @foreach($breadcrumbs as $index => $crumb)
@@ -36,12 +36,12 @@
                         <li class="inline-flex items-center">
                             @if(!empty($crumb['url']))
                                 <a href="{{ $crumb['url'] }}" class="inline-flex items-center gap-2 transition hover:text-themeText-h">
-                                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="Home" class="w-[14px] h-[14px]" />
+                                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
                                     <span class="font-poppins-regular  text-f14 text-themeText-p">{{ $crumb['label'] }}</span>
                                 </a>
                             @else
                                 <span class="inline-flex items-center gap-2">
-                                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="Home" class="w-[14px] h-[14px]" />
+                                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
                                     <span class="font-poppins-regular  text-f14 text-themeText-p">{{ $crumb['label'] }}</span>
                                 </span>
                             @endif
@@ -66,8 +66,8 @@
             @else
             <li class="inline-flex items-center">
             <a href="#" class="inline-flex items-center gap-2 transition hover:text-themeText-h">
-                <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="Home" class="w-[14px] h-[14px]" />
-                <span class="font-poppins-regular  text-f14 text-themeText-p">Home</span>
+                <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
+                <span class="font-poppins-regular  text-f14 text-themeText-p">{{ __('Home') }}</span>
             </a>
             </li>
 
@@ -78,7 +78,7 @@
             </li>
 
             <li class="inline-flex items-center">
-            <span class="font-poppins-regular text-f14 text-themeText-g" aria-current="page">Reviews</span>
+            <span class="font-poppins-regular text-f14 text-themeText-g" aria-current="page">{{ __('Reviews') }}</span>
             </li>
             @endif
         </ol>
@@ -91,10 +91,10 @@
 <section class="w-full bg-white reviews">
     <div class="mx-auto w-full max-w-[1200px] px-4 py-10 sm2:px-5 md1:px-6 md4:py-14 lg1:px-0">
     <div class="text-center">
-        <div class="text-f32 font-poppins-semibold uppercase tracking-wide text-themeText-f">GENUINE CUSTOMER REVIEW FROM JUNEX</div>
+        <div class="text-f32 font-poppins-semibold uppercase tracking-wide text-themeText-f">{{ __('GENUINE CUSTOMER REVIEW FROM JUNEX') }}</div>
         <div class="mx-auto mt-3 h-[7px] w-[46px] rounded bg-themeBg-d" aria-hidden="true"></div>
         <p class="mx-auto mt-4 max-w-[960px] leading-6 text-slate-600 text-f16 font-poppins-regular text-themeText-g">
-        Here are some real reviews about our service and goods. We are happy to share them with all our customers, both now and in the future. If you are worried about our service and goods, you can see some reviews from our kind customers, and we hope it will help you to know us better. Looking forward to working together with you in your active wears projects.
+        {{ __('Here are some real reviews about our service and goods. We are happy to share them with all our customers, both now and in the future. If you are worried about our service and goods, you can see some reviews from our kind customers, and we hope it will help you to know us better. Looking forward to working together with you in your active wears projects.') }}
         </p>
     </div>
 
@@ -124,7 +124,7 @@
                                     <div class="mt-4 grid grid-cols-2 gap-3">
                                         @foreach(array_slice($item['imgs'], 0, 2) as $img)
                                             <div class="overflow-hidden bg-slate-200">
-                                                <img class="w-full object-cover preview-img" src="{{ $img }}" alt="Review image" loading="lazy" />
+                                                <img class="w-full object-cover preview-img" src="{{ $img }}" alt="{{ __('Review image') }}" loading="lazy" />
                                             </div>
                                         @endforeach
                                     </div>
@@ -138,8 +138,8 @@
     </div>
 
     <div class="mt-10 flex flex-col items-center justify-center gap-4 sm6:flex-row sm6:gap-6">
-        <a id="btn-view-more" href="#" data-next-page="{{ $reviews && $reviews->hasMorePages() ? ($reviews->currentPage() + 1) : '' }}" class="inline-flex items-center justify-center bg-themeBg-h px-10 py-3.5 text-f14 font-poppins-medium uppercase tracking-wide text-themeText-f transition hover:bg-slate-300">VIEW MORE</a>
-        <a href="/contact-us" class="inline-flex items-center justify-center bg-red-600 px-9 py-3.5 text-f14 font-poppins-medium uppercase tracking-wide text-white transition hover:bg-red-700">QUOTE NOW</a>
+        <a id="btn-view-more" href="#" data-next-page="{{ $reviews && $reviews->hasMorePages() ? ($reviews->currentPage() + 1) : '' }}" class="inline-flex items-center justify-center bg-themeBg-h px-10 py-3.5 text-f14 font-poppins-medium uppercase tracking-wide text-themeText-f transition hover:bg-slate-300">{{ __('VIEW MORE') }}</a>
+        <a href="/contact-us" class="inline-flex items-center justify-center bg-red-600 px-9 py-3.5 text-f14 font-poppins-medium uppercase tracking-wide text-white transition hover:bg-red-700">{{ __('QUOTE NOW') }}</a>
     </div>
     </div>
 </section>
@@ -179,7 +179,7 @@
                 var imgs = item.imgs.slice(0, 2);
                 imgsHtml = '<div class="mt-4 grid grid-cols-2 gap-3">' + imgs.map(function (src) {
                     return '<div class="overflow-hidden bg-slate-200">'
-                        + '<img class="w-full object-cover preview-img" src="' + escapeHtml(src) + '" alt="Review image" loading="lazy" />'
+                        + '<img class="w-full object-cover preview-img" src="' + escapeHtml(src) + '" alt="' + (typeof __ === 'function' ? __('Review image') : 'Review image') + '" loading="lazy" />'
                         + '</div>';
                 }).join('') + '</div>';
             }
@@ -192,7 +192,7 @@
                 + '<div class="hidden md2:flex h-[50px] w-[50px] shrink-0 items-center justify-center rounded-full bg-themeBg-d font-poppins-medium text-f22 text-white">' + escapeHtml(item.initial || '') + '</div>'
                 + '<div>'
                 + '<div class="text-f20 font-poppins-medium text-themeText-f">' + escapeHtml(item.username || '') + '</div>'
-                + '<div class="mt-1 flex items-center gap-0.5 text-[#f59e0b]" aria-label="' + escapeHtml(item.score || 0) + ' stars">'
+                + '<div class="mt-1 flex items-center gap-0.5 text-[#f59e0b]" aria-label="' + escapeHtml(item.score || 0) + ' ' + (typeof __ === 'function' ? __('stars') : 'stars') + '">'
                 + buildStarsHtml()
                 + '</div>'
                 + '</div>'
@@ -239,7 +239,7 @@
 
                 try {
                     if (typeof window.showLoading === 'function') {
-                        window.showLoading('Loading...');
+                        window.showLoading(typeof __ === 'function' ? __('Loading...') : 'Loading...');
                     }
                 } catch (e) {}
 

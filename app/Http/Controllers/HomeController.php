@@ -155,9 +155,9 @@ class HomeController extends Controller
 
         if (empty($hotStyleTabs)) {
             $hotStyleTabs = [
-                ['key' => 'new', 'label' => 'New Arrivals', 'products' => $newProducts],
-                ['key' => 'best', 'label' => 'Best Sellers', 'products' => $hotProducts],
-                ['key' => 'bundles', 'label' => 'Bundles & Save', 'products' => $recommendProducts],
+                ['key' => 'new', 'label' => __('New Arrivals'), 'products' => $newProducts],
+                ['key' => 'best', 'label' => __('Best Sellers'), 'products' => $hotProducts],
+                ['key' => 'bundles', 'label' => __('Bundles & Save'), 'products' => $recommendProducts],
             ];
         }
 
@@ -499,8 +499,8 @@ class HomeController extends Controller
             'injectToView' => $injectToView,
             'pageBanner' => $pageBanner,
             'breadcrumbs' => $this->buildBreadcrumbs([
-                ['label' => 'Home', 'url' => '/'],
-                ['label' => 'About Us', 'url' => null],
+                ['label' => __('Home'), 'url' => '/'],
+                ['label' => __('About Us'), 'url' => null],
             ]),
             'tdk' => $tdk,
         ];
@@ -525,8 +525,8 @@ class HomeController extends Controller
             'injectToView' => $injectToView,
             'pageBanner' => $pageBanner,
             'breadcrumbs' => $this->buildBreadcrumbs([
-                ['label' => 'Home', 'url' => '/'],
-                ['label' => 'Contact Us', 'url' => null],
+                ['label' => __('Home'), 'url' => '/'],
+                ['label' => __('Contact Us'), 'url' => null],
             ]),
             'tdk' => $tdk,
         ];
@@ -549,8 +549,8 @@ class HomeController extends Controller
             'injectToView' => $injectToView,
             'pageBanner' => $pageBanner,
             'breadcrumbs' => $this->buildBreadcrumbs([
-                ['label' => 'Home', 'url' => '/'],
-                ['label' => 'Customer Services', 'url' => null],
+                ['label' => __('Home'), 'url' => '/'],
+                ['label' => __('Customer Services'), 'url' => null],
             ]),
             'tdk' => $tdk,
         ];
@@ -599,7 +599,7 @@ class HomeController extends Controller
             'pageContent' => $pageContent,
             'createdLabel' => $createdLabel,
             'breadcrumbs' => $this->buildBreadcrumbs([
-                ['label' => 'Home', 'url' => '/'],
+                ['label' => __('Home'), 'url' => '/'],
                 ['label' => $pageName, 'url' => null],
             ]),
             'tdk' => $tdk,
@@ -631,8 +631,8 @@ class HomeController extends Controller
             'injectToView' => $injectToView,
             'pageBanner' => $pageBanner,
             'breadcrumbs' => $this->buildBreadcrumbs([
-                ['label' => 'Home', 'url' => '/'],
-                ['label' => 'Not Found', 'url' => null],
+                ['label' => __('Home'), 'url' => '/'],
+                ['label' => __('Not Found'), 'url' => null],
             ]),
             'tdk' => $tdk,
         ];
@@ -664,8 +664,8 @@ class HomeController extends Controller
             'injectToView' => $injectToView,
             'pageBanner' => $pageBanner,
             'breadcrumbs' => $this->buildBreadcrumbs([
-                ['label' => 'Home', 'url' => '/'],
-                ['label' => 'Inquiry', 'url' => null],
+                ['label' => __('Home'), 'url' => '/'],
+                ['label' => __('Inquiry'), 'url' => null],
             ]),
             'tdk' => $tdk,
             'inquirySuccessEmail' => $email,
@@ -867,7 +867,7 @@ class HomeController extends Controller
             ]);
             return response()->json([
                 'success' => false,
-                'message' => (bool)config('app.debug') ? $e->getMessage() : 'Submit failed',
+                'message' => (bool)config('app.debug') ? $e->getMessage() : __('Submit failed'),
             ], 500);
         }
     }
@@ -1004,7 +1004,7 @@ class HomeController extends Controller
             ]);
             return response()->json([
                 'success' => false,
-                'message' => (bool)config('app.debug') ? $e->getMessage() : 'Submit failed',
+                'message' => (bool)config('app.debug') ? $e->getMessage() : __('Submit failed'),
             ], 500);
         }
     }

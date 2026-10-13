@@ -107,7 +107,7 @@
       prevEl = document.createElement('button');
       prevEl.type = 'button';
       prevEl.className = `${p}-prev junex-swiper-nav`;
-      prevEl.setAttribute('aria-label', 'Previous');
+      prevEl.setAttribute('aria-label', typeof __ === 'function' ? __('Previous') : 'Previous');
       prevEl.innerHTML = PREV_SVG;
       controls.appendChild(prevEl);
     } else {
@@ -118,7 +118,7 @@
       nextEl = document.createElement('button');
       nextEl.type = 'button';
       nextEl.className = `${p}-next junex-swiper-nav`;
-      nextEl.setAttribute('aria-label', 'Next');
+      nextEl.setAttribute('aria-label', typeof __ === 'function' ? __('Next') : 'Next');
       nextEl.innerHTML = NEXT_SVG;
       controls.appendChild(nextEl);
     } else {

@@ -117,8 +117,8 @@ class BlogController extends Controller
             'productVideosData' => $productVideosData,
             'pageBanner' => $pageBanner,
             'breadcrumbs' => $this->buildBreadcrumbs([
-                ['label' => 'Home', 'url' => '/'],
-                ['label' => 'Blogs', 'url' => null],
+                ['label' => __('Home'), 'url' => '/'],
+                ['label' => __('Blogs'), 'url' => null],
             ]),
             'injectToView' => $injectToView,
             'tdk' => $tdk,
@@ -145,8 +145,8 @@ class BlogController extends Controller
         $blog->load(['translations', 'blogTags.translations', 'blogTags.url', 'url']);
 
         $breadcrumbs = $this->buildBreadcrumbs([
-            ['label' => 'Home', 'url' => '/'],
-            ['label' => 'Blogs', 'url' => '/blogs'],
+            ['label' => __('Home'), 'url' => '/'],
+            ['label' => __('Blogs'), 'url' => '/blogs'],
             ['label' => $blog->name, 'url' => null],
         ]);
 
@@ -297,8 +297,8 @@ class BlogController extends Controller
         $category->load(['translations']);
 
         $breadcrumbs = $this->buildBreadcrumbs([
-            ['label' => 'Home', 'url' => '/'],
-            ['label' => 'Blogs', 'url' => '/blogs'],
+            ['label' => __('Home'), 'url' => '/'],
+            ['label' => __('Blogs'), 'url' => '/blogs'],
             ['label' => $category->name, 'url' => null],
         ]);
 
@@ -382,8 +382,8 @@ class BlogController extends Controller
         $tag->load(['translations']);
 
         $breadcrumbs = $this->buildBreadcrumbs([
-            ['label' => 'Home', 'url' => '/'],
-            ['label' => 'Blogs', 'url' => '/blogs'],
+            ['label' => __('Home'), 'url' => '/'],
+            ['label' => __('Blogs'), 'url' => '/blogs'],
             ['label' => $tag->name, 'url' => null],
         ]);
 

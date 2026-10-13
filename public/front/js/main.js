@@ -284,7 +284,7 @@ function ajax(options) {
                     res = raw ? JSON.parse(raw) : null;
                 } catch (e) {
                     reject({
-                        message: 'Invalid JSON response',
+                        message: (typeof __ === 'function' ? __('Invalid JSON response') : 'Invalid JSON response'),
                         status: status,
                         url: url,
                         raw: raw,
@@ -298,7 +298,7 @@ function ajax(options) {
                 resolve(res);
             } else {
                 reject({
-                    message: 'HTTP Error',
+                    message: (typeof __ === 'function' ? __('HTTP Error') : 'HTTP Error'),
                     status: status,
                     url: url,
                     response: res,
@@ -308,11 +308,11 @@ function ajax(options) {
         };
 
         xhr.onerror = function () {
-            reject({ message: 'Network Error', status: xhr.status || 0, url: url });
+            reject({ message: (typeof __ === 'function' ? __('Network Error') : 'Network Error'), status: xhr.status || 0, url: url });
         };
 
         xhr.ontimeout = function () {
-            reject({ message: 'Timeout', status: xhr.status || 0, url: url });
+            reject({ message: (typeof __ === 'function' ? __('Timeout') : 'Timeout'), status: xhr.status || 0, url: url });
         };
 
         xhr.send(body);
@@ -463,8 +463,10 @@ ajax.post = function (url, data, options) {
         var dialog = $('<div class="bg-white rounded-lg shadow-xl p-6 min-w-[420px]"></div>');
         var content = $('<div class="text-f16 text-gray-800 mb-6">' + message + '</div>');
         var footer = $('<div class="flex justify-end gap-3"></div>');
-        var cancelBtn = $('<button class="px-4 py-2 text-f14 border border-gray-300 rounded hover:bg-gray-50">取消</button>');
-        var confirmBtn = $('<button class="px-4 py-2 text-f14 bg-blue-500 text-white rounded hover:bg-blue-600">确定</button>');
+        var cancelLabel = typeof __ === 'function' ? __('Cancel') : 'Cancel';
+        var confirmLabel = typeof __ === 'function' ? __('Confirm') : 'Confirm';
+        var cancelBtn = $('<button class="px-4 py-2 text-f14 border border-gray-300 rounded hover:bg-gray-50"></button>').text(cancelLabel);
+        var confirmBtn = $('<button class="px-4 py-2 text-f14 bg-blue-500 text-white rounded hover:bg-blue-600"></button>').text(confirmLabel);
 
         footer.append(cancelBtn, confirmBtn);
         dialog.append(content, footer);
@@ -577,7 +579,7 @@ $(document).on('click', '.swiper-slide-preview img', function() {
     function showLoading(text) {
         if (loadingInstance) return loadingInstance;
 
-        text = text || 'Loading...';
+        text = text || (typeof __ === 'function' ? __('Loading...') : 'Loading...');
         var overlay = $('<div class="fixed inset-0 bg-black/60 z-[10000] flex items-center justify-center"></div>');
         var container = $('<div class="flex flex-col items-center gap-4"></div>');
 
@@ -661,7 +663,7 @@ $(function () {
         $('.search_popup').addClass('search_popup_active');
     });
     //  关闭搜索框
-    $(document).on('click', '.search_popup button[aria-label="Close search"]', function (e) {
+    $(document).on('click', '.search_popup .search_popup_close', function (e) {
         e.preventDefault();
         $('.search_popup').removeClass('search_popup_active');
     });
@@ -706,17 +708,6 @@ $(function () {
         function closePopup() {
             $('.inquiry_popup').removeClass('inquiry_popup_active');
         }
-
-        $(document).on('click', '.inquiry-entry a[aria-label="Leave a message"]', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            var $popup = $('.inquiry_popup');
-            if ($popup.hasClass('inquiry_popup_active')) {
-                closePopup();
-                return;
-            }
-            openPopup();
-        });
 
         $(document).on('click', '.inquiry_popup .inquiry_popup_close', function (e) {
             e.preventDefault();
@@ -1050,7 +1041,7 @@ $(function () {
         var content = ($form.find('textarea[name="content"]').val() || '').trim();
         if (!email || !content) {
             if (typeof showMessage === 'function') {
-                showMessage({ type: 'warning', message: 'Please fill in required fields.' });
+                showMessage({ type: 'warning', message: (typeof __ === 'function' ? __('Please fill in required fields.') : 'Please fill in required fields.') });
             }
             return;
         }
@@ -1067,7 +1058,7 @@ $(function () {
         ajax.post('/api/inquiry-popup', fd, { timeout: 60000 }).then(function (res) {
             if (res && res.success) {
                 if (typeof showMessage === 'function') {
-                    showMessage({ type: 'success', message: 'Message successfully!' });
+                    showMessage({ type: 'success', message: (typeof __ === 'function' ? __('Message successfully!') : 'Message successfully!') });
                 }
                 formEl.reset();
                 syncInquiryFormMeta();
@@ -1076,10 +1067,10 @@ $(function () {
                 return;
             }
             if (typeof showMessage === 'function') {
-                showMessage({ type: 'error', message: (res && res.message) ? res.message : 'Submit failed' });
+                showMessage({ type: 'error', message: (res && res.message) ? res.message : (typeof __ === 'function' ? __('Submit failed') : 'Submit failed') });
             }
         }).catch(function (err) {
-            var msg = 'Submit failed';
+            var msg = (typeof __ === 'function' ? __('Submit failed') : 'Submit failed');
             if (err && err.response) {
                 if (err.response.message) msg = err.response.message;
                 else if (err.response.errors) {
@@ -1145,7 +1136,7 @@ $(function () {
         // tel 全站询盘可选，仅校验 name / email / content
         if (!name || !email || !content) {
             if (typeof showMessage === 'function') {
-                showMessage({ type: 'warning', message: 'Please fill in required fields.' });
+                showMessage({ type: 'warning', message: (typeof __ === 'function' ? __('Please fill in required fields.') : 'Please fill in required fields.') });
             }
             return;
         }
@@ -1193,7 +1184,7 @@ $(function () {
         ajax.post('/api/ask-us-inquiry', fd, { timeout: 60000 }).then(function (res) {
             if (res && res.success) {
                 if (typeof showMessage === 'function') {
-                    showMessage({ type: 'success', message: 'Message successfully!' });
+                    showMessage({ type: 'success', message: (typeof __ === 'function' ? __('Message successfully!') : 'Message successfully!') });
                 }
                 formEl.reset();
                 if (typeof window.clearInquiryAttachments === 'function') { window.clearInquiryAttachments($form[0]); }
@@ -1202,10 +1193,10 @@ $(function () {
                 return;
             }
             if (typeof showMessage === 'function') {
-                showMessage({ type: 'error', message: (res && res.message) ? res.message : 'Submit failed' });
+                showMessage({ type: 'error', message: (res && res.message) ? res.message : (typeof __ === 'function' ? __('Submit failed') : 'Submit failed') });
             }
         }).catch(function (err) {
-            var msg = 'Submit failed';
+            var msg = (typeof __ === 'function' ? __('Submit failed') : 'Submit failed');
             if (err && err.response) {
                 if (err.response.message) msg = err.response.message;
                 else if (err.response.errors) {
@@ -1266,9 +1257,9 @@ $(function () {
                       '</span>' +
                       '<span class="inquiry-attach__file-meta">' +
                         '<span class="inquiry-attach__file-name" title="' + safeName + '">' + safeName + '</span>' +
-                        '<span class="inquiry-attach__file-size">' + formatSize(f.size || 0) + ' · ' + (extOf(f.name).toUpperCase() || 'FILE') + '</span>' +
+                        '<span class="inquiry-attach__file-size">' + formatSize(f.size || 0) + ' · ' + (extOf(f.name).toUpperCase() || (typeof __ === 'function' ? __('FILE') : 'FILE')) + '</span>' +
                       '</span>' +
-                      '<button type="button" class="inquiry-attach__file-remove js-inquiry-attach-remove" data-index="' + idx + '" aria-label="Remove">' +
+                      '<button type="button" class="inquiry-attach__file-remove js-inquiry-attach-remove" data-index="' + idx + '" aria-label="' + (typeof __ === 'function' ? __('Remove') : 'Remove') + '">' +
                         '<svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>' +
                       '</button>' +
                     '</li>';
@@ -1295,11 +1286,11 @@ $(function () {
             });
 
             if (rejected.indexOf('limit') >= 0 && typeof showMessage === 'function') {
-                showMessage({ type: 'warning', message: 'You can upload up to ' + maxFiles + ' files.' });
+                showMessage({ type: 'warning', message: (typeof __ === 'function' ? __('You can upload up to :count files.', { count: maxFiles }) : ('You can upload up to ' + maxFiles + ' files.')) });
             } else if (rejected.indexOf('size') >= 0 && typeof showMessage === 'function') {
-                showMessage({ type: 'warning', message: 'Each file must be smaller than 10MB.' });
+                showMessage({ type: 'warning', message: (typeof __ === 'function' ? __('Each file must be smaller than 10MB.') : 'Each file must be smaller than 10MB.') });
             } else if (rejected.indexOf('type') >= 0 && typeof showMessage === 'function') {
-                showMessage({ type: 'warning', message: 'Unsupported file type.' });
+                showMessage({ type: 'warning', message: (typeof __ === 'function' ? __('Unsupported file type.') : 'Unsupported file type.') });
             }
 
             syncInput(wrap);
@@ -1406,7 +1397,7 @@ $(function () {
         if ($btn.data('loading') === 1) return;
 
         if (typeof showLoading === 'function') {
-            showLoading('Removing...');
+            showLoading(typeof __ === 'function' ? __('Removing...') : 'Removing...');
         }
 
         var customerId = getCustomerId();
@@ -1457,7 +1448,7 @@ $(function () {
             var customerId = getCustomerId();
             if (!customerId) {
                 if (typeof showMessage === 'function') {
-                    showMessage({ type: 'warning', message: 'Please refresh and try again.' });
+                    showMessage({ type: 'warning', message: (typeof __ === 'function' ? __('Please refresh and try again.') : 'Please refresh and try again.') });
                 }
                 return;
             }
@@ -1479,18 +1470,18 @@ $(function () {
             })).then(function (res) {
                 if (res && res.success === true) {
                     if (typeof showMessage === 'function') {
-                        showMessage({ type: 'success', message: nextFav ? 'Added to favorites.' : 'Removed from favorites.' });
+                        showMessage({ type: 'success', message: nextFav ? (typeof __ === 'function' ? __('Added to favorites.') : 'Added to favorites.') : (typeof __ === 'function' ? __('Removed from favorites.') : 'Removed from favorites.') });
                     }
                     return;
                 }
                 setBtnFavorite($btn, currentFav);
                 if (typeof showMessage === 'function') {
-                    showMessage({ type: 'error', message: (res && res.message) ? res.message : 'Action failed' });
+                    showMessage({ type: 'error', message: (res && res.message) ? res.message : (typeof __ === 'function' ? __('Action failed') : 'Action failed') });
                 }
             }).catch(function () {
                 setBtnFavorite($btn, currentFav);
                 if (typeof showMessage === 'function') {
-                    showMessage({ type: 'error', message: 'Action failed' });
+                    showMessage({ type: 'error', message: (typeof __ === 'function' ? __('Action failed') : 'Action failed') });
                 }
             }).finally(function () {
                 $btn.data('loading', 0);

@@ -42,13 +42,13 @@
         ],
     ];
 @endphp
-<section class="cs-stages sec-bg-color" aria-label="Four Sample Stages">
+<section class="cs-stages sec-bg-color" aria-label="{{ __('Four Sample Stages') }}">
     <div class="cs-stages-inner sec-pad">
         <div class="cs-stages-header">
-            <h2 class="cs-stages-title">FOUR SAMPLE STAGES. EACH ONE APPROVED IN WRITING BEFORE THE NEXT IS CUT.</h2>
+            <h2 class="cs-stages-title">{{ __('FOUR SAMPLE STAGES. EACH ONE APPROVED IN WRITING BEFORE THE NEXT IS CUT.') }}</h2>
             <div class="cs-stages-bar" aria-hidden="true"></div>
             <p class="cs-stages-desc">
-                Our Company Holds Internationally Recognized Certifications, Including BSCI (Grade B), GRS, ISO 9001, And OEKO TEX 100. These Help Your Brand Meet Retailer And Customer Requirements For Quality.
+                {{ __('Our Company Holds Internationally Recognized Certifications, Including BSCI (Grade B), GRS, ISO 9001, And OEKO TEX 100. These Help Your Brand Meet Retailer And Customer Requirements For Quality.') }}
             </p>
         </div>
         <div class="cs-stages-grid">
@@ -78,7 +78,7 @@
                     <div class="sample-stage-footer">
                         <div class="sample-stage-divider" aria-hidden="true"></div>
                         <div class="sample-stage-lead">
-                            <div class="sample-stage-lead-label">Lead Time</div>
+                            <div class="sample-stage-lead-label">{{ __('Lead Time') }}</div>
                             <div class="sample-stage-lead-value">{{ $stage['lead_time'] }}</div>
                         </div>
                     </div>

@@ -28,7 +28,7 @@
         <div class="py-10 md1:py-12 md4:py-16">
             <div class="mx-auto w-full max-w-[728px] bg-white shadow-[0_18px_40px_rgba(0,0,0,0.12)] ring-1 ring-black/5">
                 <div class="px-5 py-7 sm6:px-8 md1:px-12">
-                    <h1 class="text-center text-f26 md1:text-f32 font-poppins-semibold uppercase tracking-wide text-themeText-f">Forgot Password</h1>
+                    <h1 class="text-center text-f26 md1:text-f32 font-poppins-semibold uppercase tracking-wide text-themeText-f">{{ __('Forgot Password') }}</h1>
                     <div class="mx-auto mt-3 h-[7px] w-[46px] rounded bg-themeBg-d" aria-hidden="true"></div>
 
                     @if (session('status'))
@@ -46,7 +46,7 @@
                     <div class="auth_error hidden mt-6 rounded bg-red-50 px-4 py-3 text-f14 text-red-700 ring-1 ring-red-200 whitespace-nowrap overflow-hidden text-ellipsis"></div>
 
                     <p class="mt-7 text-f14 md1:text-f16 font-poppins-regular text-themeText-g leading-6">
-                        Enter the email address associated with your account. If it exists in our system, we will send you reset instructions.
+                        {{ __('Enter the email address associated with your account. If it exists in our system, we will send you reset instructions.') }}
                     </p>
 
                     <form class="auth_form mt-7 space-y-6" method="post" action="{{ route('forget.submit') }}">
@@ -54,23 +54,23 @@
                         <input type="hidden" name="redirect" value="{{ old('redirect', request('redirect', $redirect ?? '/')) }}" />
 
                         <div>
-                            <label class="block text-f14 font-poppins-regular text-themeText-g">Email <span class="text-themeBg-d">*</span></label>
+                            <label class="block text-f14 font-poppins-regular text-themeText-g">{{ __('Email') }} <span class="text-themeBg-d">*</span></label>
                             <input
                                 type="email"
                                 name="email"
                                 value="{{ old('email') }}"
-                                placeholder="Please enter your email"
+                                placeholder="{{ __('Please enter your email') }}"
                                 class="mt-2 h-[46px] md1:h-[51px] w-full rounded border border-themeBg-h bg-white px-3 text-f14 text-themeText-a placeholder-themeText-i outline-none transition focus:border-themeBg-d"
                                 required
                             />
                         </div>
 
                         <button type="submit" class="h-[48px] md1:h-[54px] w-full bg-themeText-f font-poppins-medium text-f16 uppercase tracking-wide text-white transition hover:opacity-90">
-                            Send Reset Instructions
+                            {{ __('Send Reset Instructions') }}
                         </button>
 
                         <div class="text-center text-f14 font-poppins-regular text-themeText-g">
-                            <a href="{{ route('login', ['redirect' => request('redirect', $redirect ?? '/')]) }}" class="text-themeText-h transition hover:underline">Back to login</a>
+                            <a href="{{ route('login', ['redirect' => request('redirect', $redirect ?? '/')]) }}" class="text-themeText-h transition hover:underline">{{ __('Back to login') }}</a>
                         </div>
                     </form>
 
@@ -107,7 +107,7 @@
         var errorBox = document.querySelector('.auth_error');
         var showError = function (msg) {
             if (!errorBox) return;
-            errorBox.textContent = msg || 'Invalid request.';
+            errorBox.textContent = msg || (typeof __ === 'function' ? __('Invalid request.') : 'Invalid request.');
             errorBox.classList.remove('hidden');
         };
         var hideError = function () {
@@ -128,13 +128,13 @@
                 headers: { 'Accept': 'application/json' }
             }).then(function (res) {
                 if (typeof window.showMessage === 'function') {
-                    window.showMessage({ type: 'success', message: res.message || 'Success', duration: 2000 });
+                    window.showMessage({ type: 'success', message: res.message || (typeof __ === 'function' ? __('Success') : 'Success'), duration: 2000 });
                 }
                 setTimeout(function () {
                     window.location.href = (res && res.redirect) ? res.redirect : '/';
                 }, 2000);
             }).catch(function (err) {
-                var msg = (err && err.response && err.response.message) ? err.response.message : (err && err.message ? err.message : 'Request failed.');
+                var msg = (err && err.response && err.response.message) ? err.response.message : (err && err.message ? err.message : (typeof __ === 'function' ? __('Request failed.') : 'Request failed.'));
                 if (err && err.response && err.response.errors) {
                     var firstKey = Object.keys(err.response.errors)[0];
                     if (firstKey && err.response.errors[firstKey] && err.response.errors[firstKey][0]) {

@@ -17,12 +17,12 @@
 <section class="w-full breadcrumb bg-[#f7f8fa]">
     <div>
     <div class="mx-auto w-full max-w-[1200px] px-4 py-4 sm2:px-5 md1:px-6 lg1:px-0">
-        <nav aria-label="Breadcrumb">
+        <nav aria-label="{{ __('Breadcrumb') }}">
         <ol class="flex flex-wrap items-center gap-x-3 gap-y-1">
             <li class="inline-flex items-center">
                 <a href="/" class="inline-flex items-center gap-2 transition hover:text-themeText-h">
-                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="Home" class="w-[14px] h-[14px]" />
-                    <span class="font-poppins-regular text-f14 text-themeText-p">Home</span>
+                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
+                    <span class="font-poppins-regular text-f14 text-themeText-p">{{ __('Home') }}</span>
                 </a>
             </li>
             <li class="inline-flex items-center text-themeText-h" aria-hidden="true">
@@ -31,7 +31,7 @@
                 </svg>
             </li>
             <li class="inline-flex items-center">
-                <span class="font-poppins-regular text-f14 text-themeText-g" aria-current="page">New Style</span>
+                <span class="font-poppins-regular text-f14 text-themeText-g" aria-current="page">{{ __('New Style') }}</span>
             </li>
         </ol>
         </nav>
@@ -42,7 +42,7 @@
 <section class="relative w-full bg-white sec-bg-white">
     <div class="mx-auto w-full max-w-[100%] px-4 py-16 sm2:px-5 md1:px-6 lg1:px-0">
         <div class="text-center">
-            <div class="text-f32 font-poppins-semibold uppercase tracking-wide text-themeText-f">NEW STYLE</div>
+            <div class="text-f32 font-poppins-semibold uppercase tracking-wide text-themeText-f">{{ __('NEW STYLE') }}</div>
             <div class="mx-auto mt-3 h-[7px] w-[46px] rounded bg-themeBg-d" aria-hidden="true"></div>
         </div>
 

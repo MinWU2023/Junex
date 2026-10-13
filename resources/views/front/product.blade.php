@@ -26,7 +26,7 @@
 <section class="w-full breadcrumb bg-themeBg-a md4:bg-themeBg-g">
     <div >
     <div class="mx-auto w-full max-w-[1200px] px-4 py-4 sm2:px-5 md1:px-6 lg1:px-0">
-        <nav aria-label="Breadcrumb">
+        <nav aria-label="{{ __('Breadcrumb') }}">
         <ol class="flex flex-wrap items-center gap-x-3 gap-y-1">
             @if(isset($breadcrumbs) && count($breadcrumbs))
                 @foreach($breadcrumbs as $index => $crumb)
@@ -34,12 +34,12 @@
                         <li class="inline-flex items-center">
                             @if(!empty($crumb['url']))
                                 <a href="{{ $crumb['url'] }}" class="inline-flex items-center gap-2 transition hover:text-themeText-h">
-                                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="Home" class="w-[14px] h-[14px]" />
+                                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
                                     <span class="font-poppins-regular  text-f14 text-themeText-p">{{ $crumb['label'] }}</span>
                                 </a>
                             @else
                                 <span class="inline-flex items-center gap-2">
-                                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="Home" class="w-[14px] h-[14px]" />
+                                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
                                     <span class="font-poppins-regular  text-f14 text-themeText-p">{{ $crumb['label'] }}</span>
                                 </span>
                             @endif
@@ -64,8 +64,8 @@
             @else
             <li class="inline-flex items-center">
             <a href="#" class="inline-flex items-center gap-2 transition hover:text-themeText-h">
-                <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="Home" class="w-[14px] h-[14px]" />
-                <span class="font-poppins-regular  text-f14 text-themeText-p">Home</span>
+                <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
+                <span class="font-poppins-regular  text-f14 text-themeText-p">{{ __('Home') }}</span>
             </a>
             </li>
 
@@ -77,7 +77,7 @@
 
             <li class="inline-flex items-center">
             <a href="#" class="inline-flex items-center gap-2 transition hover:text-themeText-h">
-                <span class="font-poppins-regular  text-f14 text-themeText-p">Products</span>
+                <span class="font-poppins-regular  text-f14 text-themeText-p">{{ __('Products') }}</span>
             </a>
             </li>
 
@@ -89,7 +89,7 @@
 
             <li class="inline-flex items-center">
             <a href="#" class="inline-flex items-center gap-2 transition hover:text-themeText-h">
-                <span class="font-poppins-regular  text-f14 text-themeText-p">Sports Bra</span>
+                <span class="font-poppins-regular  text-f14 text-themeText-p">{{ __('Sports Bra') }}</span>
             </a>
             </li>
 
@@ -100,7 +100,7 @@
             </li>
             
             <li class="inline-flex items-center">
-            <span class="font-poppins-regular text-f14 text-themeText-g" aria-current="page">Popular Ruched Front Sports Bra Halter Neckline 2024 China Manufacturer</span>
+            <span class="font-poppins-regular text-f14 text-themeText-g" aria-current="page">{{ __('Popular Ruched Front Sports Bra Halter Neckline 2024 China Manufacturer') }}</span>
             </li>
             @endif
         </ol>
@@ -119,7 +119,7 @@
                 @foreach(($productImagesData ?? []) as $img)
                 <div class="swiper-slide">
                 <div class="pdp-main-frame">
-                    <img class="pdp-main-img" src="{{ $img['url'] ?? '' }}" alt="{{ $img['alt'] ?? 'Product' }}" loading="lazy" />
+                    <img class="pdp-main-img" src="{{ $img['url'] ?? '' }}" alt="{{ $img['alt'] ?? __('Product') }}" loading="lazy" />
                 </div>
                 </div>
                 @endforeach
@@ -137,7 +137,7 @@
                 @foreach(($productImagesData ?? []) as $img)
                 <div class="swiper-slide !w-auto cursor-pointer">
                 <div class="pdp-thumb">
-                    <img class="pdp-thumb-img" src="{{ $img['url'] ?? '' }}" alt="{{ $img['alt'] ?? 'Thumb' }}" loading="lazy" />
+                    <img class="pdp-thumb-img" src="{{ $img['url'] ?? '' }}" alt="{{ $img['alt'] ?? __('Thumb') }}" loading="lazy" />
                 </div>
                 </div>
                 @endforeach
@@ -170,7 +170,7 @@
             <div class="pdp-actions">
                 <button id="quoteNowBtn" type="button" class="pdp-btn-quote group">
                 <img src="{{ front_webp_url('/front/icons/QuoteNow.svg') }}" class="w-[19px] h-[18px] brightness-0 invert group-hover:invert-0" alt="" />
-                QUOTE NOW
+                {{ __('QUOTE NOW') }}
                 </button>
                 @php
                     $pdpInquiryImage = (string) (($productImagesData[0]['url'] ?? '') ?: '');
@@ -188,12 +188,12 @@
                         data-product-url="{{ $pdpInquiryUrl }}"
                         data-product-model="{{ $pdpInquiryModel }}"
                         data-in-inquiry="0"
-                        aria-label="Add to inquiry">
+                        aria-label="{{ __('Add to inquiry') }}">
                 <svg class="inquiry-pdp-icon h-[18px] w-[18px] shrink-0" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <path d="M7.5 19.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Zm9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="white"/>
                     <path d="M3.2 3.2h1.86c.64 0 1.2.43 1.36 1.05l.28 1.05h12.55c.86 0 1.5.8 1.3 1.63l-1.4 5.9a1.4 1.4 0 0 1-1.36 1.07H8.55l.22.82c.16.62.72 1.05 1.36 1.05h8.62a.9.9 0 1 1 0 1.8H9.91a3.2 3.2 0 0 1-3.1-2.4L4.86 4.7H3.2a.9.9 0 1 1 0-1.8Zm3.7 3.9.78 2.95h9.55l1.05-4.4H7.28l-.38 1.45Z" fill="white"/>
                 </svg>
-                <span class="inquiry-pdp-text">ADD TO INQUIRY</span>
+                <span class="inquiry-pdp-text">{{ __('ADD TO INQUIRY') }}</span>
                 </button>
             </div>
         </div>
@@ -218,7 +218,7 @@
         <div class="pdp-section-icon">
             <img src="{{ front_webp_url('/front/icons/JUNEXWomensYogaBrasSizeReference.svg') }}" class="h-5 w-5 brightness-0 invert" alt="" />
         </div>
-        <h2 class="pdp-section-title">Product Introduction</h2>
+        <h2 class="pdp-section-title">{{ __('Product Introduction') }}</h2>
         </div>
 
         <div class="mt-4 product-highlights-content">{!! $productIntroHtml ?? '' !!}</div>
@@ -227,68 +227,68 @@
         <table class="w-full border-collapse [&_td]:border [&_td]:border-themeBorder-a">
             <tbody>
             <tr class="border-b border-black/5">
-                <td class="w-1/4 min-w-[140px] px-4 py-3 text-f14 text-themeText-b sm6:w-1/3 sm6:px-6 md4:w-[380px]">Item</td>
-                <td class="px-4 py-3 text-[15px] text-themeText-p font-poppins-regular sm6:px-6">JUNEX 2026 S/S Women Sportswear Collection</td>
+                <td class="w-1/4 min-w-[140px] px-4 py-3 text-f14 text-themeText-b sm6:w-1/3 sm6:px-6 md4:w-[380px]">{{ __('Item') }}</td>
+                <td class="px-4 py-3 text-[15px] text-themeText-p font-poppins-regular sm6:px-6">{{ __('JUNEX 2026 S/S Women Sportswear Collection') }}</td>
             </tr>
             <tr class="border-b border-black/5 bg-themeBg-g/50">
-                <td class="px-4 py-3.5 text-f14 text-themeText-g sm6:px-6">Design</td>
-                <td class="px-4 py-3 text-[15px] text-themeText-p font-poppins-regular sm6:px-6">ODM / OEM /Design</td>
+                <td class="px-4 py-3.5 text-f14 text-themeText-g sm6:px-6">{{ __('Design') }}</td>
+                <td class="px-4 py-3 text-[15px] text-themeText-p font-poppins-regular sm6:px-6">{{ __('ODM / OEM /Design') }}</td>
             </tr>
             <tr class="border-b border-black/5">
-                <td class="px-4 py-3.5 text-f14 text-themeText-g sm6:px-6">Fabric</td>
-                <td class="px-4 py-3 text-[15px] text-themeText-p font-poppins-regular sm6:px-6">75%nylon 25%spandex</td>
+                <td class="px-4 py-3.5 text-f14 text-themeText-g sm6:px-6">{{ __('Fabric') }}</td>
+                <td class="px-4 py-3 text-[15px] text-themeText-p font-poppins-regular sm6:px-6">{{ __('75%nylon 25%spandex') }}</td>
             </tr>
             <tr class="border-b border-black/5 bg-themeBg-g/50">
-                <td class="px-4 py-3.5 text-f14 text-themeText-g sm6:px-6">Function</td>
-                <td class="px-4 py-3 text-[15px] text-themeText-p font-poppins-regular sm6:px-6">Absorbent moisture, medium pressure, not easy to change color deformation</td>
+                <td class="px-4 py-3.5 text-f14 text-themeText-g sm6:px-6">{{ __('Function') }}</td>
+                <td class="px-4 py-3 text-[15px] text-themeText-p font-poppins-regular sm6:px-6">{{ __('Absorbent moisture, medium pressure, not easy to change color deformation') }}</td>
             </tr>
             <tr class="border-b border-black/5">
-                <td class="px-4 py-3.5 text-f14 text-themeText-g sm6:px-6">Technical -Four way stretch</td>
-                <td class="px-4 py-4 text-f14 leading-6 text-themeText-a sm6:px-6">stretchy both vertically and horizontally which gives amazing flexibility and elasticity. It allows for a full range of motion to make your training as good as possible.</td>
+                <td class="px-4 py-3.5 text-f14 text-themeText-g sm6:px-6">{{ __('Technical -Four way stretch') }}</td>
+                <td class="px-4 py-4 text-f14 leading-6 text-themeText-a sm6:px-6">{{ __('stretchy both vertically and horizontally which gives amazing flexibility and elasticity. It allows for a full range of motion to make your training as good as possible.') }}</td>
             </tr>
             <tr class="border-b border-black/5 bg-themeBg-g/50">
-                <td class="px-4 py-3.5 text-f14 text-themeText-g sm6:px-6">Color</td>
-                <td class="px-4 py-3 text-[15px] text-themeText-p font-poppins-regular sm6:px-6">Optional,can be customized as Pantone No.</td>
+                <td class="px-4 py-3.5 text-f14 text-themeText-g sm6:px-6">{{ __('Color') }}</td>
+                <td class="px-4 py-3 text-[15px] text-themeText-p font-poppins-regular sm6:px-6">{{ __('Optional,can be customized as Pantone No.') }}</td>
             </tr>
             <tr class="border-b border-black/5">
-                <td class="px-4 py-3.5 text-f14 text-themeText-g sm6:px-6">Size</td>
-                <td class="px-4 py-3 text-[15px] text-themeText-p font-poppins-regular sm6:px-6">Optional: XS-XXXL</td>
+                <td class="px-4 py-3.5 text-f14 text-themeText-g sm6:px-6">{{ __('Size') }}</td>
+                <td class="px-4 py-3 text-[15px] text-themeText-p font-poppins-regular sm6:px-6">{{ __('Optional: XS-XXXL') }}</td>
             </tr>
             <tr class="border-b border-black/5 bg-themeBg-g/50">
-                <td class="px-4 py-3.5 text-f14 text-themeText-g sm6:px-6">Packing</td>
-                <td class="px-4 py-3 text-[15px] text-themeText-p font-poppins-regular sm6:px-6">1pc/polybag , 80pcs/carton or to be packed as requirements.</td>
+                <td class="px-4 py-3.5 text-f14 text-themeText-g sm6:px-6">{{ __('Packing') }}</td>
+                <td class="px-4 py-3 text-[15px] text-themeText-p font-poppins-regular sm6:px-6">{{ __('1pc/polybag , 80pcs/carton or to be packed as requirements.') }}</td>
             </tr>
             <tr class="border-b border-black/5">
-                <td class="px-4 py-3.5 text-f14 text-themeText-g sm6:px-6">MOQ</td>
-                <td class="px-4 py-3 text-[15px] text-themeText-p font-poppins-regular sm6:px-6">200 PCS</td>
+                <td class="px-4 py-3.5 text-f14 text-themeText-g sm6:px-6">{{ __('MOQ') }}</td>
+                <td class="px-4 py-3 text-[15px] text-themeText-p font-poppins-regular sm6:px-6">{{ __('200 PCS') }}</td>
             </tr>
             <tr class="border-b border-black/5 bg-themeBg-g/50">
-                <td class="px-4 py-3.5 text-f14 text-themeText-g sm6:px-6">Shipping</td>
-                <td class="px-4 py-3 text-[15px] text-themeText-p font-poppins-regular sm6:px-6">By sear, by air, by DHL/UPS/TNT etc.</td>
+                <td class="px-4 py-3.5 text-f14 text-themeText-g sm6:px-6">{{ __('Shipping') }}</td>
+                <td class="px-4 py-3 text-[15px] text-themeText-p font-poppins-regular sm6:px-6">{{ __('By sear, by air, by DHL/UPS/TNT etc.') }}</td>
             </tr>
             <tr class="border-b border-black/5">
-                <td class="px-4 py-3.5 text-f14 text-themeText-g sm6:px-6">Delivery time</td>
-                <td class="px-4 py-3 text-[15px] text-themeText-p font-poppins-regular sm6:px-6">Within 30-35 days after comforming the details of the pre production sample</td>
+                <td class="px-4 py-3.5 text-f14 text-themeText-g sm6:px-6">{{ __('Delivery time') }}</td>
+                <td class="px-4 py-3 text-[15px] text-themeText-p font-poppins-regular sm6:px-6">{{ __('Within 30-35 days after comforming the details of the pre production sample') }}</td>
             </tr>
             <tr>
-                <td class="px-4 py-3.5 text-f14 text-themeText-g sm6:px-6">Payment terms</td>
-                <td class="px-4 py-3 text-[15px] text-themeText-p font-poppins-regular sm6:px-6">T/T, Paypal, Western Union.</td>
+                <td class="px-4 py-3.5 text-f14 text-themeText-g sm6:px-6">{{ __('Payment terms') }}</td>
+                <td class="px-4 py-3 text-[15px] text-themeText-p font-poppins-regular sm6:px-6">{{ __('T/T, Paypal, Western Union.') }}</td>
             </tr>
             </tbody>
         </table>
         </div>
         <div class="mt-8 grid grid-cols-2 gap-[30px] md1:mt-10">
             <div class="w-full overflow-hidden bg-themeBg-g">
-                <img class="h-auto w-full object-cover" src="{{ front_webp_url('/front/imgs/pro_detail_01.png') }}" alt="Product Detail" loading="lazy" />
+                <img class="h-auto w-full object-cover" src="{{ front_webp_url('/front/imgs/pro_detail_01.png') }}" alt="{{ __('Product Detail') }}" loading="lazy" />
             </div>
             <div class="w-full overflow-hidden bg-themeBg-g">
-                <img class="h-auto w-full object-cover" src="{{ front_webp_url('/front/imgs/pro_detail_02.png') }}" alt="Product Detail" loading="lazy" />
+                <img class="h-auto w-full object-cover" src="{{ front_webp_url('/front/imgs/pro_detail_02.png') }}" alt="{{ __('Product Detail') }}" loading="lazy" />
             </div>
             <div class="w-full overflow-hidden bg-themeBg-g">
-                <img class="h-auto w-full object-cover" src="{{ front_webp_url('/front/imgs/pro_detail_03.png') }}" alt="Product Detail" loading="lazy" />
+                <img class="h-auto w-full object-cover" src="{{ front_webp_url('/front/imgs/pro_detail_03.png') }}" alt="{{ __('Product Detail') }}" loading="lazy" />
             </div>
             <div class="w-full overflow-hidden bg-themeBg-g">
-                <img class="h-auto w-full object-cover" src="{{ front_webp_url('/front/imgs/pro_detail_04.png') }}" alt="Product Detail" loading="lazy" />
+                <img class="h-auto w-full object-cover" src="{{ front_webp_url('/front/imgs/pro_detail_04.png') }}" alt="{{ __('Product Detail') }}" loading="lazy" />
             </div>
         </div>
         -->
@@ -299,7 +299,7 @@
                 <div class="pdp-section-icon">
                     <img src="{{ front_webp_url('/front/icons/ProductIntroduction.svg') }}" class="h-5 w-5 brightness-0 invert" alt="" />
                 </div>
-                <h2 class="pdp-section-title">Product Details</h2>
+                <h2 class="pdp-section-title">{{ __('Product Details') }}</h2>
             </div>
             <div class="product-details-content mt-2">{!! $productDetailsHtml ?? '' !!}</div>
         </div>
@@ -310,14 +310,14 @@
 </section>
 
 @if(!empty($productFaqsData))
-<section class="product-faqs sec-bg-white" aria-label="FAQ">
+<section class="product-faqs sec-bg-white" aria-label="{{ __('FAQ') }}">
     <div class="mx-auto w-full max-w-[1200px] px-[15px] sm2:px-5 md1:px-6 lg1:px-0">
         <div class="product-faqs-inner sec-pad">
             <div class="pdp-section-head">
                 <div class="pdp-section-icon">
                     <img src="{{ front_webp_url('/front/icons/JUNEXWomensYogaBrasSizeReference.svg') }}" class="h-5 w-5 brightness-0 invert" alt="" />
                 </div>
-                <h2 class="pdp-section-title">FAQ</h2>
+                <h2 class="pdp-section-title">{{ __('FAQ') }}</h2>
             </div>
             <div class="product-faqs-panel">
                 @foreach($productFaqsData as $faq)
@@ -340,14 +340,14 @@
 @endif
 
 @if(!empty($productTagsData))
-<section class="product-tags sec-bg-white" aria-label="Product Tags">
+<section class="product-tags sec-bg-white" aria-label="{{ __('Product Tags') }}">
     <div class="mx-auto w-full max-w-[1200px] px-[15px] sm2:px-5 md1:px-6 lg1:px-0">
         <div class="product-tags-inner sec-pad">
             <div class="pdp-section-head">
                 <div class="pdp-section-icon">
                     <img src="{{ front_webp_url('/front/icons/blog-tags.svg') }}" class="h-5 w-5 brightness-0 invert" alt="" />
                 </div>
-                <h2 class="pdp-section-title">Product Tags</h2>
+                <h2 class="pdp-section-title">{{ __('Product Tags') }}</h2>
             </div>
             <div class="product-tags-list">
                 @foreach($productTagsData as $tag)
@@ -368,7 +368,7 @@
         <div class="absolute left-0 top-[-8px] flex h-[50px] w-[50px] items-center justify-center bg-themeBg-d">
             <img src="{{ front_webp_url('/front/icons/RelatedProducts.svg') }}" class="h-5 w-5 brightness-0 invert" alt="" />
         </div>
-        <h2 class="text-f22 font-poppins-medium text-themeText-f">Related Products</h2>
+        <h2 class="text-f22 font-poppins-medium text-themeText-f">{{ __('Related Products') }}</h2>
         </div>
 
         <div class="relative mt-8 md1:mt-10">

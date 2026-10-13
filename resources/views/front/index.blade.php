@@ -23,7 +23,7 @@
                 $stickyLogo = $innerLogo ?: $siteLogo;
             @endphp
             <a href="/" class="flex items-center gap-2">
-                <img class="header-logo selectable h-[70px] w-[100px] object-contain" src="{{ $siteLogo }}" data-default-src="{{ $siteLogo }}" data-sticky-src="{{ $stickyLogo }}" alt="Logo" loading="lazy" />
+                <img class="header-logo selectable h-[70px] w-[100px] object-contain" src="{{ $siteLogo }}" data-default-src="{{ $siteLogo }}" data-sticky-src="{{ $stickyLogo }}" alt="{{ __('Logo') }}" loading="lazy" />
             </a>
             <div class="flex items-center gap-[35px]">
             @php
@@ -81,7 +81,7 @@
         </nav>
         
         <div class="flex items-center gap-[35px] text-white/90">
-            <button type="button" class="hidden h-8 w-8 items-center justify-center md4:inline-flex search-trigger" aria-label="Search">
+            <button type="button" class="hidden h-8 w-8 items-center justify-center md4:inline-flex search-trigger" aria-label="{{ __('Search') }}">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 48 48" class="h-6 w-6" aria-hidden="true">
                 <path stroke-linejoin="round" stroke-width="4" stroke="currentColor" d="M21 38c9.389 0 17-7.611 17-17S30.389 4 21 4 4 11.611 4 21s7.611 17 17 17Z" data-follow-stroke="#000" />
                 <path stroke-linejoin="round" stroke-linecap="round" stroke-width="4" stroke="currentColor" d="M26.657 14.343A7.975 7.975 0 0 0 21 12c-2.209 0-4.209.895-5.657 2.343M33.222 33.222l8.485 8.485" data-follow-stroke="#000" />
@@ -89,11 +89,11 @@
             </button>
             @php
                 $localeItems = $locales['items'] ?? [];
-                $firstLocale = $localeItems[0] ?? null;
+                $currentLocale = $locales['current'] ?? ($localeItems[0] ?? null);
             @endphp
             <div class="language-switcher relative ml-auto hidden cursor-pointer select-none items-center gap-2 md4:flex">
-            <img class="h-[26px] w-[26px] rounded-full object-cover" src="{{ $firstLocale['path'] ?? front_webp_url('/front/imgs/us-flag.svg') }}" alt="{{ $firstLocale['code'] ?? 'EN' }}" loading="lazy" />
-            <span class="text-[15px] font-poppins-medium font-[500]">{{ $firstLocale['label'] ?? 'ENGLISH' }}</span>
+            <img class="h-[26px] w-[26px] rounded-full object-cover" src="{{ $currentLocale['path'] ?? front_webp_url('/front/imgs/us-flag.svg') }}" alt="{{ $currentLocale['code'] ?? 'EN' }}" loading="lazy" />
+            <span class="text-[15px] font-poppins-medium font-[500]">{{ $currentLocale['label'] ?? __('ENGLISH') }}</span>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 text-white" aria-hidden="true">
                 <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
             </svg>
@@ -111,7 +111,7 @@
                 </div>
             </div>
             </div>
-            <button type="button" class="inline-flex h-9 w-9 items-center justify-center rounded bg-white/10 text-white md4:hidden" aria-label="Menu">
+            <button type="button" class="inline-flex h-9 w-9 items-center justify-center rounded bg-white/10 text-white md4:hidden" aria-label="{{ __('Menu') }}">
             <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor" aria-hidden="true">
                 <path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z" />
             </svg>
@@ -200,7 +200,7 @@
                                 <div class="relative pl-5 pb-5 md1:pl-6 md1:pb-6">
                                     <div class="absolute left-0 bottom-0 h-16 w-16 bg-brand-red md1:h-40 md1:w-[100px]" aria-hidden="true"></div>
                                     <div class="relative z-[1] overflow-hidden bg-slate-200 shadow-sm">
-                                        <img class="block h-auto w-full object-cover" src="{{ $slide['media_image_url'] ?? '' }}" alt="{{ $slide['title'] ?? 'Brand solutions' }}" loading="lazy" />
+                                        <img class="block h-auto w-full object-cover" src="{{ $slide['media_image_url'] ?? '' }}" alt="{{ $slide['title'] ?? __('Brand solutions') }}" loading="lazy" />
                                     </div>
                                 </div>
 
@@ -221,7 +221,7 @@
                                             </li>
                                             @endforeach
                                         </ul>
-                                        <a href="{{ $slide['button']['url'] ?? '#' }}" class="about-us-cta" aria-label="Learn more">{{ $slide['button']['text'] ?? 'Learn More' }}</a>
+                                        <a href="{{ $slide['button']['url'] ?? '#' }}" class="about-us-cta" aria-label="{{ __('Learn more') }}">{{ $slide['button']['text'] ?? __('Learn More') }}</a>
                                     </div>
                                 </div>
                             </div>
@@ -233,10 +233,10 @@
             </div>
 
             <div class="about-us-controls">
-                <button type="button" class="about-us-prev about-us-nav-btn junex-swiper-nav" aria-label="Previous">
+                <button type="button" class="about-us-prev about-us-nav-btn junex-swiper-nav" aria-label="{{ __('Previous') }}">
                     <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 1L2 8l7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </button>
-                <button type="button" class="about-us-next about-us-nav-btn junex-swiper-nav" aria-label="Next">
+                <button type="button" class="about-us-next about-us-nav-btn junex-swiper-nav" aria-label="{{ __('Next') }}">
                     <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M1 1l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </button>
             </div>
@@ -267,7 +267,7 @@
                                 {!! $card['description'] ?? '' !!}
                             </p>
                             <a href="{{ $card['url'] ?? '#' }}" class="mt-5 inline-flex h-[40px] items-center justify-center bg-brand-dark px-3 font-poppins-regular text-f14 uppercase tracking-wide text-white transition hover:bg-opacity-90 max-[600px]:mx-auto">
-                                {{ $card['button_text'] ?? 'Learn More' }}
+                                {{ $card['button_text'] ?? __('Learn More') }}
                             </a>
                         </div>
                     </div>
@@ -293,7 +293,7 @@
         @endphp
 
         <div class="hot-styles-tabs-wrap mt-8">
-            <div class="hot-styles-tabs" role="tablist" aria-label="Hot styles filters">
+            <div class="hot-styles-tabs" role="tablist" aria-label="{{ __('Hot styles filters') }}">
                 @foreach($hotStyleTabs as $index => $tab)
                 <button
                     type="button"
@@ -333,10 +333,10 @@
             </div>
 
             <div class="hot-styles-controls">
-                <button type="button" class="hot-styles-prev about-us-nav-btn junex-swiper-nav" aria-label="Previous">
+                <button type="button" class="hot-styles-prev about-us-nav-btn junex-swiper-nav" aria-label="{{ __('Previous') }}">
                     <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 1L2 8l7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </button>
-                <button type="button" class="hot-styles-next about-us-nav-btn junex-swiper-nav" aria-label="Next">
+                <button type="button" class="hot-styles-next about-us-nav-btn junex-swiper-nav" aria-label="{{ __('Next') }}">
                     <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M1 1l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </button>
             </div>
@@ -375,7 +375,7 @@
         @endforeach
         <div class="flex items-center justify-center bg-themeBg-d py-10 text-center text-white">
             <div>
-            <img class="mx-auto h-14 w-14 object-contain" src="{{ $whyChoose['center']['logo_url'] ?? '' }}" alt="Junex" loading="lazy" />
+            <img class="mx-auto h-14 w-14 object-contain" src="{{ $whyChoose['center']['logo_url'] ?? '' }}" alt="{{ __('Junex') }}" loading="lazy" />
             <div class="mt-3 text-[16px] font-poppins-semibold uppercase tracking-[3px]">{{ $whyChoose['center']['title'] ?? '' }}</div>
             <div class="mx-auto mt-3 h-[1px] w-[40px] bg-white/60"></div>
             <div class="mt-3 text-[11px] leading-5 text-white px-4 font-poppins-regular">{{ $whyChoose['center']['subtitle'] ?? '' }}</div>
@@ -434,7 +434,7 @@
         </div>
         <!-- Center Red Block -->
         <div class="absolute z-10 flex flex-col items-center justify-center bg-themeBg-d text-center text-white" style="left:39%;top:33.33%;width:22%;height:33.34%;">
-            <img class="h-auto w-[200px] object-contain" src="{{ $whyChoose['center']['logo_url'] ?? '' }}" alt="Junex" loading="lazy" />
+            <img class="h-auto w-[200px] object-contain" src="{{ $whyChoose['center']['logo_url'] ?? '' }}" alt="{{ __('Junex') }}" loading="lazy" />
             <div class="mt-3 text-f12 leading-5 text-white px-4 font-poppins-regular">{{ $whyChoose['center']['description_desktop'] ?? '' }}</div>
         </div>
         </div>
@@ -451,6 +451,6 @@
 @endsection
 
 @section('page-js-footer')
-<script type="text/javascript" src="/front/js/pages/home.js?v=20260929c" defer></script>
+<script type="text/javascript" src="/front/js/pages/home.js?v=20261010f" defer></script>
 @endsection 
 </x-layout>

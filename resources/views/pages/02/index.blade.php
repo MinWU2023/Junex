@@ -201,7 +201,7 @@
             <div class="top-search clearfix">
                 <p>{{ $data->plate_content_4['names'][1] }}</p>
                 <div class="header_search clearfix">
-                    <input name="search_keyword" type="text" class="form-control" placeholder="Email(required)">
+                    <input name="search_keyword" type="text" class="form-control" placeholder="{{ __('Email(required)') }}">
                     <span class="search_btn"><input type="submit" class="btn_search5" value="Download Now!"></span>
                 </div>
             </div>
@@ -240,16 +240,16 @@
                             <input type="hidden" name="msg_title" value="无title填写">
                             <div class="input-group">
                             <span class="ms_e"><input class="form-control" name="msg_email" id="email" tabindex="10" required="required"
-                                                      type="text" placeholder="* Your Email :"></span>
+                                                      type="text" placeholder="{{ __('* Your Email :') }}"></span>
                             </div>
                             <div class="input-group">
                             <span class="ms_p"><input class="form-control" name="msg_phone" id="phone"
-                                                      tabindex="10" type="text" placeholder="Tel/WhatsApp :"></span>
+                                                      tabindex="10" type="text" placeholder="{{ __('Tel/WhatsApp :') }}"></span>
                             </div>
                             <div class="input-group">
                             <span class="ms_m"><textarea name="msg_content" class="form-control" id="message" required="required"
                                                          tabindex="13"
-                                                         placeholder="* Enter product details (such as color, size, materials etc.) and other specific requirements to receive an accurate quote."></textarea></span>
+                                                         placeholder="{{ __('* Enter product details (such as color, size, materials etc.) and other specific requirements to receive an accurate quote.') }}"></textarea></span>
                             </div>
                         @overwrite
                         <x-slot name="formId">
@@ -261,7 +261,7 @@
                         </x-slot>
 
                         <x-slot name="inputValue">
-                            Submit
+                            {{ __('Submit') }}
                         </x-slot>
                         <x-slot name="inputClass">
 
@@ -298,16 +298,16 @@
                             <ul class="row clearfix">
                                 <li class=" col-sm-12 col-xs-12">
                                 <span class="ms_e"><input class="form-control" name="msg_email" required="required"
-                                                          tabindex="10" type="text" placeholder="* Your Email"></span>
+                                                          tabindex="10" type="text" placeholder="{{ __('* Your Email') }}"></span>
                                 </li>
                                 <li class=" col-sm-12 col-xs-12">
                                 <span class="ms_p"><input class="form-control" name="msg_phone" tabindex="10"
-                                                          type="text" placeholder="Tel/WhatsApp"></span>
+                                                          type="text" placeholder="{{ __('Tel/WhatsApp') }}"></span>
                                 </li>
                                 <li class="meText col-xs-12">
                                 <span class="ms_m"><textarea name="msg_content" class="form-control" required="required"
                                                              tabindex="13"
-                                                             placeholder="* Enter product details (such as color, size, materials etc.) and other specific requirements to receive an accurate quote."></textarea></span>
+                                                             placeholder="{{ __('* Enter product details (such as color, size, materials etc.) and other specific requirements to receive an accurate quote.') }}"></textarea></span>
                                 </li>
 
                             </ul>
@@ -319,7 +319,7 @@
                             ms_btn
                         </x-slot>
                         <x-slot name="inputValue">
-                            Submit
+                            {{ __('Submit') }}
                         </x-slot>
                         <x-slot name="inputClass">
                             google_genzong
@@ -333,16 +333,16 @@
                     {{--                        <ul class="row clearfix">--}}
                     {{--                            <li class=" col-sm-12 col-xs-12">--}}
                     {{--                                <span class="ms_e"><input class="form-control" name="msg_email" id="msg_email"--}}
-                    {{--                                                          tabindex="10" type="text" placeholder="* Your Email"></span>--}}
+                    {{--                                                          tabindex="10" type="text" placeholder="{{ __('* Your Email') }}"></span>--}}
                     {{--                            </li>--}}
                     {{--                            <li class=" col-sm-12 col-xs-12">--}}
                     {{--                                <span class="ms_p"><input class="form-control" name="msg_phone" id="phone" tabindex="10"--}}
-                    {{--                                                          type="text" placeholder="Tel/WhatsApp"></span>--}}
+                    {{--                                                          type="text" placeholder="{{ __('Tel/WhatsApp') }}"></span>--}}
                     {{--                            </li>--}}
                     {{--                            <li class="meText col-xs-12">--}}
                     {{--                                <span class="ms_m"><textarea name="msg_content" class="form-control" id="message"--}}
                     {{--                                                             tabindex="13"--}}
-                    {{--                                                             placeholder="* Enter product details (such as color, size, materials etc.) and other specific requirements to receive an accurate quote."></textarea></span>--}}
+                    {{--                                                             placeholder="{{ __('* Enter product details (such as color, size, materials etc.) and other specific requirements to receive an accurate quote.') }}"></textarea></span>--}}
                     {{--                            </li>--}}
 
                     {{--                        </ul>--}}
@@ -481,7 +481,7 @@
             <div class="column">
                 <i class="icon"></i>
                 <a>
-                    <p>Scan to wechat :</p><img src="pages/02/images/right-wx.png" alt=""/>
+                    <p>{{ __('Scan to wechat :') }}</p><img src="pages/02/images/right-wx.png" alt=""/>
                 </a>
             </div>
         </li>
@@ -490,13 +490,13 @@
 
 <div class="mobile_nav clearfix">
     <a href="index.html"><i style="background-position: -323px -160px"></i>
-        <p>home</p></a>
+        <p>{{ __('home') }}</p></a>
     <a href="products.html"><i style="background-position: -366px -160px"></i>
-        <p>products</p></a>
+        <p>{{ __('products') }}</p></a>
     <a href="about.html"><i style="background-position: -242px -160px"></i>
-        <p>whatsApp</p></a>
+        <p>{{ __('whatsApp') }}</p></a>
     <a href="contact.html"><i style="background-position: -283px -160px"></i>
-        <p>skype</p></a>
+        <p>{{ __('skype') }}</p></a>
 </div>
 
 <script type="text/javascript" src="/pages/{{ $data->area_name }}/js/main.js"></script>

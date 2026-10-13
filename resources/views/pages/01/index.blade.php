@@ -62,14 +62,14 @@
                             <ul>
                             <li>
                                 <input type="text" name="msg_email" required="required" class="meInput"
-                                       placeholder="Email">
+                                       placeholder="{{ __('Email') }}">
                             </li>
                             <li>
                                 <input type="text" name="msg_title" required="required" class="meInput"
-                                       placeholder="Subject">
+                                       placeholder="{{ __('Subject') }}">
                             </li>
                             <li>
-                                <textarea id="meText" placeholder="Content" required="required" name="msg_content"
+                                <textarea id="meText" placeholder="{{ __('Content') }}" required="required" name="msg_content"
                                           style="color:#808080;" class="meText"></textarea>
                             </li>
                             <div class="clearfix"></div>
@@ -83,7 +83,7 @@
                             send
                         </x-slot>
                         <x-slot name="inputValue">
-                            FREE SAMPLE!
+                            {{ __('FREE SAMPLE!') }}
                         </x-slot>
                         <x-slot name="inputClass">
 
@@ -268,14 +268,14 @@
                         <ul>
                             <li class=" col-sm-6 col-xs-12">
                             <span class="ms_e"><input type="text" name="msg_email"  class="meInput"
-                                                      placeholder="Your Email"></span>
+                                                      placeholder="{{ __('Your Email') }}"></span>
                             </li>
                             <li class=" col-sm-6 col-xs-12">
                             <span class="ms_p"><input type="text" name="msg_phone"  class="meInput"
-                                                      placeholder="Subject"></span>
+                                                      placeholder="{{ __('Subject') }}"></span>
                             </li>
                             <li class=" meText col-xs-12">
-                            <span class="ms_m"><textarea placeholder="Enter product details (such as color, size, materials etc.) and other specific requirements to receive an accurate quote."
+                            <span class="ms_m"><textarea placeholder="{{ __('Enter product details (such as color, size, materials etc.) and other specific requirements to receive an accurate quote.') }}"
                                                          maxlength="3000" name="msg_content"></textarea></span>
                             </li>
                             <div class="clearfix"></div>
@@ -289,7 +289,7 @@
                         main_more
                     </x-slot>
                     <x-slot name="inputValue">
-                        Submit
+                        {{ __('Submit') }}
                     </x-slot>
                     <x-slot name="inputClass">
 

@@ -1150,7 +1150,7 @@
     <section class="fixed inset-x-0 top-0 z-30 bg-white shadow-[0_6px_18px_rgba(0,0,0,0.22)] md4:hidden mobile-nav">
       <div class="header-mobile-bar relative mx-auto flex h-16 w-full max-w-[1200px] items-center justify-between px-4 sm2:px-2 md1:px-2 lg1:px-0">
         <div class="header-mobile-left">
-          <button id="mobileMenuBtn" type="button" class="inline-flex h-10 w-10 items-center justify-center rounded bg-transparent text-slate-900 transition hover:bg-slate-100" aria-label="Menu">
+          <button id="mobileMenuBtn" type="button" class="inline-flex h-10 w-10 items-center justify-center rounded bg-transparent text-slate-900 transition hover:bg-slate-100" aria-label="{{ __('Menu') }}">
             <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
               <path d="M3 6h18M3 12h18M3 18h18" />
             </svg>
@@ -1160,16 +1160,16 @@
             $logoForInner = $data['header_logo_url'] ?? front_webp_url('/front/imgs/logo2.svg');
           @endphp
           <a href="/" class="header-mobile-logo">
-            <img class="h-[52px] w-auto max-w-[110px] object-contain" src="{{ $logoForInner }}" alt="Logo" loading="lazy" />
+            <img class="h-[52px] w-auto max-w-[110px] object-contain" src="{{ $logoForInner }}" alt="{{ __('Logo') }}" loading="lazy" />
           </a>
         </div>
 
         @php
           $localeItems = $data['locales']['items'] ?? [];
-          $firstLocale = $localeItems[0] ?? null;
+          $currentLocale = $data['locales']['current'] ?? ($localeItems[0] ?? null);
         @endphp
         <div class="header-mobile-actions">
-          <button type="button" class="header-search-btn search-trigger" aria-label="Search">
+          <button type="button" class="header-search-btn search-trigger" aria-label="{{ __('Search') }}">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 48 48" aria-hidden="true">
               <path stroke-linejoin="round" stroke-width="4" stroke="currentColor" d="M21 38c9.389 0 17-7.611 17-17S30.389 4 21 4 4 11.611 4 21s7.611 17 17 17Z" />
               <path stroke-linejoin="round" stroke-linecap="round" stroke-width="4" stroke="currentColor" d="M26.657 14.343A7.975 7.975 0 0 0 21 12c-2.209 0-4.209.895-5.657 2.343M33.222 33.222l8.485 8.485" />
@@ -1177,9 +1177,9 @@
           </button>
 
           <div class="relative">
-            <button id="mobileLangBtn" type="button" class="inline-flex h-9 items-center gap-2 rounded bg-slate-900/5 px-3 text-[12px] font-semibold text-slate-900 ring-1 ring-slate-900/10 transition hover:bg-slate-900/10" aria-label="Language">
-              <img class="h-5 w-5 rounded-full object-cover" src="{{ $firstLocale['path'] ?? front_webp_url('/front/imgs/us-flag.svg') }}" alt="{{ $firstLocale['code'] ?? 'EN' }}" loading="lazy" />
-              <span>{{ $firstLocale['code'] ?? 'EN' }}</span>
+            <button id="mobileLangBtn" type="button" class="inline-flex h-9 items-center gap-2 rounded bg-slate-900/5 px-3 text-[12px] font-semibold text-slate-900 ring-1 ring-slate-900/10 transition hover:bg-slate-900/10" aria-label="{{ __('Language') }}">
+              <img class="h-5 w-5 rounded-full object-cover" src="{{ $currentLocale['path'] ?? front_webp_url('/front/imgs/us-flag.svg') }}" alt="{{ $currentLocale['code'] ?? 'EN' }}" loading="lazy" />
+              <span>{{ strtoupper($currentLocale['code'] ?? 'EN') }}</span>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 text-slate-700" aria-hidden="true">
                 <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
               </svg>
@@ -1205,8 +1205,8 @@
       <div id="mobileMenuBackdrop" class="absolute inset-0 bg-black/60"></div>
       <div id="mobileMenuPanel" class="absolute left-0 top-0 flex h-full w-[280px] max-w-[85vw] -translate-x-full flex-col bg-white shadow-xl transition-transform duration-200">
         <div class="flex items-center justify-between px-4 py-4 ring-1 ring-slate-200">
-          <img class="h-10 w-auto max-w-[110px] object-contain" src="{{ $logoForInner }}" alt="Logo" loading="lazy" />
-          <button id="mobileMenuClose" type="button" class="inline-flex h-9 w-9 items-center justify-center rounded bg-slate-900/5 text-slate-800 transition hover:bg-slate-900/10" aria-label="Close">
+          <img class="h-10 w-auto max-w-[110px] object-contain" src="{{ $logoForInner }}" alt="{{ __('Logo') }}" loading="lazy" />
+          <button id="mobileMenuClose" type="button" class="inline-flex h-9 w-9 items-center justify-center rounded bg-slate-900/5 text-slate-800 transition hover:bg-slate-900/10" aria-label="{{ __('Close') }}">
             <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M18 6L6 18" />
               <path d="M6 6l12 12" />
@@ -1263,7 +1263,7 @@
         </nav>
         
         <div class="px-4 pb-5">
-          <a href="#" class="mobile-menu-get-in-touch inline-flex h-10 w-full items-center justify-center bg-themeBg-d text-[12px] font-semibold uppercase tracking-wide text-white transition hover:bg-themeBg-d">Get In Touch</a>
+          <a href="#" class="mobile-menu-get-in-touch inline-flex h-10 w-full items-center justify-center bg-themeBg-d text-[12px] font-semibold uppercase tracking-wide text-white transition hover:bg-themeBg-d">{{ __('Get In Touch') }}</a>
         </div>
       </div>
     </section>
@@ -1285,7 +1285,7 @@
             <div class="pointer-events-auto mx-auto w-full max-w-[1200px] px-4 sm2:px-5 md1:px-6 lg1:px-0">
               <div class="flex h-16 items-center justify-between md1:h-20">
                 <a href="/" class="flex items-center gap-2">
-                  <img class="h-[70px] w-auto max-w-[140px] object-contain" src="{{ $logoForInner }}" alt="Logo" loading="lazy" />
+                  <img class="h-[70px] w-auto max-w-[140px] object-contain" src="{{ $logoForInner }}" alt="{{ __('Logo') }}" loading="lazy" />
                 </a>
 
                 <div class="flex items-center gap-[35px]">
@@ -1344,15 +1344,15 @@
                   </nav>
 
                   <div class="flex items-center gap-[35px] text-white/90">
-                    <button type="button" class="hidden h-8 w-8 items-center justify-center md4:inline-flex search-trigger" aria-label="Search">
+                    <button type="button" class="hidden h-8 w-8 items-center justify-center md4:inline-flex search-trigger" aria-label="{{ __('Search') }}">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 48 48" class="h-6 w-6 text-black" aria-hidden="true">
                         <path stroke-linejoin="round" stroke-width="4" stroke="currentColor" d="M21 38c9.389 0 17-7.611 17-17S30.389 4 21 4 4 11.611 4 21s7.611 17 17 17 Z" data-follow-stroke="#000"></path>
                         <path stroke-linejoin="round" stroke-linecap="round" stroke-width="4" stroke="currentColor" d="M26.657 14.343A7.975 7.975 0 0 0 21 12c-2.209 0-4.209.895-5.657 2.343M33.222 33.222l8.485 8.485" data-follow-stroke="#000"></path>
                       </svg>
                     </button>
                     <div class="language-switcher relative ml-auto hidden cursor-pointer select-none items-center gap-2 md4:flex">
-                      <img class="h-[26px] w-[26px] rounded-full object-cover" src="{{ $firstLocale['path'] ?? front_webp_url('/front/imgs/us-flag.svg') }}" alt="{{ $firstLocale['code'] ?? 'EN' }}" loading="lazy" />
-                      <span class="text-[15px] font-poppins-regular text-black  font-[500]">{{ $firstLocale['label'] ?? 'ENGLISH' }}</span>
+                      <img class="h-[26px] w-[26px] rounded-full object-cover" src="{{ $currentLocale['path'] ?? front_webp_url('/front/imgs/us-flag.svg') }}" alt="{{ $currentLocale['code'] ?? 'EN' }}" loading="lazy" />
+                      <span class="text-[15px] font-poppins-regular text-black  font-[500]">{{ $currentLocale['label'] ?? __('ENGLISH') }}</span>
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 text-black" aria-hidden="true">
                         <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
                       </svg>
@@ -1393,7 +1393,7 @@
                 <details class="footer-accordion group" data-footer-accordion>
                   <summary class="flex cursor-pointer items-center justify-between gap-4 select-none rounded pr-2 py-1 transition-colors duration-200 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-themeBg-d/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black/60">
                     <div>
-                      <div class="footer-nav-title text-f16 md1:text-f18 font-poppins-medium uppercase tracking-wide whitespace-nowrap">{{ $data['footerNavGroups'][0]['label'] ?? 'Our Services' }}</div>
+                      <div class="footer-nav-title text-f16 md1:text-f18 font-poppins-medium uppercase tracking-wide whitespace-nowrap">{{ $data['footerNavGroups'][0]['label'] ?? __('Our Services') }}</div>
                       <div class="mt-2 h-[6px] w-[34px] rounded-[6px] bg-themeBg-d  lg1:block hidden" aria-hidden="true"></div>
                     </div>
 
@@ -1411,11 +1411,11 @@
                           @endif
                         @endforeach
                       @else
-                      <li><a class="inline-flex transition duration-200 hover:translate-x-0.5 text-themeText-o" href="/faqs.html">FAQs</a></li>
-                      <li><a class="inline-flex transition duration-200 hover:translate-x-0.5 text-themeText-o" href="/customerservices.html">Support</a></li>
-                      <li><a class="inline-flex transition duration-200 hover:translate-x-0.5 text-themeText-o" href="/productcategory.html">Catalog</a></li>
-                      <li><a class="inline-flex transition duration-200 hover:translate-x-0.5 text-themeText-o" href="/aboutus.htmlq">Our Story</a></li>
-                      <li><a class="inline-flex transition duration-200 hover:translate-x-0.5 text-themeText-o" href="/blogs.html">Blogs</a></li>
+                      <li><a class="inline-flex transition duration-200 hover:translate-x-0.5 text-themeText-o" href="/faqs.html">{{ __('FAQs') }}</a></li>
+                      <li><a class="inline-flex transition duration-200 hover:translate-x-0.5 text-themeText-o" href="/customerservices.html">{{ __('Support') }}</a></li>
+                      <li><a class="inline-flex transition duration-200 hover:translate-x-0.5 text-themeText-o" href="/productcategory.html">{{ __('Catalog') }}</a></li>
+                      <li><a class="inline-flex transition duration-200 hover:translate-x-0.5 text-themeText-o" href="/aboutus.htmlq">{{ __('Our Story') }}</a></li>
+                      <li><a class="inline-flex transition duration-200 hover:translate-x-0.5 text-themeText-o" href="/blogs.html">{{ __('Blogs') }}</a></li>
                       @endif
                     </ul>
                   </div>
@@ -1426,7 +1426,7 @@
                 <details class="footer-accordion group" data-footer-accordion>
                   <summary class="flex cursor-pointer items-center justify-between gap-4 select-none rounded pr-2 py-1 transition-colors duration-200 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-themeBg-d/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black/60">
                     <div class="min-w-0">
-                      <div class="footer-nav-title text-f16 md1:text-f18 font-poppins-medium uppercase tracking-wide whitespace-nowrap">{{ $data['footerNavGroups'][1]['label'] ?? 'Product Categories' }}</div>
+                      <div class="footer-nav-title text-f16 md1:text-f18 font-poppins-medium uppercase tracking-wide whitespace-nowrap">{{ $data['footerNavGroups'][1]['label'] ?? __('Product Categories') }}</div>
                       <div class="mt-2 h-[6px] w-[34px] rounded-[6px] bg-themeBg-d  lg1:block hidden" aria-hidden="true"></div>
                     </div>
 
@@ -1444,11 +1444,11 @@
                           @endif
                         @endforeach
                       @else
-                      <li><a class="inline-flex transition duration-200 hover:translate-x-0.5 text-themeText-o" href="#">Activewear Manufacture</a></li>
-                      <li><a class="inline-flex transition duration-200 hover:translate-x-0.5 text-themeText-o" href="#">Gym Clothing Wholesale</a></li>
-                      <li><a class="inline-flex transition duration-200 hover:translate-x-0.5 text-themeText-o" href="#">Fitness Wear Wholesale</a></li>
-                      <li><a class="inline-flex transition duration-200 hover:translate-x-0.5 text-themeText-o" href="#">Gym Clothing Supplier</a></li>
-                      <li><a class="inline-flex transition duration-200 hover:translate-x-0.5 text-themeText-o" href="#">Gym Clothes Manufacturer</a></li>
+                      <li><a class="inline-flex transition duration-200 hover:translate-x-0.5 text-themeText-o" href="#">{{ __('Activewear Manufacture') }}</a></li>
+                      <li><a class="inline-flex transition duration-200 hover:translate-x-0.5 text-themeText-o" href="#">{{ __('Gym Clothing Wholesale') }}</a></li>
+                      <li><a class="inline-flex transition duration-200 hover:translate-x-0.5 text-themeText-o" href="#">{{ __('Fitness Wear Wholesale') }}</a></li>
+                      <li><a class="inline-flex transition duration-200 hover:translate-x-0.5 text-themeText-o" href="#">{{ __('Gym Clothing Supplier') }}</a></li>
+                      <li><a class="inline-flex transition duration-200 hover:translate-x-0.5 text-themeText-o" href="#">{{ __('Gym Clothes Manufacturer') }}</a></li>
                       @endif
                     </ul>
                   </div>
@@ -1462,9 +1462,9 @@
                 @php
                   $bottomLogo = $data['footer_logo_url'] ?? front_webp_url('/front/imgs/footer_logo.png');
                 @endphp
-                <img class="h-auto w-[110px] object-contain sm3:w-[130px] sm6:w-[150px] md1:w-[170px]" src="{{ $bottomLogo }}" alt="Logo" loading="lazy" />
+                <img class="h-auto w-[110px] object-contain sm3:w-[130px] sm6:w-[150px] md1:w-[170px]" src="{{ $bottomLogo }}" alt="{{ __('Logo') }}" loading="lazy" />
                 <p class="mt-3 max-w-[100%] text-[11px] leading-5 text-white/70">
-                  {{ $data['footerContact']['brief'] ?? 'Infray Technologies Co., Ltd., A Subsidiary Corporation Of Rayton, Is An Innovative.' }}
+                  {{ $data['footerContact']['brief'] ?? __('Infray Technologies Co., Ltd., A Subsidiary Corporation Of Rayton, Is An Innovative.') }}
                 </p>
 
                 <div class="mt-5 flex items-center justify-center gap-2">
@@ -1482,7 +1482,7 @@
                 <details class="footer-accordion group" data-footer-accordion>
                   <summary class="flex cursor-pointer items-center justify-between gap-4 select-none rounded pr-2 py-1 transition-colors duration-200 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-themeBg-d/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black/60">
                     <div>
-                      <div class="footer-nav-title text-f16 md1:text-f18 font-poppins-medium uppercase tracking-wide whitespace-nowrap">{{ $data['footerNavGroups'][2]['label'] ?? 'Follow Us' }}</div>
+                      <div class="footer-nav-title text-f16 md1:text-f18 font-poppins-medium uppercase tracking-wide whitespace-nowrap">{{ $data['footerNavGroups'][2]['label'] ?? __('Follow Us') }}</div>
                       <div class="mt-2 h-[6px] w-[34px] rounded-[6px] bg-themeBg-d  lg1:block hidden" aria-hidden="true"></div>
                     </div>
 
@@ -1500,11 +1500,11 @@
                           @endif
                         @endforeach
                       @else
-                      <li><a class="inline-flex transition duration-200 hover:translate-x-0.5 text-themeText-o" href="/">Home</a></li>
-                      <li><a class="inline-flex transition duration-200 hover:translate-x-0.5 text-themeText-o" href="/products.html">Products</a></li>
-                      <li><a class="inline-flex transition duration-200 hover:translate-x-0.5 text-themeText-o" href="/contactus.html">Contact Us</a></li>
-                      <li><a class="inline-flex transition duration-200 hover:translate-x-0.5 text-themeText-o" href="/singlepage.html">Privacy Policy</a></li>
-                      <li><a class="inline-flex transition duration-200 hover:translate-x-0.5 text-themeText-o" href="#">New Style Display</a></li>
+                      <li><a class="inline-flex transition duration-200 hover:translate-x-0.5 text-themeText-o" href="/">{{ __('Home') }}</a></li>
+                      <li><a class="inline-flex transition duration-200 hover:translate-x-0.5 text-themeText-o" href="/products.html">{{ __('Products') }}</a></li>
+                      <li><a class="inline-flex transition duration-200 hover:translate-x-0.5 text-themeText-o" href="/contactus.html">{{ __('Contact Us') }}</a></li>
+                      <li><a class="inline-flex transition duration-200 hover:translate-x-0.5 text-themeText-o" href="/singlepage.html">{{ __('Privacy Policy') }}</a></li>
+                      <li><a class="inline-flex transition duration-200 hover:translate-x-0.5 text-themeText-o" href="#">{{ __('New Style Display') }}</a></li>
                       @endif
                     </ul>
                   </div>
@@ -1515,7 +1515,7 @@
                 <details class="footer-accordion group" data-footer-accordion>
                   <summary class="flex cursor-pointer items-center justify-between gap-4 select-none rounded pr-2 py-1 transition-colors duration-200 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-themeBg-d/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black/60">
                     <div>
-                      <div class="footer-nav-title text-f16 md1:text-f18 font-poppins-medium uppercase tracking-wide whitespace-nowrap">{{ $data['footerNavGroups'][3]['label'] ?? 'Hot Tags' }}</div>
+                      <div class="footer-nav-title text-f16 md1:text-f18 font-poppins-medium uppercase tracking-wide whitespace-nowrap">{{ $data['footerNavGroups'][3]['label'] ?? __('Hot Tags') }}</div>
                       <div class="mt-2 h-[6px] w-[34px] rounded-[6px] bg-themeBg-d  lg1:block hidden" aria-hidden="true"></div>
                     </div>
 
@@ -1546,15 +1546,15 @@
           <div class="mt-[30px] grid grid-cols-1 gap-4  pt-8 text-white sm6:grid-cols-2 md2:grid-cols-3 md4:grid-cols-[30%_40%_30%] md4:pt-10">
             <div class="flex items-center gap-4 bg-themeBg-n px-5 py-8 ring-1 ring-white/10 transition duration-200 hover:-translate-y-0.5 sm6:col-span-2 md2:col-span-1">
               <span class="inline-flex h-[52px] w-[52px] min-h-[52px] min-w-[52px] shrink-0 items-center justify-center bg-themeBg-m ring-1 ring-white/10 bg-opacity-25" aria-hidden="true">
-                <img src="{{ front_webp_url('/front/icons/ft-email.svg') }}" alt="icon" width="24" height="24" />
+                <img src="{{ front_webp_url('/front/icons/ft-email.svg') }}" alt="{{ __('icon') }}" width="24" height="24" />
               </span>
               <div class="min-w-0">
-                <div class="text-[16px] font-poppins-medium">Our Email</div>
+                <div class="text-[16px] font-poppins-medium">{{ __('Our Email') }}</div>
                 <div class="mt-0.5 truncate text-[14px] font-poppins-regular text-white/70">
                   @if(!empty($data['footerContact']['email']['href']) && !empty($data['footerContact']['email']['label']))
                     <a href="{{ $data['footerContact']['email']['href'] }}" class="text-white/70">{{ $data['footerContact']['email']['label'] }}</a>
                   @else
-                    Info@Junzhusport.com
+                    {{ __('Info@Junzhusport.com') }}
                   @endif
                 </div>
               </div>
@@ -1565,8 +1565,8 @@
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 48 48" class="h-6 w-6"><path stroke-linejoin="round" stroke-linecap="round" stroke-width="4" stroke="#DA2B28" d="M9.858 32.757C6.238 33.843 4 35.343 4 37c0 3.314 8.954 6 20 6s20-2.686 20-6c0-1.657-2.239-3.157-5.858-4.243"/><path stroke-linejoin="round" stroke-width="4" stroke="#FFFFFF" d="M24 35s13-8.496 13-18.318C37 9.678 31.18 4 24 4S11 9.678 11 16.682C11 26.504 24 35 24 35Z"/><path stroke-linejoin="round" stroke-width="4" stroke="#FFFFFF" d="M24 22a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z"/></svg>
               </span>
               <div class="min-w-0">
-                <div class="text-[16px] font-poppins-medium">Address</div>
-                <div class="mt-0.5 text-[14px] font-poppins-regular leading-5 text-white/70">{{ $data['footerContact']['address'] ?? 'Room 701,Block C, Zhonghuancity CBD, Shushan District,Hefei,Anhui Province,China. ZIP CODE:230031' }}</div>
+                <div class="text-[16px] font-poppins-medium">{{ __('Address') }}</div>
+                <div class="mt-0.5 text-[14px] font-poppins-regular leading-5 text-white/70">{{ $data['footerContact']['address'] ?? __('Room 701,Block C, Zhonghuancity CBD, Shushan District,Hefei,Anhui Province,China. ZIP CODE:230031') }}</div>
               </div>
             </div>
 
@@ -1575,7 +1575,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 48 48" class="h-6 w-6"><path stroke-linejoin="round" stroke-linecap="round" stroke-width="4" stroke="#DA2B28" d="M41.78 20.607c.252-1.696.17-3.432-.25-5.102a12.939 12.939 0 0 0-3.415-6.018 12.94 12.94 0 0 0-6.018-3.416 13.068 13.068 0 0 0-5.102-.249M34.19 19.803a5.991 5.991 0 0 0-1.692-5.132 5.992 5.992 0 0 0-5.132-1.691"/><path stroke-linejoin="round" stroke-width="4" stroke="#FFFFFF" d="M14.376 8.794a2 2 0 0 1 1.748 1.03l2.447 4.406a2 2 0 0 1 .04 1.866l-2.357 4.713s.683 3.512 3.541 6.37c2.859 2.858 6.358 3.53 6.358 3.53l4.713-2.357a2 2 0 0 1 1.867.041l4.419 2.457a2 2 0 0 1 1.028 1.748v5.074c0 2.583-2.4 4.45-4.848 3.623-5.028-1.696-12.832-4.927-17.78-9.873-4.946-4.947-8.176-12.752-9.873-17.78-.826-2.448 1.04-4.848 3.624-4.848h5.072Z"/></svg>
               </span>
               <div class="min-w-0">
-                <div class="text-[16px] font-poppins-medium">Call Us</div>
+                <div class="text-[16px] font-poppins-medium">{{ __('Call Us') }}</div>
                 <div class="mt-0.5 text-[14px] font-poppins-regular leading-5 text-white/70">
                   @if(!empty($data['footerContact']['phone']['href']) && !empty($data['footerContact']['phone']['label']))
                     <a href="{{ $data['footerContact']['phone']['href'] }}" class="text-white/70">{{ $data['footerContact']['phone']['label'] }}</a>
@@ -1596,11 +1596,11 @@
 
         <div class="relative mx-auto w-full max-w-[1200px] px-4 sm2:px-5 md1:px-6 lg1:px-0">
           <div class="flex flex-col items-center justify-between gap-3 py-3 text-center text-[14px] font-poppins-regular text-white md4:flex-row md4:text-left">
-            <div class="order-2 text-[15px] font-poppins-regular md4:order-1">JUNZHUO SPORTS CO., LTD. &copy; 2025 ICP NO. ALL RIGHTS RESERVED.</div>
+            <div class="order-2 text-[15px] font-poppins-regular md4:order-1">{{ __('JUNZHUO SPORTS CO., LTD. &copy; 2025 ICP NO. ALL RIGHTS RESERVED.') }}</div>
 
             <div class="order-1 flex items-center justify-center gap-2 md4:order-2 md4:justify-end">
-              <span class="inline-flex h-5 items-center justify-center bg-themeBg-n px-2 text-[14px] font-poppins-regular text-white ring-1 ring-white/15 transition duration-200 hover:bg-black/35">IPV6</span>
-              <span class="inline-flex h-5 items-center justify-center  px-2 text-[14px] font-poppins-regular text-white  transition duration-200 hover:bg-black/35">IPV6 NETWORK SUPPORTED</span>
+              <span class="inline-flex h-5 items-center justify-center bg-themeBg-n px-2 text-[14px] font-poppins-regular text-white ring-1 ring-white/15 transition duration-200 hover:bg-black/35">{{ __('IPV6') }}</span>
+              <span class="inline-flex h-5 items-center justify-center  px-2 text-[14px] font-poppins-regular text-white  transition duration-200 hover:bg-black/35">{{ __('IPV6 NETWORK SUPPORTED') }}</span>
             </div>
           </div>
         </div>
@@ -1615,21 +1615,21 @@
       <div class="relative flex min-h-full w-full flex-col">
         <div class="w-full bg-white search_main">
           <div class="mx-auto w-full max-w-[1200px] px-4 py-10 sm2:px-5 md1:px-6 md1:py-12 lg1:px-0">
-            <h2 class="text-center text-[18px] font-extrabold text-slate-900 md1:text-[22px]">What Are You Looking For?</h2>
+            <h2 class="text-center text-[18px] font-extrabold text-slate-900 md1:text-[22px]">{{ __('What Are You Looking For?') }}</h2>
 
             <form class="mx-auto mt-6 w-[1200px] max-w-[calc(100%-30px)] md1:mt-7" action="{{ $data['search']['action'] ?? '/search' }}" method="get">
               <div class="relative w-full">
                 <input
                   type="text"
                   name="q"
-                  placeholder="{{ $data['search']['placeholder'] ?? 'Search For...' }}"
+                  placeholder="{{ $data['search']['placeholder'] ?? __('Search For...') }}"
                   value="{{ $data['search']['q'] ?? '' }}"
                   class="w-full rounded border border-slate-200 bg-white py-[26px] pl-4 pr-14 text-[14px] text-slate-800 outline-none placeholder:text-slate-400 focus:border-themeBg-d md1:h-11 md1:text-[16px]"
                 />
                 <button
                   type="submit"
                   class="absolute right-2 top-1/2 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded bg-themeBg-d text-white transition duration-200 hover:bg-themeBg-d active:bg-themeBg-d md1:h-11 md1:w-11"
-                  aria-label="Search"
+                  aria-label="{{ __('Search') }}"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 48 48" class="h-6 w-6" aria-hidden="true">
                     <path stroke-linejoin="round" stroke-width="4" stroke="currentColor" d="M21 38c9.389 0 17-7.611 17-17S30.389 4 21 4 4 11.611 4 21s7.611 17 17 17Z" data-follow-stroke="#000" />
@@ -1657,7 +1657,7 @@
         </div>
 
         <div class="relative flex flex-1 items-start justify-center">
-          <button type="button" class="group absolute -top-5 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white text-slate-700 shadow-md ring-1 ring-slate-200 transition duration-200 hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-themeBg-d focus-visible:ring-offset-2" aria-label="Close search">
+          <button type="button" class="search_popup_close group absolute -top-5 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white text-slate-700 shadow-md ring-1 ring-slate-200 transition duration-200 hover:-translate-y-0.5 hover:bg-slate-50 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-themeBg-d focus-visible:ring-offset-2" aria-label="{{ __('Close search') }}">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 48 48" width="18" height="18" class="transition-transform duration-200 group-hover:rotate-90"><path stroke-linejoin="round" stroke-width="6" stroke="#000" d="m8 8 32 32M8 40 40 8" data-follow-stroke="#000"/></svg>
           </button>
         </div>
@@ -1707,7 +1707,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" fill="#ffffff" viewBox="0 0 24 24" class="mr-3 h-[24px] w-[24px] flex-shrink-0">
               <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
             </svg>
-            <a href="{{ $data['contactPopup']['teams']['href'] }}" target="_blank" class="text-f16 text-white transition-colors hover:text-white">{{ $data['contactPopup']['teams']['label'] ?? 'Instagram' }}</a>
+            <a href="{{ $data['contactPopup']['teams']['href'] }}" target="_blank" class="text-f16 text-white transition-colors hover:text-white">{{ $data['contactPopup']['teams']['label'] ?? __('Instagram') }}</a>
           </div>
           @endif
 
@@ -1736,7 +1736,7 @@
             </svg>
             @foreach($data['contactPopup']['qrs'] as $qr)
               @if(!empty($qr['src']))
-                <img src="{{ $qr['src'] }}" alt="QR Code" class="ml-3 w-[120px] h-auto bg-white object-contain p-1" />
+                <img src="{{ $qr['src'] }}" alt="{{ __('QR Code') }}" class="ml-3 w-[120px] h-auto bg-white object-contain p-1" />
               @endif
             @endforeach
           </a>
@@ -1753,23 +1753,23 @@
       $tabContactActive = $currentPath === 'contact-us' || str_starts_with($currentPath, 'contact-us/');
     @endphp
     <!-- Mobile Bottom Tabbar (<768px) -->
-    <nav class="mobile-tabbar" aria-label="Mobile bottom navigation">
+    <nav class="mobile-tabbar" aria-label="{{ __('Mobile bottom navigation') }}">
       <div class="mobile-tabbar__inner">
         <a href="{{ route('home') }}" class="mobile-tabbar__item {{ $tabHomeActive ? 'is-active' : '' }}" @if($tabHomeActive) aria-current="page" @endif>
           <span class="mobile-tabbar__icon" aria-hidden="true">
             <img class="mobile-tabbar__icon-default" src="{{ front_webp_url('/front/imgs/icons/tabbar/home.svg') }}" alt="" width="22" height="22" />
             <img class="mobile-tabbar__icon-active" src="{{ front_webp_url('/front/imgs/icons/tabbar/home-active.svg') }}" alt="" width="22" height="22" />
           </span>
-          <span class="mobile-tabbar__label">Home</span>
+          <span class="mobile-tabbar__label">{{ __('Home') }}</span>
         </a>
         <a href="{{ route('products') }}" class="mobile-tabbar__item {{ $tabProductsActive ? 'is-active' : '' }}" @if($tabProductsActive) aria-current="page" @endif>
           <span class="mobile-tabbar__icon" aria-hidden="true">
             <img class="mobile-tabbar__icon-default" src="{{ front_webp_url('/front/imgs/icons/tabbar/products.svg') }}" alt="" width="22" height="22" />
             <img class="mobile-tabbar__icon-active" src="{{ front_webp_url('/front/imgs/icons/tabbar/products-active.svg') }}" alt="" width="22" height="22" />
           </span>
-          <span class="mobile-tabbar__label">Products</span>
+          <span class="mobile-tabbar__label">{{ __('Products') }}</span>
         </a>
-        <button type="button" class="mobile-tabbar__inquiry inquiry-entry-btn" aria-label="Inquiry">
+        <button type="button" class="mobile-tabbar__inquiry inquiry-entry-btn" aria-label="{{ __('Inquiry') }}">
           <span class="mobile-tabbar__inquiry-btn">
             <img src="{{ front_webp_url('/front/imgs/icons/tabbar/inquiry.svg') }}" alt="" width="26" height="26" />
             <span class="inquiry-cart-badge inquiry-cart-badge-float mobile-tabbar__badge hidden">0</span>
@@ -1780,14 +1780,14 @@
             <img class="mobile-tabbar__icon-default" src="{{ front_webp_url('/front/imgs/icons/tabbar/about.svg') }}" alt="" width="22" height="22" />
             <img class="mobile-tabbar__icon-active" src="{{ front_webp_url('/front/imgs/icons/tabbar/about-active.svg') }}" alt="" width="22" height="22" />
           </span>
-          <span class="mobile-tabbar__label">About</span>
+          <span class="mobile-tabbar__label">{{ __('About') }}</span>
         </a>
         <a href="{{ url('/contact-us') }}" class="mobile-tabbar__item {{ $tabContactActive ? 'is-active' : '' }}" @if($tabContactActive) aria-current="page" @endif>
           <span class="mobile-tabbar__icon" aria-hidden="true">
             <img class="mobile-tabbar__icon-default" src="{{ front_webp_url('/front/imgs/icons/tabbar/contact.svg') }}" alt="" width="22" height="22" />
             <img class="mobile-tabbar__icon-active" src="{{ front_webp_url('/front/imgs/icons/tabbar/contact-active.svg') }}" alt="" width="22" height="22" />
           </span>
-          <span class="mobile-tabbar__label">Contact</span>
+          <span class="mobile-tabbar__label">{{ __('Contact') }}</span>
         </a>
       </div>
     </nav>
@@ -1796,7 +1796,7 @@
     <!-- Fixed Right Side Buttons -->
     <div class="fixed bottom-[100px] right-3 z-40 flex flex-col items-center gap-3 md4:bottom-[170px] md4:right-[100px] md4:gap-4 float-side-actions">
       <!-- Message Button -->
-      <a href="#" class="inquiry-entry-btn group relative flex h-[38px] w-[38px] items-center justify-center rounded-full bg-black shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl md4:h-[45px] md4:w-[45px] float-inquiry-btn" aria-label="Messages">
+      <a href="#" class="inquiry-entry-btn group relative flex h-[38px] w-[38px] items-center justify-center rounded-full bg-black shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl md4:h-[45px] md4:w-[45px] float-inquiry-btn" aria-label="{{ __('Messages') }}">
         <svg class="h-[20px] w-[20px] md4:h-[26px] md4:w-[26px]" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
           <g clip-path="url(#clip_fbmsg)">
             <path d="M12.9998 0C5.85096 0 0.0546875 5.07213 0.0546875 11.3269C0.0546875 14.9024 1.95196 18.086 4.90907 20.1612V25.8903C6.79941 24.7431 8.6898 23.5963 10.5799 22.4493C11.3646 22.5786 12.1718 22.6541 12.9998 22.6541C20.1487 22.6541 25.9449 17.5828 25.9449 11.327C25.9448 5.07213 20.1487 0 12.9998 0ZM6.52727 12.9451C5.63409 12.9451 4.90907 12.2201 4.90907 11.327C4.90907 10.434 5.63409 9.70899 6.52727 9.70899C7.42042 9.70899 8.14548 10.434 8.14548 11.327C8.14543 12.2201 7.42042 12.9451 6.52727 12.9451ZM12.9998 12.9451C12.1066 12.9451 11.3816 12.2201 11.3816 11.327C11.3816 10.434 12.1066 9.70899 12.9998 9.70899C13.893 9.70899 14.618 10.434 14.618 11.327C14.618 12.2201 13.893 12.9451 12.9998 12.9451ZM19.4724 12.9451C18.5792 12.9451 17.8541 12.2201 17.8541 11.327C17.8541 10.434 18.5792 9.70899 19.4724 9.70899C20.3655 9.70899 21.0906 10.434 21.0906 11.327C21.0906 12.2201 20.3655 12.9451 19.4724 12.9451Z" fill="white"/>
@@ -1805,7 +1805,7 @@
         </svg>
       </a>
       <!-- Inquiry List Button -->
-      <a href="#" class="wishlist-entry-btn group relative flex h-[38px] w-[38px] items-center justify-center rounded-full bg-themeBg-d shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl md4:h-[45px] md4:w-[45px]" aria-label="Inquiry List">
+      <a href="#" class="wishlist-entry-btn group relative flex h-[38px] w-[38px] items-center justify-center rounded-full bg-themeBg-d shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl md4:h-[45px] md4:w-[45px]" aria-label="{{ __('Inquiry List') }}">
         <svg class="h-[20px] w-[20px] md4:h-[26px] md4:w-[26px]" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M7.5 19.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Zm9 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3Z" fill="white"/>
           <path d="M3.2 3.2h1.86c.64 0 1.2.43 1.36 1.05l.28 1.05h12.55c.86 0 1.5.8 1.3 1.63l-1.4 5.9a1.4 1.4 0 0 1-1.36 1.07H8.55l.22.82c.16.62.72 1.05 1.36 1.05h8.62a.9.9 0 1 1 0 1.8H9.91a3.2 3.2 0 0 1-3.1-2.4L4.86 4.7H3.2a.9.9 0 1 1 0-1.8Zm3.7 3.9.78 2.95h9.55l1.05-4.4H7.28l-.38 1.45Z" fill="white"/>
@@ -1813,7 +1813,7 @@
         <span class="inquiry-cart-badge inquiry-cart-badge-float absolute -right-1 -top-1 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-black px-1 text-[11px] font-bold text-white hidden">0</span>
       </a>
       <!-- Back to Top Button -->
-      <a href="#" id="backToTopBtn" class="group relative flex h-[38px] w-[38px] items-center justify-center rounded-full bg-slate-200 shadow-lg transition-all duration-300 hover:scale-110 hover:bg-slate-300 hover:shadow-xl md4:h-[45px] md4:w-[45px]" aria-label="Back to top">
+      <a href="#" id="backToTopBtn" class="group relative flex h-[38px] w-[38px] items-center justify-center rounded-full bg-slate-200 shadow-lg transition-all duration-300 hover:scale-110 hover:bg-slate-300 hover:shadow-xl md4:h-[45px] md4:w-[45px]" aria-label="{{ __('Back to top') }}">
         <svg class="h-[20px] w-[20px] md4:h-[26px] md4:w-[26px]" viewBox="0 0 17 22" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M16.8187 1.04346C16.8187 1.61973 16.359 2.08692 15.7919 2.08692H1.04321C0.476172 2.08692 0.0164712 1.61975 0.0164712 1.04346C0.0164712 0.467187 0.476147 0 1.04321 0H15.7919C16.359 0 16.8187 0.467162 16.8187 1.04346ZM8.49993 4.92416C7.9329 4.92416 7.4732 5.39133 7.4732 5.96762V20.9565C7.4732 21.5328 7.93287 22 8.49993 22C9.06697 22 9.52667 21.5328 9.52667 20.9565V5.9676C9.52664 5.39132 9.06697 4.92416 8.49993 4.92416ZM9.22859 4.15434C8.82763 3.74685 8.20054 3.72347 7.82794 4.10214L0.265064 11.7882C-0.107516 12.1668 -0.0845296 12.8041 0.316431 13.2116C0.717391 13.6191 1.34448 13.6425 1.71706 13.2638L9.27996 5.57778C9.65254 5.19913 9.62955 4.56183 9.22859 4.15434ZM7.77143 4.15434C7.37047 4.56183 7.34745 5.19913 7.72006 5.57778L15.2829 13.2638C15.6555 13.6425 16.2826 13.6191 16.6836 13.2116C17.0845 12.8041 17.1075 12.1668 16.7349 11.7882L9.17205 4.10212C8.79947 3.72347 8.17239 3.74685 7.77143 4.15434Z" fill="black"/>
         </svg>
@@ -1826,22 +1826,22 @@
       <div class="inquiry_popup_backdrop absolute inset-0 cursor-pointer bg-black/70" aria-hidden="true"></div>
       <div class="inquiry_popup_panel relative mx-auto w-[calc(100%-20px)] bg-white shadow-2xl ring-1 ring-black/10 md4:w-[320px]">
         <div class="flex items-center justify-between bg-themeBg-d px-4 py-3 text-white">
-          <div class="text-[16px] font-extrabold uppercase tracking-wide">LEAVE A MESSAGE</div>
-          <button type="button" class="inquiry_popup_close inline-flex h-8 w-8 items-center justify-center text-white/90 hover:text-white" aria-label="Close inquiry">
+          <div class="text-[16px] font-extrabold uppercase tracking-wide">{{ __('LEAVE A MESSAGE') }}</div>
+          <button type="button" class="inquiry_popup_close inline-flex h-8 w-8 items-center justify-center text-white/90 hover:text-white" aria-label="{{ __('Close inquiry') }}">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 48 48" width="16" height="16"><path stroke-linejoin="round" stroke-linecap="round" stroke-width="6" stroke="currentColor" d="m8 8 32 32M8 40 40 8"/></svg>
           </button>
         </div>
         <div class="px-4 py-4">
           <p class="text-[12px] leading-5 text-slate-600">
-            If you are interested in our products and want to know more details, please leave a message here, we will reply you as soon as we can.
+            {{ __('If you are interested in our products and want to know more details, please leave a message here, we will reply you as soon as we can.') }}
           </p>
           <form class="mt-4 js-inquiry-popup-form" action="#" onsubmit="return false" method="post">
             <input type="hidden" name="source_url" value="" class="js-inquiry-popup-source-url" />
             <div class="space-y-3">
               <div>
-                <label class="form-field-label mb-1 block text-[12px] font-poppins-regular text-slate-700">E-Mail<x-front.form-required /></label>
+                <label class="form-field-label mb-1 block text-[12px] font-poppins-regular text-slate-700">{{ __('E-Mail') }}<x-front.form-required /></label>
                 <div class="relative">
-                <input type="email" name="email" required placeholder="Please enter your email" class="h-10 w-full rounded border border-slate-200 bg-white px-3 pr-10 text-[12px] text-slate-900 outline-none placeholder:text-slate-400 focus:border-themeBg-d" />
+                <input type="email" name="email" required placeholder="{{ __('Please enter your email') }}" class="h-10 w-full rounded border border-slate-200 bg-white px-3 pr-10 text-[12px] text-slate-900 outline-none placeholder:text-slate-400 focus:border-themeBg-d" />
                 <span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400" aria-hidden="true">
                   <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M4 4h16v16H4z" opacity="0" />
@@ -1853,9 +1853,9 @@
                 </div>
               </div>
               <div>
-                <label class="form-field-label mb-1 block text-[12px] font-poppins-regular text-slate-700">Tel/WhatsApp</label>
+                <label class="form-field-label mb-1 block text-[12px] font-poppins-regular text-slate-700">{{ __('Tel/WhatsApp') }}</label>
                 <div class="relative">
-                <input type="tel" name="tel" placeholder="Please enter your phone number" class="h-10 w-full rounded border border-slate-200 bg-white px-3 pr-10 text-[12px] text-slate-900 outline-none placeholder:text-slate-400 focus:border-themeBg-d" />
+                <input type="tel" name="tel" placeholder="{{ __('Please enter your phone number') }}" class="h-10 w-full rounded border border-slate-200 bg-white px-3 pr-10 text-[12px] text-slate-900 outline-none placeholder:text-slate-400 focus:border-themeBg-d" />
                 <span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400" aria-hidden="true">
                   <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M22 16.92v3a2 2 0 01-2.18 2 19.8 19.8 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.8 19.8 0 013.11 4.18 2 2 0 015.09 2h3a2 2 0 012 1.72c.12.86.32 1.7.59 2.5a2 2 0 01-.45 2.11L9.09 9.91a16 16 0 006 6l1.58-1.13a2 2 0 012.11-.45c.8.27 1.64.47 2.5.59A2 2 0 0122 16.92z" />
@@ -1864,16 +1864,16 @@
                 </div>
               </div>
               <div>
-                <label class="form-field-label mb-1 block text-[12px] font-poppins-regular text-slate-700">Content<x-front.form-required /></label>
-                <textarea name="content" rows="5" required placeholder="Enter product details (such as color, size, materials etc.) and other specific requirements to receive an accurate quote." class="w-full resize-y rounded border border-slate-200 bg-white px-3 py-2 text-[12px] text-slate-900 outline-none placeholder:text-slate-400 focus:border-themeBg-d"></textarea>
+                <label class="form-field-label mb-1 block text-[12px] font-poppins-regular text-slate-700">{{ __('Content') }}<x-front.form-required /></label>
+                <textarea name="content" rows="5" required placeholder="{{ __('Enter product details (such as color, size, materials etc.) and other specific requirements to receive an accurate quote.') }}" class="w-full resize-y rounded border border-slate-200 bg-white px-3 py-2 text-[12px] text-slate-900 outline-none placeholder:text-slate-400 focus:border-themeBg-d"></textarea>
               </div>
             </div>
             <button type="submit" class="mt-4 inline-flex h-10 w-full items-center justify-center bg-themeBg-d text-[12px] font-extrabold uppercase tracking-wide text-white transition hover:bg-themeBg-d">
-              SUBMIT
+              {{ __('SUBMIT') }}
             </button>
             {{-- 暂时隐藏 Inquiry List 入口 --}}
             <a href="/myinquirys" class="mt-3 hidden h-10 w-full items-center justify-center border border-themeBg-d bg-white text-[12px] font-extrabold uppercase tracking-wide text-themeBg-d transition hover:bg-themeBg-d hover:text-white">
-              Inquiry List (<span class="inquiry-cart-badge">0</span>)
+              {{ __('Inquiry List') }} (<span class="inquiry-cart-badge">0</span>)
             </a>
           </form>
         </div>
@@ -1882,12 +1882,12 @@
     <!-- Inquiry Popup -->
 
     <!-- Inquiry List Popup (reuse wishlist_popup styles/position) -->
-    <section class="wishlist_popup fixed inset-0 z-[60]" aria-label="Inquiry List">
+    <section class="wishlist_popup fixed inset-0 z-[60]" aria-label="{{ __('Inquiry List') }}">
       <div class="wishlist_popup_backdrop absolute inset-0 cursor-pointer bg-black/70" aria-hidden="true"></div>
       <div class="wishlist_popup_panel w-[calc(100%-20px)] bg-white shadow-2xl ring-1 ring-black/10 md4:w-[280px]">
         <div class="wishlist_popup_header">
-          <div class="wishlist_popup_title">INQUIRY LIST</div>
-          <button type="button" class="wishlist_popup_close" aria-label="Close inquiry list">
+          <div class="wishlist_popup_title">{{ __('INQUIRY LIST') }}</div>
+          <button type="button" class="wishlist_popup_close" aria-label="{{ __('Close inquiry list') }}">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M18 6L6 18" />
               <path d="M6 6l12 12" />
@@ -1899,14 +1899,14 @@
             <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="mb-3 h-8 w-8 text-slate-400" aria-hidden="true">
               <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
             </svg>
-            <p class="text-center text-[13px] text-slate-500">There is currently no<br>inquiry product</p>
+            <p class="text-center text-[13px] text-slate-500">{{ __('There is currently no') }}<br>{{ __('inquiry product') }}</p>
           </div>
           <div class="wishlist_list js-inquiry-float-list hidden"></div>
         </div>
         <div class="wishlist_footer js-inquiry-float-footer hidden border-t border-slate-200 px-3 py-2">
           <div class="flex items-center gap-2">
-            <button type="button" class="wishlist_delete_btn js-inquiry-float-clear flex-1 rounded border border-slate-300 px-3 py-1 text-[12px] text-slate-600 transition hover:bg-slate-100">Clear</button>
-            <button type="button" class="wishlist_contact_btn js-inquiry-float-contact flex-1 rounded bg-themeBg-d px-3 py-1 text-[12px] text-white transition hover:bg-[#c22522]">Contact Now</button>
+            <button type="button" class="wishlist_delete_btn js-inquiry-float-clear flex-1 rounded border border-slate-300 px-3 py-1 text-[12px] text-slate-600 transition hover:bg-slate-100">{{ __('Clear') }}</button>
+            <button type="button" class="wishlist_contact_btn js-inquiry-float-contact flex-1 rounded bg-themeBg-d px-3 py-1 text-[12px] text-white transition hover:bg-[#c22522]">{{ __('Contact Now') }}</button>
           </div>
         </div>
       </div>
@@ -1917,7 +1917,7 @@
       <div class="video-modal-backdrop absolute inset-0 bg-black/70"></div>
       <div class="absolute inset-0 flex items-center justify-center px-4 py-6">
         <div class="relative w-full max-w-[920px]">
-          <button type="button" class="video-modal-close absolute -top-4 -right-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-slate-900 shadow ring-1 ring-black/10 transition hover:bg-white" aria-label="Close">
+          <button type="button" class="video-modal-close absolute -top-4 -right-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-slate-900 shadow ring-1 ring-black/10 transition hover:bg-white" aria-label="{{ __('Close') }}">
             <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M18 6L6 18" />
               <path d="M6 6l12 12" />
@@ -1925,7 +1925,7 @@
           </button>
           <div class="w-full overflow-hidden rounded bg-black">
             <div class="relative w-full aspect-video">
-              <iframe id="videoModalIframe" class="absolute inset-0 h-full w-full" src="" title="Video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+              <iframe id="videoModalIframe" class="absolute inset-0 h-full w-full" src="" title="{{ __('Video player') }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
               <video id="videoModalVideo" class="absolute inset-0 hidden h-full w-full" controls playsinline></video>
             </div>
           </div>
@@ -1934,13 +1934,14 @@
     </div>
 
     @yield('page-css-footer')
+    @include('front.partials.front-i18n')
     <script type="text/javascript" src="/front/js/jquery.min.js"></script>
-    <script type="text/javascript" src="/front/js/inquiry-cart.js?v=20260316c"></script>
-    <script type="text/javascript" src="/front/js/main.js?v=20261009b"></script>
+    <script type="text/javascript" src="/front/js/inquiry-cart.js?v=20261010g"></script>
+    <script type="text/javascript" src="/front/js/main.js?v=20261010g"></script>
     <script type="text/javascript" src="/front/js/sns-share.js?v=20260923a"></script>
     <script type="text/javascript" src="/front/js/section-spacing.js?v=20261010a"></script>
     <script src="/front/js/swiper-bundle.min.js" defer></script>
-    <script src="/front/js/swiper-common.js?v=20260915d" defer></script>
+    <script src="/front/js/swiper-common.js?v=20261010f" defer></script>
     @yield('page-js-footer')
 </body>
 </html>

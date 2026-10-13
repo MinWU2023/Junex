@@ -23,7 +23,7 @@
  <section class="w-full breadcrumb bg-[#f7f8fa]">
     <div >
         <div class="mx-auto w-full max-w-[1200px] px-4 py-4 sm2:px-5 md1:px-6 lg1:px-0">
-            <nav aria-label="Breadcrumb">
+            <nav aria-label="{{ __('Breadcrumb') }}">
             <ol class="flex flex-wrap items-center gap-x-3 gap-y-1">
                 @if(isset($breadcrumbs) && count($breadcrumbs))
                     @foreach($breadcrumbs as $index => $crumb)
@@ -31,12 +31,12 @@
                             <li class="inline-flex items-center">
                                 @if(!empty($crumb['url']))
                                     <a href="{{ $crumb['url'] }}" class="inline-flex items-center gap-2 transition hover:text-themeText-h">
-                                        <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="Home" class="w-[14px] h-[14px]" />
+                                        <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
                                         <span class="font-poppins-regular  text-f14 text-themeText-p">{{ $crumb['label'] }}</span>
                                     </a>
                                 @else
                                     <span class="inline-flex items-center gap-2">
-                                        <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="Home" class="w-[14px] h-[14px]" />
+                                        <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
                                         <span class="font-poppins-regular  text-f14 text-themeText-p">{{ $crumb['label'] }}</span>
                                     </span>
                                 @endif
@@ -61,8 +61,8 @@
                 @else
                 <li class="inline-flex items-center">
                 <a href="#" class="inline-flex items-center gap-2 transition hover:text-themeText-h">
-                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="Home" class="w-[14px] h-[14px]" />
-                    <span class="font-poppins-regular  text-f14 text-themeText-p">Home</span>
+                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
+                    <span class="font-poppins-regular  text-f14 text-themeText-p">{{ __('Home') }}</span>
                 </a>
                 </li>
 
@@ -73,7 +73,7 @@
                 </li>
 
                 <li class="inline-flex items-center">
-                <span class="font-poppins-regular text-f14 text-themeText-g" aria-current="page">Products</span>
+                <span class="font-poppins-regular text-f14 text-themeText-g" aria-current="page">{{ __('Products') }}</span>
                 </li>
                 @endif
             </ol>
@@ -89,8 +89,8 @@
             {!! front_html_prefer_webp($category->content) !!}
         </div>
         <div class="js-cat-desc-actions mt-4 flex justify-start gap-3 hidden">
-            <button type="button" class="js-cat-desc-more inline-flex items-center justify-center bg-themeBg-d px-5 py-2 text-f12 font-poppins-medium uppercase tracking-wide text-white transition hover:opacity-90">Read More</button>
-            <button type="button" class="js-cat-desc-less hidden inline-flex items-center justify-center bg-themeBg-d px-5 py-2 text-f12 font-poppins-medium uppercase tracking-wide text-white transition hover:opacity-90">Hide More</button>
+            <button type="button" class="js-cat-desc-more inline-flex items-center justify-center bg-themeBg-d px-5 py-2 text-f12 font-poppins-medium uppercase tracking-wide text-white transition hover:opacity-90">{{ __('Read More') }}</button>
+            <button type="button" class="js-cat-desc-less hidden inline-flex items-center justify-center bg-themeBg-d px-5 py-2 text-f12 font-poppins-medium uppercase tracking-wide text-white transition hover:opacity-90">{{ __('Hide More') }}</button>
         </div>
     </div>
 </section>
@@ -127,8 +127,8 @@
             {!! front_html_prefer_webp($category->content2) !!}
         </div>
         <div class="js-cat-desc-actions mt-4 flex justify-start gap-3 hidden">
-            <button type="button" class="js-cat-desc-more inline-flex items-center justify-center bg-themeBg-d px-5 py-2 text-f12 font-poppins-medium uppercase tracking-wide text-white transition hover:opacity-90">Read More</button>
-            <button type="button" class="js-cat-desc-less hidden inline-flex items-center justify-center bg-themeBg-d px-5 py-2 text-f12 font-poppins-medium uppercase tracking-wide text-white transition hover:opacity-90">Hide More</button>
+            <button type="button" class="js-cat-desc-more inline-flex items-center justify-center bg-themeBg-d px-5 py-2 text-f12 font-poppins-medium uppercase tracking-wide text-white transition hover:opacity-90">{{ __('Read More') }}</button>
+            <button type="button" class="js-cat-desc-less hidden inline-flex items-center justify-center bg-themeBg-d px-5 py-2 text-f12 font-poppins-medium uppercase tracking-wide text-white transition hover:opacity-90">{{ __('Hide More') }}</button>
         </div>
     </div>
 </section>
@@ -173,7 +173,7 @@
             @endforeach
             <div class="flex items-center justify-center bg-themeBg-d py-10 text-center text-white">
                 <div>
-                <img class="mx-auto h-14 w-14 object-contain" src="{{ $whyChoose['center']['logo_url'] ?? '' }}" alt="Junex" loading="lazy" />
+                <img class="mx-auto h-14 w-14 object-contain" src="{{ $whyChoose['center']['logo_url'] ?? '' }}" alt="{{ __('Junex') }}" loading="lazy" />
                 <div class="mt-3 text-[16px] font-poppins-semibold uppercase tracking-[3px]">{{ $whyChoose['center']['title'] ?? '' }}</div>
                 <div class="mx-auto mt-3 h-[1px] w-[40px] bg-white/60"></div>
                 <div class="mt-3 text-[11px] leading-5 text-white px-4 font-poppins-regular">{{ $whyChoose['center']['subtitle'] ?? '' }}</div>
@@ -232,7 +232,7 @@
             </div>
             <!-- Center Red Block -->
             <div class="absolute z-10 flex flex-col items-center justify-center bg-themeBg-d text-center text-white" style="left:39%;top:33.33%;width:22%;height:33.34%;">
-                <img class="h-auto w-[200px] object-contain" src="{{ $whyChoose['center']['logo_url'] ?? '' }}" alt="Junex" loading="lazy" />
+                <img class="h-auto w-[200px] object-contain" src="{{ $whyChoose['center']['logo_url'] ?? '' }}" alt="{{ __('Junex') }}" loading="lazy" />
                 <div class="mt-3 text-f12 leading-5 text-white px-4 font-poppins-regular">{{ $whyChoose['center']['description_desktop'] ?? '' }}</div>
             </div>
             </div>

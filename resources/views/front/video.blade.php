@@ -16,7 +16,7 @@
 @section('content')
 <section class="w-full breadcrumb bg-[#f7f8fa]">
     <div class="mx-auto w-full max-w-[1200px] px-4 py-4 sm2:px-5 md1:px-6 lg1:px-0">
-        <nav aria-label="Breadcrumb">
+        <nav aria-label="{{ __('Breadcrumb') }}">
             <ol class="flex flex-wrap items-center gap-x-3 gap-y-1">
                 @foreach(($breadcrumbs ?? []) as $index => $crumb)
                     @if($index > 0)
@@ -28,7 +28,7 @@
                         @if(!empty($crumb['url']))
                             <a href="{{ $crumb['url'] }}" class="inline-flex items-center gap-2 transition hover:text-themeText-h">
                                 @if($index === 0)
-                                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="Home" class="w-[14px] h-[14px]" />
+                                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
                                 @endif
                                 <span class="font-poppins-regular text-f14 text-themeText-p">{{ $crumb['label'] }}</span>
                             </a>
@@ -64,7 +64,7 @@
                         <img
                             class="h-[240px] w-full object-cover md1:h-[320px] md2:h-[360px]"
                             src="{{ $coverSrc }}"
-                            alt="{{ $videoTitle ?? 'Video cover' }}"
+                            alt="{{ $videoTitle ?? __('Video cover') }}"
                             loading="lazy"
                             data-fallback-hq="{{ $ytHq }}"
                             data-fallback-local="{{ $coverFallback }}"
@@ -91,7 +91,7 @@
 
                     @if(!empty($relatedProductsData))
                     <div class="mt-10">
-                        <div class="text-f18 font-poppins-medium uppercase tracking-wide text-themeText-h">Related Products</div>
+                        <div class="text-f18 font-poppins-medium uppercase tracking-wide text-themeText-h">{{ __('Related Products') }}</div>
                         <div class="mt-5 grid grid-cols-1 gap-4 sm5:grid-cols-2">
                             @foreach($relatedProductsData as $p)
                             <a href="{{ $p['url'] ?? '#' }}" class="flex items-center gap-4 bg-themeBg-g p-3 transition hover:bg-slate-200">
@@ -111,7 +111,7 @@
                                     <svg viewBox="0 0 24 24" class="h-[30px] w-auto" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 15l6-6 6 6" /></svg>
                                 </div>
                                 <div class="min-w-0">
-                                    <div class="text-f18 font-poppins-medium uppercase tracking-wide">Previous Video</div>
+                                    <div class="text-f18 font-poppins-medium uppercase tracking-wide">{{ __('Previous Video') }}</div>
                                     <div class="truncate text-[14px] text-themeText-p font-poppins-regular">{{ $prevVideoData['title'] ?? '' }}</div>
                                 </div>
                             </div>
@@ -122,7 +122,7 @@
                                     <svg viewBox="0 0 24 24" class="h-[30px] w-auto" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6" /></svg>
                                 </div>
                                 <div class="min-w-0">
-                                    <div class="text-f18 font-poppins-medium uppercase tracking-wide">Next Video</div>
+                                    <div class="text-f18 font-poppins-medium uppercase tracking-wide">{{ __('Next Video') }}</div>
                                     <div class="truncate text-[14px] text-themeText-p font-poppins-regular">{{ $nextVideoData['title'] ?? '' }}</div>
                                 </div>
                             </div>
@@ -133,7 +133,7 @@
 
             <aside class="w-full md4:w-[314px]">
                 <section class="w-full">
-                    <div class="text-f18 font-poppins-medium uppercase tracking-wide">New Videos</div>
+                    <div class="text-f18 font-poppins-medium uppercase tracking-wide">{{ __('New Videos') }}</div>
                     <div class="mt-5 space-y-4">
                         @foreach(($latestVideosData ?? []) as $item)
                         <a href="{{ $item['url'] ?? 'javascript:void(0);' }}" class="block bg-themeBg-g p-4 transition hover:bg-slate-200">
@@ -141,7 +141,7 @@
                                 <img
                                     class="h-[70px] w-[100px] shrink-0 object-cover"
                                     src="{{ $item['image'] ?? front_webp_url('/front/imgs/video-item.png') }}"
-                                    alt="{{ $item['title'] ?? 'Video thumbnail' }}"
+                                    alt="{{ $item['title'] ?? __('Video thumbnail') }}"
                                     loading="lazy"
                                     data-fallback-hq="{{ youtube_thumbnail_url($item['video_url'] ?? '', 'hqdefault') }}"
                                     data-fallback-local="{{ front_webp_url('/front/imgs/video-item.png') }}"

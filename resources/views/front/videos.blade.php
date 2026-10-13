@@ -35,7 +35,7 @@
 @section('content')
 <section class="w-full breadcrumb bg-[#f7f8fa]">
     <div class="mx-auto w-full max-w-[1200px] px-4 py-4 sm2:px-5 md1:px-6 lg1:px-0">
-        <nav aria-label="Breadcrumb">
+        <nav aria-label="{{ __('Breadcrumb') }}">
             <ol class="flex flex-wrap items-center gap-x-3 gap-y-1">
                 @foreach(($breadcrumbs ?? []) as $index => $crumb)
                     @if($index > 0)
@@ -47,7 +47,7 @@
                         @if(!empty($crumb['url']))
                             <a href="{{ $crumb['url'] }}" class="inline-flex items-center gap-2 transition hover:text-themeText-h">
                                 @if($index === 0)
-                                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="Home" class="w-[14px] h-[14px]" />
+                                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
                                 @endif
                                 <span class="font-poppins-regular text-f14 text-themeText-p">{{ $crumb['label'] }}</span>
                             </a>
@@ -70,7 +70,7 @@
             {!! $videosHeaderHtml !!}
         @else
         <div class="mb-8 text-center md1:mb-10">
-            <h1 class="text-f28 font-poppins-semibold uppercase tracking-wide text-themeText-f md1:text-f32">Product Videos</h1>
+            <h1 class="text-f28 font-poppins-semibold uppercase tracking-wide text-themeText-f md1:text-f32">{{ __('Product Videos') }}</h1>
             <div class="mx-auto mt-3 h-[7px] w-[46px] rounded bg-themeBg-d" aria-hidden="true"></div>
             <p class="mx-auto mt-4 max-w-[720px] text-f14 font-poppins-regular leading-relaxed text-themeText-g md1:text-f15">
                 {{ __('Watch factory showcases, product highlights, and customization workflows from our sportswear production line.') }}

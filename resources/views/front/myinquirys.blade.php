@@ -17,12 +17,12 @@
 <section class="w-full breadcrumb bg-[#f7f8fa]">
     <div>
         <div class="mx-auto w-full max-w-[1200px] px-4 py-4 sm2:px-5 md1:px-6 lg1:px-0">
-            <nav aria-label="Breadcrumb">
+            <nav aria-label="{{ __('Breadcrumb') }}">
             <ol class="flex flex-wrap items-center gap-x-3 gap-y-1">
                 <li class="inline-flex items-center">
                 <a href="/" class="inline-flex items-center gap-2 transition hover:text-themeText-h">
-                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="Home" class="w-[14px] h-[14px]" />
-                    <span class="font-poppins-regular text-f14 text-themeText-p">Home</span>
+                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
+                    <span class="font-poppins-regular text-f14 text-themeText-p">{{ __('Home') }}</span>
                 </a>
                 </li>
                 <li class="inline-flex items-center text-themeText-h" aria-hidden="true">
@@ -31,7 +31,7 @@
                 </svg>
                 </li>
                 <li class="inline-flex items-center">
-                <span class="font-poppins-regular text-f14 text-themeText-g" aria-current="page">Inquiry List</span>
+                <span class="font-poppins-regular text-f14 text-themeText-g" aria-current="page">{{ __('Inquiry List') }}</span>
                 </li>
             </ol>
             </nav>
@@ -43,13 +43,13 @@
     <div class="mx-auto w-full max-w-[1200px] px-[15px] sm2:px-5 md1:px-6 lg1:px-0">
     <div class="py-16">
         <div class="flex flex-col items-center">
-            <h2 class="text-f24 font-poppins-semibold text-themeText-f uppercase tracking-wide md1:text-f32">PLEASE SEND YOUR MESSAGE TO US</h2>
+            <h2 class="text-f24 font-poppins-semibold text-themeText-f uppercase tracking-wide md1:text-f32">{{ __('PLEASE SEND YOUR MESSAGE TO US') }}</h2>
             <div class="mx-auto mt-3 h-[7px] w-[46px] rounded bg-themeBg-d" aria-hidden="true"></div>
         </div>
 
         <div id="inquiryCartEmpty" class="mt-10 hidden rounded border border-dashed border-slate-300 bg-white px-6 py-12 text-center">
-            <p class="text-f16 text-themeText-p">Your inquiry list is empty.</p>
-            <a href="/products" class="mt-4 inline-flex h-11 items-center justify-center bg-themeBg-d px-6 text-f14 font-poppins-medium uppercase tracking-wide text-white transition hover:bg-red-700">Browse Products</a>
+            <p class="text-f16 text-themeText-p">{{ __('Your inquiry list is empty.') }}</p>
+            <a href="/products" class="mt-4 inline-flex h-11 items-center justify-center bg-themeBg-d px-6 text-f14 font-poppins-medium uppercase tracking-wide text-white transition hover:bg-red-700">{{ __('Browse Products') }}</a>
         </div>
 
         <div id="inquiryCartList" class="mt-8 flex flex-col gap-3 md1:mt-12"></div>
@@ -67,20 +67,20 @@
 
         <div class="flex flex-col gap-5 sm6:flex-row sm6:gap-5">
             <div class="flex flex-1 flex-col gap-2">
-            <label class="form-field-label text-f14 font-poppins-regular text-themeText-g">Name <x-front.form-required /></label>
-            <input type="text" name="name" required placeholder="Please enter your name" class="h-[42px] sm6:h-[46px] md1:h-[51px] w-full rounded border border-themeBg-h bg-white px-3 text-f14 font-poppins-regular text-themeText-a placeholder-themeText-i outline-none transition focus:border-themeBg-d" />
+            <label class="form-field-label text-f14 font-poppins-regular text-themeText-g">{{ __('Name') }} <x-front.form-required /></label>
+            <input type="text" name="name" required placeholder="{{ __('Please enter your name') }}" class="h-[42px] sm6:h-[46px] md1:h-[51px] w-full rounded border border-themeBg-h bg-white px-3 text-f14 font-poppins-regular text-themeText-a placeholder-themeText-i outline-none transition focus:border-themeBg-d" />
             </div>
             <div class="flex flex-1 flex-col gap-2">
-            <label class="form-field-label text-f14 font-poppins-regular text-themeText-g">E-Mail <x-front.form-required /></label>
-            <input type="email" name="email" required placeholder="Please enter your email" class="h-[42px] sm6:h-[46px] md1:h-[51px] w-full rounded border border-themeBg-h bg-white px-3 text-f14 font-poppins-regular text-themeText-a placeholder-themeText-i outline-none transition focus:border-themeBg-d" />
+            <label class="form-field-label text-f14 font-poppins-regular text-themeText-g">{{ __('E-Mail') }} <x-front.form-required /></label>
+            <input type="email" name="email" required placeholder="{{ __('Please enter your email') }}" class="h-[42px] sm6:h-[46px] md1:h-[51px] w-full rounded border border-themeBg-h bg-white px-3 text-f14 font-poppins-regular text-themeText-a placeholder-themeText-i outline-none transition focus:border-themeBg-d" />
             </div>
         </div>
 
         <div class="flex flex-col gap-5 sm6:flex-row sm6:gap-5">
             <div class="flex flex-1 flex-col gap-2">
-            <label class="text-f14 font-poppins-regular text-themeText-g">Quantity</label>
+            <label class="text-f14 font-poppins-regular text-themeText-g">{{ __('Quantity') }}</label>
             <select name="quantity" class="h-[42px] sm6:h-[46px] md1:h-[51px] w-full appearance-none rounded border border-themeBg-h bg-white px-3 text-f14 font-poppins-regular text-themeText-a outline-none transition focus:border-themeBg-d">
-                <option value="">Please select</option>
+                <option value="">{{ __('Please select') }}</option>
                 <option value="0~100">0~100</option>
                 <option value="101~500">101~500</option>
                 <option value="501~1000">501~1000</option>
@@ -89,14 +89,14 @@
             </select>
             </div>
             <div class="flex flex-1 flex-col gap-2">
-            <label class="form-field-label text-f14 font-poppins-regular text-themeText-g">Tel/WhatsAPP</label>
-            <input type="tel" name="tel" placeholder="Please enter your phone number" class="h-[42px] sm6:h-[46px] md1:h-[51px] w-full rounded border border-themeBg-h bg-white px-3 text-f14 font-poppins-regular text-themeText-a placeholder-themeText-i outline-none transition focus:border-themeBg-d" />
+            <label class="form-field-label text-f14 font-poppins-regular text-themeText-g">{{ __('Tel/WhatsAPP') }}</label>
+            <input type="tel" name="tel" placeholder="{{ __('Please enter your phone number') }}" class="h-[42px] sm6:h-[46px] md1:h-[51px] w-full rounded border border-themeBg-h bg-white px-3 text-f14 font-poppins-regular text-themeText-a placeholder-themeText-i outline-none transition focus:border-themeBg-d" />
             </div>
         </div>
 
         <div class="flex flex-col gap-2">
-            <label class="form-field-label text-f14 font-poppins-regular text-themeText-g">Content <x-front.form-required /></label>
-            <textarea name="content" rows="6" required placeholder="Please enter the content" class="h-[120px] sm6:h-[140px] md1:h-[163px] w-full resize-none rounded border border-themeBg-h bg-white px-3 py-3 text-f14 font-poppins-regular text-themeText-a placeholder-themeText-i outline-none transition focus:border-themeBg-d"></textarea>
+            <label class="form-field-label text-f14 font-poppins-regular text-themeText-g">{{ __('Content') }} <x-front.form-required /></label>
+            <textarea name="content" rows="6" required placeholder="{{ __('Please enter the content') }}" class="h-[120px] sm6:h-[140px] md1:h-[163px] w-full resize-none rounded border border-themeBg-h bg-white px-3 py-3 text-f14 font-poppins-regular text-themeText-a placeholder-themeText-i outline-none transition focus:border-themeBg-d"></textarea>
         </div>
 
         @include('front.partials.inquiry-attachment-field', [
@@ -105,7 +105,7 @@
         ])
 
         <div class="flex justify-center">
-            <button type="submit" id="inquiryListSubmit" class="h-[48px] sm6:h-[54px] md1:h-[60px] w-[200px] bg-themeText-f font-poppins-medium text-f18 uppercase tracking-wide text-white transition hover:opacity-90">SEND</button>
+            <button type="submit" id="inquiryListSubmit" class="h-[48px] sm6:h-[54px] md1:h-[60px] w-[200px] bg-themeText-f font-poppins-medium text-f18 uppercase tracking-wide text-white transition hover:opacity-90">{{ __('SEND') }}</button>
         </div>
         </form>
     </div>
@@ -114,7 +114,6 @@
 @endsection
 
 @section('page-js-footer')
-<script type="text/javascript" src="/front/js/inquiry-cart.js"></script>
 <script>
 (function () {
   function esc(s) {
@@ -149,11 +148,11 @@
           '<div class="flex min-w-0 flex-1 flex-col gap-[6px] sm6:gap-[10px]">' +
             '<a href="' + esc(item.url || '#') + '" class="line-clamp-1 text-f16 font-poppins-semibold leading-[1.4] text-themeText-f transition hover:text-themeBg-d sm6:text-f18">' + esc(item.name) + '</a>' +
             '<div class="flex items-center gap-2">' +
-              '<span class="text-f14 font-poppins-medium text-themeText-g">Qty:</span>' +
+              '<span class="text-f14 font-poppins-medium text-themeText-g">' + (typeof __ === 'function' ? __('Qty:') : 'Qty:') + '</span>' +
               '<input type="number" min="1" class="js-inquiry-qty h-9 w-20 rounded border border-themeBg-h bg-white px-2 text-f14" data-product-id="' + item.id + '" value="' + (parseInt(item.quantity, 10) || 1) + '" />' +
             '</div>' +
           '</div>' +
-          '<button type="button" class="js-inquiry-remove flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-themeText-i transition hover:bg-black/5 hover:text-themeBg-d" data-product-id="' + item.id + '" aria-label="Remove">' +
+          '<button type="button" class="js-inquiry-remove flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-themeText-i transition hover:bg-black/5 hover:text-themeBg-d" data-product-id="' + item.id + '" aria-label="' + (typeof __ === 'function' ? __('Remove') : 'Remove') + '">' +
             '<svg viewBox="0 0 24 24" class="h-[18px] w-[18px]" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>' +
           '</button>' +
         '</div>'
@@ -196,10 +195,11 @@
       e.preventDefault();
       if (srcField) srcField.value = window.location.href;
       if (!window.InquiryCart || !InquiryCart.getCount()) {
+        var emptyMsg = typeof __ === 'function' ? __('Please add products to your inquiry list first.') : 'Please add products to your inquiry list first.';
         if (typeof showMessage === 'function') {
-          showMessage({ type: 'warning', message: 'Please add products to your inquiry list first.' });
+          showMessage({ type: 'warning', message: emptyMsg });
         } else {
-          alert('Please add products to your inquiry list first.');
+          alert(emptyMsg);
         }
         return;
       }
@@ -223,7 +223,7 @@
         if (result.ok && result.data && result.data.success) {
           InquiryCart.clear();
           if (typeof showMessage === 'function') {
-            showMessage({ type: 'success', message: 'Message successfully!', duration: 2000 });
+            showMessage({ type: 'success', message: (typeof __ === 'function' ? __('Message successfully!') : 'Message successfully!'), duration: 2000 });
           }
           var redirectUrl = (result.data && result.data.redirect) ? result.data.redirect : '/inquirysuccess';
           setTimeout(function () {
@@ -231,13 +231,14 @@
           }, 2000);
           return;
         }
-        var msg = (result.data && result.data.message) ? result.data.message : 'Submit failed';
+        var msg = (result.data && result.data.message) ? result.data.message : (typeof __ === 'function' ? __('Submit failed') : 'Submit failed');
         if (typeof showMessage === 'function') showMessage({ type: 'error', message: msg });
         else alert(msg);
         if (submitBtn) submitBtn.disabled = false;
       }).catch(function () {
-        if (typeof showMessage === 'function') showMessage({ type: 'error', message: 'Network error' });
-        else alert('Network error');
+        var netMsg = typeof __ === 'function' ? __('Network error') : 'Network error';
+        if (typeof showMessage === 'function') showMessage({ type: 'error', message: netMsg });
+        else alert(netMsg);
         if (submitBtn) submitBtn.disabled = false;
       });
     });

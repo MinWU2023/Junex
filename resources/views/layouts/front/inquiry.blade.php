@@ -5,13 +5,13 @@
             <ul>
 
             <li>
-                <input type="text" name="msg_email"  required="required" class="meInput" placeholder="Email">
+                <input type="text" name="msg_email"  required="required" class="meInput" placeholder="{{ __('Email') }}">
             </li>
             <li>
-                <input type="text" name="msg_title" required="required" class="meInput" placeholder="Subject">
+                <input type="text" name="msg_title" required="required" class="meInput" placeholder="{{ __('Subject') }}">
             </li>
             <li>
-                <textarea id="meText" placeholder="Content" required="required" name="msg_content" style="color:#808080;" class="meText"></textarea>
+                <textarea id="meText" placeholder="{{ __('Content') }}" required="required" name="msg_content" style="color:#808080;" class="meText"></textarea>
             </li>
             <div class="clearfix"></div>
             </ul>

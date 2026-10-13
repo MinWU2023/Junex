@@ -6,11 +6,11 @@
         <div class="border border-slate-200 px-4 py-8 sm6:px-8 md1:px-10">
             <div class="text-center">
             <h2 class="text-f32 font-poppins-semibold uppercase tracking-wide text-themeText-f">
-                {{ $askUs['title'] ?? 'To Power Your Brand With Us' }}
+                {{ $askUs['title'] ?? __('To Power Your Brand With Us') }}
             </h2>
             <div class="mx-auto mt-3 h-[7px] w-[46px] rounded bg-themeBg-d" aria-hidden="true"></div>
             <p class="mx-auto mt-4 max-w-[825px] leading-6  text-themeText-g text-f14">
-                {{ $askUs['subtitle'] ?? 'Junzhuosport, As A Mature Sportswear/ Yoga Wear/ Fitness Clothing Wholesale Supplier And Custom Gym Wear Manufacturer, Focuses On Offering Eco-Friendly & Recycled & Sustainable Fabric' }}
+                {{ $askUs['subtitle'] ?? __('Junzhuosport, As A Mature Sportswear/ Yoga Wear/ Fitness Clothing Wholesale Supplier And Custom Gym Wear Manufacturer, Focuses On Offering Eco-Friendly & Recycled & Sustainable Fabric') }}
             </p>
             </div>
 
@@ -18,19 +18,19 @@
             @include('front.partials.inquiry-form-hidden-fields')
             <div class="grid grid-cols-1 gap-x-6 gap-y-5 md4:grid-cols-2">
                 <label class="block">
-                <span class="form-field-label text-f14 font-poppins-regular text-slate-700">Name<x-front.form-required /></span>
-                <input type="text" name="name" required placeholder="{{ $askUs['placeholder_name'] ?? 'Please Enter Your Name' }}" class="mt-2 h-[50px] w-full rounded border border-slate-200 bg-white px-3 text-f14 text-slate-900 outline-none ring-0 placeholder:text-slate-400 focus:border-themeBg-d" />
+                <span class="form-field-label text-f14 font-poppins-regular text-slate-700">{{ __('Name') }}<x-front.form-required /></span>
+                <input type="text" name="name" required placeholder="{{ $askUs['placeholder_name'] ?? __('Please Enter Your Name') }}" class="mt-2 h-[50px] w-full rounded border border-slate-200 bg-white px-3 text-f14 text-slate-900 outline-none ring-0 placeholder:text-slate-400 focus:border-themeBg-d" />
                 </label>
 
                 <label class="block">
-                <span class="form-field-label text-f14 font-poppins-regular text-slate-700">E-Mail<x-front.form-required /></span>
-                <input type="email" name="email" required placeholder="{{ $askUs['placeholder_email'] ?? 'Please Enter Your Email Address' }}" class="mt-2 h-[50px] w-full rounded border border-slate-200 bg-white px-3 text-f14 text-slate-900 outline-none ring-0 placeholder:text-slate-400 focus:border-themeBg-d" />
+                <span class="form-field-label text-f14 font-poppins-regular text-slate-700">{{ __('E-Mail') }}<x-front.form-required /></span>
+                <input type="email" name="email" required placeholder="{{ $askUs['placeholder_email'] ?? __('Please Enter Your Email Address') }}" class="mt-2 h-[50px] w-full rounded border border-slate-200 bg-white px-3 text-f14 text-slate-900 outline-none ring-0 placeholder:text-slate-400 focus:border-themeBg-d" />
                 </label>
 
                 <label class="block">
-                <span class="text-f14 font-poppins-regular text-slate-700">Quantity</span>
+                <span class="text-f14 font-poppins-regular text-slate-700">{{ __('Quantity') }}</span>
                 <select name="quantity" class="mt-2 h-[50px] w-full rounded border border-slate-200 bg-white px-3 text-f14 text-slate-600 outline-none ring-0 focus:border-themeBg-d">
-                    <option value="" selected>{{ $askUs['placeholder_quantity'] ?? 'Please Select Quantity' }}</option>
+                    <option value="" selected>{{ $askUs['placeholder_quantity'] ?? __('Please Select Quantity') }}</option>
                     <option value="0~100">0~100</option>
                     <option value="101~500">101~500</option>
                     <option value="501~1000">501~1000</option>
@@ -40,14 +40,14 @@
                 </label>
 
                 <label class="block">
-                <span class="form-field-label text-f14 font-poppins-regular text-slate-700">Tel / WhatsAPP</span>
-                <input type="tel" name="tel" placeholder="{{ $askUs['placeholder_tel'] ?? 'Please Enter Your Telephone Number Or WhatsApp Number' }}" class="mt-2 h-[50px] w-full rounded border border-slate-200 bg-white px-3 text-f14 text-slate-900 outline-none ring-0 placeholder:text-slate-400 focus:border-themeBg-d" />
+                <span class="form-field-label text-f14 font-poppins-regular text-slate-700">{{ __('Tel / WhatsAPP') }}</span>
+                <input type="tel" name="tel" placeholder="{{ $askUs['placeholder_tel'] ?? __('Please Enter Your Telephone Number Or WhatsApp Number') }}" class="mt-2 h-[50px] w-full rounded border border-slate-200 bg-white px-3 text-f14 text-slate-900 outline-none ring-0 placeholder:text-slate-400 focus:border-themeBg-d" />
                 </label>
             </div>
 
             <label class="mt-5 block">
-                <span class="form-field-label text-f14 font-poppins-regular text-slate-700">Content<x-front.form-required /></span>
-                <textarea name="content" rows="8" required placeholder="{{ $askUs['placeholder_content'] ?? 'Please Enter The Content' }}" class="mt-2 w-full resize-y rounded border border-slate-200 bg-white px-3 py-3 text-f14 text-slate-900 outline-none ring-0 placeholder:text-slate-400 focus:border-themeBg-d"></textarea>
+                <span class="form-field-label text-f14 font-poppins-regular text-slate-700">{{ __('Content') }}<x-front.form-required /></span>
+                <textarea name="content" rows="8" required placeholder="{{ $askUs['placeholder_content'] ?? __('Please Enter The Content') }}" class="mt-2 w-full resize-y rounded border border-slate-200 bg-white px-3 py-3 text-f14 text-slate-900 outline-none ring-0 placeholder:text-slate-400 focus:border-themeBg-d"></textarea>
             </label>
 
             <div class="mt-5">
@@ -58,7 +58,7 @@
 
             <div class="mt-7 flex justify-center">
                 <button type="submit" class="inline-flex h-[50px] items-center justify-center bg-slate-900 px-4 text-f15 font-poppins-medium uppercase tracking-wide text-white transition hover:bg-slate-800">
-                {{ $askUs['button_text'] ?? 'Send Inquiry Now' }}
+                {{ $askUs['button_text'] ?? __('Send Inquiry Now') }}
                 </button>
             </div>
             </form>

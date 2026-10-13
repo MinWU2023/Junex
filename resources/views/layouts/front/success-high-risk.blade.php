@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Inquiry</title>
+    <title>{{ __('Inquiry') }}</title>
     {!! app('settings')['setting']->gsg_code !!}
     {!! app('settings')['setting']->head_code !!}
 </head>
@@ -44,10 +44,10 @@
 <div class="n_main">
     <div class="container">
         <div class="img"><img src="{{ asset('/images/successful.svg') }}" /></div>
-        <h1>Thank You for Your inquiry!</h1>
+        <h1>{{ __('Thank You for Your inquiry!') }}</h1>
         <p>{{ __('Please focus on your email') }}<span style="color:#6bab2b"> {{ $email }}</span><br/>{{ __('We will contact you as soon as possible') }}</p>
         <div class="i_btn">
-            <a href="javascript:history.back(-1)">RETURN TO PREVIOUS PAGE</a>
+            <a href="javascript:history.back(-1)">{{ __('RETURN TO PREVIOUS PAGE') }}</a>
         </div>
     </div>
 </div>

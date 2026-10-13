@@ -36,7 +36,7 @@ class PageController extends Controller
         }
 
         $breadcrumbs = $this->buildBreadcrumbs([
-            ['label' => 'Home', 'url' => '/'],
+            ['label' => __('Home'), 'url' => '/'],
             ['label' => $pageName, 'url' => null],
         ]);
 

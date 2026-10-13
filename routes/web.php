@@ -16,7 +16,15 @@ use App\Http\Controllers\CollectController;
 use App\Http\Controllers\UserApiController;
 use App\Http\Controllers\CustomerAuthController;
 use App\Http\Controllers\NewStyleController;
+use App\Http\Controllers\FrontLangController;
 
+
+// Avoid /front/lang/*.js — nginx may 404 missing public static files before Laravel.
+Route::get('/front/i18n/{locale}.js', [FrontLangController::class, 'script'])
+    ->where('locale', '[A-Za-z_-]+')
+    ->name('front.lang.js');
+Route::get('/front/lang/{locale}.js', [FrontLangController::class, 'script'])
+    ->where('locale', '[A-Za-z_-]+');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 

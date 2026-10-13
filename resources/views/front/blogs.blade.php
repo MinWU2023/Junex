@@ -22,7 +22,7 @@
 <section class="w-full breadcrumb bg-[#f7f8fa]">
     <div >
     <div class="mx-auto w-full max-w-[1200px] px-4 py-4 sm2:px-5 md1:px-6 lg1:px-0">
-        <nav aria-label="Breadcrumb">
+        <nav aria-label="{{ __('Breadcrumb') }}">
         <ol class="flex flex-wrap items-center gap-x-3 gap-y-1">
             @if(isset($breadcrumbs) && count($breadcrumbs))
                 @foreach($breadcrumbs as $index => $crumb)
@@ -30,12 +30,12 @@
                         <li class="inline-flex items-center">
                             @if(!empty($crumb['url']))
                                 <a href="{{ $crumb['url'] }}" class="inline-flex items-center gap-2 transition hover:text-themeText-h">
-                                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="Home" class="w-[14px] h-[14px]" />
+                                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
                                     <span class="font-poppins-regular  text-f14 text-themeText-p">{{ $crumb['label'] }}</span>
                                 </a>
                             @else
                                 <span class="inline-flex items-center gap-2">
-                                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="Home" class="w-[14px] h-[14px]" />
+                                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
                                     <span class="font-poppins-regular  text-f14 text-themeText-p">{{ $crumb['label'] }}</span>
                                 </span>
                             @endif
@@ -60,8 +60,8 @@
             @else
             <li class="inline-flex items-center">
             <a href="#" class="inline-flex items-center gap-2 transition hover:text-themeText-h">
-                <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="Home" class="w-[14px] h-[14px]" />
-                <span class="font-poppins-regular  text-f14 text-themeText-p">Home</span>
+                <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
+                <span class="font-poppins-regular  text-f14 text-themeText-p">{{ __('Home') }}</span>
             </a>
             </li>
 
@@ -72,7 +72,7 @@
             </li>
 
             <li class="inline-flex items-center">
-            <span class="font-poppins-regular text-f14 text-themeText-g" aria-current="page">Blogs</span>
+            <span class="font-poppins-regular text-f14 text-themeText-g" aria-current="page">{{ __('Blogs') }}</span>
             </li>
             @endif
         </ol>
@@ -106,7 +106,7 @@
     <article class="w-full bg-themeBg-g">
         <a href="{{ $featuredBlog['url'] }}" class="flex flex-col md2:flex-row md2:items-stretch">
         <div class="relative flex w-full items-center justify-center md2:w-[48%]">
-            <img class="w-full object-cover" src="{{ $featuredBlog['image'] }}" alt="Blog cover" loading="lazy" />
+            <img class="w-full object-cover" src="{{ $featuredBlog['image'] }}" alt="{{ __('Blog cover') }}" loading="lazy" />
         </div>
         <div class="flex w-full flex-col justify-center px-6 py-6 md2:w-[42%] md2:px-10 md2:py-10">
             <h2 class="text-f34 font-poppins-semibold leading-snug font-themeText-f">
@@ -149,7 +149,7 @@
     <div class="sec-pad mx-auto w-full max-w-[1200px] px-4 pt-4 pb-14 sm2:px-5 md1:px-6 md1:pt-10 md1:pb-16 lg1:px-0">
     <div class="text-center">
         <a href="{{ route('videos') }}" class="group inline-block transition hover:text-themeBg-d">
-            <div class="text-f32 font-poppins-semibold uppercase tracking-wide text-themeText-f transition group-hover:text-themeBg-d">PRODUCT VIDEO</div>
+            <div class="text-f32 font-poppins-semibold uppercase tracking-wide text-themeText-f transition group-hover:text-themeBg-d">{{ __('PRODUCT VIDEO') }}</div>
             <div class="mx-auto mt-3 h-[7px] w-[46px] rounded bg-themeBg-d transition group-hover:w-[56px]" aria-hidden="true"></div>
         </a>
     </div>
@@ -162,7 +162,7 @@
                 <div class="h-full bg-themeBg-g">
                     <a href="{{ $v['video_url'] ?: '#' }}" data-video-url="{{ $v['video_url'] ?: '' }}" class="group block js-video-modal">
                     <div class="relative">
-                        <img class="h-[190px] w-full object-cover md1:h-[210px]" src="{{ $v['image'] }}" alt="Product video cover" loading="lazy" />
+                        <img class="h-[190px] w-full object-cover md1:h-[210px]" src="{{ $v['image'] }}" alt="{{ __('Product video cover') }}" loading="lazy" />
                         <div class="absolute inset-0 bg-black/10 transition group-hover:bg-black/15" aria-hidden="true"></div>
                         <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
                         <span class="video-play-btn inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/70 bg-white/20 text-white backdrop-blur-[1px] transition duration-200">

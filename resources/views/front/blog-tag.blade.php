@@ -23,7 +23,7 @@
 <section class="w-full breadcrumb bg-themeBg-a md4:bg-themeBg-g">
     <div >
     <div class="mx-auto w-full max-w-[1200px] px-4 py-4 sm2:px-5 md1:px-6 lg1:px-0">
-        <nav aria-label="Breadcrumb">
+        <nav aria-label="{{ __('Breadcrumb') }}">
         <ol class="flex flex-wrap items-center gap-x-3 gap-y-1">
             @if(isset($breadcrumbs) && count($breadcrumbs))
                 @foreach($breadcrumbs as $index => $crumb)
@@ -31,12 +31,12 @@
                         <li class="inline-flex items-center">
                             @if(!empty($crumb['url']))
                                 <a href="{{ $crumb['url'] }}" class="inline-flex items-center gap-2 transition hover:text-themeText-h">
-                                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="Home" class="w-[14px] h-[14px]" />
+                                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
                                     <span class="font-poppins-regular  text-f14 text-themeText-p">{{ $crumb['label'] }}</span>
                                 </a>
                             @else
                                 <span class="inline-flex items-center gap-2">
-                                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="Home" class="w-[14px] h-[14px]" />
+                                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
                                     <span class="font-poppins-regular  text-f14 text-themeText-p">{{ $crumb['label'] }}</span>
                                 </span>
                             @endif
@@ -61,8 +61,8 @@
             @else
             <li class="inline-flex items-center">
             <a href="#" class="inline-flex items-center gap-2 transition hover:text-themeText-h">
-                <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="Home" class="w-[14px] h-[14px]" />
-                <span class="font-poppins-regular  text-f14 text-themeText-p">Home</span>
+                <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
+                <span class="font-poppins-regular  text-f14 text-themeText-p">{{ __('Home') }}</span>
             </a>
             </li>
 
@@ -73,7 +73,7 @@
             </li>
 
             <li class="inline-flex items-center">
-            <span class="font-poppins-regular text-f14 text-themeText-g" aria-current="page">Blogs</span>
+            <span class="font-poppins-regular text-f14 text-themeText-g" aria-current="page">{{ __('Blogs') }}</span>
             </li>
             @endif
         </ol>
@@ -110,7 +110,7 @@
     <article class="w-full bg-themeBg-g">
         <a href="{{ $featuredBlog['url'] }}" class="flex flex-col md2:flex-row md2:items-center">
         <div class="relative flex w-full items-center justify-center md2:w-[48%]">
-            <img class="w-full object-cover" src="{{ $featuredBlog['image'] }}" alt="Blog cover" loading="lazy" />
+            <img class="w-full object-cover" src="{{ $featuredBlog['image'] }}" alt="{{ __('Blog cover') }}" loading="lazy" />
         </div>
         <div class="flex w-full flex-col justify-center px-6 py-6 md2:w-[42%] md2:px-10 md2:py-10">
             <h2 class="text-f34 font-poppins-semibold leading-snug font-themeText-f">
@@ -133,7 +133,7 @@
         <article class="w-full px-0 md2:w-1/2 md2:px-2 md4:w-1/3">
         <div class="h-full bg-themeBg-g">
             <a href="{{ $item['url'] }}" class="block">
-            <img class="h-[180px] w-full object-cover md1:h-[200px]" src="{{ $item['image'] }}" alt="Blog cover" loading="lazy" />
+            <img class="h-[180px] w-full object-cover md1:h-[200px]" src="{{ $item['image'] }}" alt="{{ __('Blog cover') }}" loading="lazy" />
             </a>
             <div class="px-5 py-5">
             <div class="h-[5px] w-[34px] bg-themeBg-d rounded-[3px]" aria-hidden="true"></div>

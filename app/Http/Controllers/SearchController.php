@@ -97,9 +97,9 @@ class SearchController extends Controller
             'productsData' => $productsData,
             'pageBanner' => $pageBanner,
             'breadcrumbs' => $this->buildBreadcrumbs([
-                ['label' => 'Home', 'url' => '/'],
-                ['label' => 'Products', 'url' => '/products'],
-                ['label' => 'Search By : ' . ($keyword !== '' ? $keyword : ''), 'url' => null],
+                ['label' => __('Home'), 'url' => '/'],
+                ['label' => __('Products'), 'url' => '/products'],
+                ['label' => __('Search By :') . ' ' . ($keyword !== '' ? $keyword : ''), 'url' => null],
             ]),
             'injectToView' => $injectToView,
             'tdk' => $tdk,

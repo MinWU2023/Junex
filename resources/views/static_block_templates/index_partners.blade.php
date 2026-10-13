@@ -12,7 +12,7 @@
         </div>
 
         {{-- 手机 / 平板：自动轮播（&lt;992px 显示） --}}
-        <div class="swiper partners-swiper" aria-label="Partner logos">
+        <div class="swiper partners-swiper" aria-label="{{ __('Partner logos') }}">
             <div class="swiper-wrapper">
                 @foreach(($partners['logos'] ?? []) as $item)
                 <div class="swiper-slide">

@@ -27,7 +27,7 @@
         <div class="w-full md4:w-1/2">
         <div class="mx-auto w-full max-w-[520px] bg-white shadow-[0_10px_30px_rgba(0,0,0,0.12)] md4:max-w-none">
             <div class="relative overflow-hidden bg-slate-100">
-            <img class="h-[220px] w-full object-cover sm6:h-[260px] md2:h-[300px] md4:h-[320px]" src="{{ $definedServices['faqs_right_image_url'] ?? '' }}" alt="FAQs" loading="lazy" />
+            <img class="h-[220px] w-full object-cover sm6:h-[260px] md2:h-[300px] md4:h-[320px]" src="{{ $definedServices['faqs_right_image_url'] ?? '' }}" alt="{{ __('FAQs') }}" loading="lazy" />
             </div>
         </div>
         </div>

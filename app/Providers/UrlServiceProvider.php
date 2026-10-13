@@ -53,10 +53,11 @@ class UrlServiceProvider extends ServiceProvider
     protected function registerRoutes()
     {
         Route::macro('customUrl', function () {
+            // locale 已挂在 web 中间件组，此处无需重复
             if (app()->environment() === 'production') {
-                $middleware = ['web', 'optimize', 'locale', 'cachepage', 'homeLock'];
+                $middleware = ['web', 'optimize', 'cachepage', 'homeLock'];
             } else {
-                $middleware = ['web', 'locale', 'homeLock'];
+                $middleware = ['web', 'homeLock'];
             }
             Route::middleware($middleware)->get('{all}_p{page}', function ($url = '/') {
                 $url = preg_replace('/\_p\\d+/', '', $url);

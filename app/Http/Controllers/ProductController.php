@@ -85,8 +85,8 @@ class ProductController extends Controller
         $pageBlockHtml = $category->resolvePageBlockHtml();
 
         $breadcrumbs = $this->buildBreadcrumbs([
-            ['label' => 'Home', 'url' => '/'],
-            ['label' => 'Products', 'url' => '/products'],
+            ['label' => __('Home'), 'url' => '/'],
+            ['label' => __('Products'), 'url' => '/products'],
             $category->parent ? ['label' => $category->parent->name, 'url' => $category->parent->url ? ('/' . $category->parent->url->url) : null] : null,
             ['label' => $category->name, 'url' => null],
         ]);
@@ -171,8 +171,8 @@ class ProductController extends Controller
         $tag->load(['translations']);
 
         $breadcrumbs = $this->buildBreadcrumbs([
-            ['label' => 'Home', 'url' => '/'],
-            ['label' => 'Products', 'url' => '/products'],
+            ['label' => __('Home'), 'url' => '/'],
+            ['label' => __('Products'), 'url' => '/products'],
             ['label' => $tag->name, 'url' => null],
         ]);
 
@@ -261,8 +261,8 @@ class ProductController extends Controller
         $parentCategory = $category ? $category->parent : null;
         
         $breadcrumbs = $this->buildBreadcrumbs([
-            ['label' => 'Home', 'url' => '/'],
-            ['label' => 'Products', 'url' => '/products'],
+            ['label' => __('Home'), 'url' => '/'],
+            ['label' => __('Products'), 'url' => '/products'],
             $category ? ['label' => $category->name, 'url' => $category->url ? ('/' . $category->url->url) : null] : null,
             ['label' => $product->name, 'url' => null],
         ]);
@@ -316,7 +316,7 @@ class ProductController extends Controller
         $productAttributesData = [];
         if ($categoryLabel !== '') {
             $productAttributesData[] = [
-                'label' => 'Categories',
+                'label' => __('Categories'),
                 'value' => $categoryLabel,
                 'url' => $categoryUrl,
             ];

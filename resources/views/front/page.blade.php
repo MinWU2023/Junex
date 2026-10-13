@@ -27,7 +27,7 @@
 <section class="w-full breadcrumb bg-themeBg-a md4:bg-themeBg-g">
     <div>
         <div class="mx-auto w-full max-w-[1200px] px-4 py-4 sm2:px-5 md1:px-6 lg1:px-0">
-            <nav aria-label="Breadcrumb">
+            <nav aria-label="{{ __('Breadcrumb') }}">
             <ol class="flex flex-wrap items-center gap-x-3 gap-y-1">
                 @if(isset($breadcrumbs) && count($breadcrumbs))
                     @foreach($breadcrumbs as $index => $crumb)
@@ -35,12 +35,12 @@
                             <li class="inline-flex items-center">
                                 @if(!empty($crumb['url']))
                                     <a href="{{ $crumb['url'] }}" class="inline-flex items-center gap-2 transition hover:text-themeText-h">
-                                        <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="Home" class="w-[14px] h-[14px]" />
+                                        <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
                                         <span class="font-poppins-regular  text-f14 text-themeText-p">{{ $crumb['label'] }}</span>
                                     </a>
                                 @else
                                     <span class="inline-flex items-center gap-2">
-                                        <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="Home" class="w-[14px] h-[14px]" />
+                                        <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
                                         <span class="font-poppins-regular  text-f14 text-themeText-p">{{ $crumb['label'] }}</span>
                                     </span>
                                 @endif
@@ -65,8 +65,8 @@
                 @else
                     <li class="inline-flex items-center">
                     <a href="/" class="inline-flex items-center gap-2 transition hover:text-themeText-h">
-                        <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="Home" class="w-[14px] h-[14px]" />
-                        <span class="font-poppins-regular  text-f14 text-themeText-p">Home</span>
+                        <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
+                        <span class="font-poppins-regular  text-f14 text-themeText-p">{{ __('Home') }}</span>
                     </a>
                     </li>
 
@@ -91,7 +91,7 @@
         <div class="w-full bg-themeBg-f px-4 pt-6  pb-8 ring-1 ring-black/5 sm6:px-8 md1:px-10 md1:pt-8  md1:pt-10 md4:px-12 md4:pt-10 md4:pb-14">
         <article class="flex flex-col">
             <h1 class="text-f24 font-poppins-medium uppercase text-themeText-b">{{ $pageName ?? '' }}</h1>
-            <p class="my-4 text-f16 font-poppins-medium text-themeText-b md1:my-5">Last updated: {{ $createdLabel ?? '' }}</p>
+            <p class="my-4 text-f16 font-poppins-medium text-themeText-b md1:my-5">{{ __('Last updated:') }} {{ $createdLabel ?? '' }}</p>
             {!! $pageContent ?? '' !!}
         </article>
         </div>

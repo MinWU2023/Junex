@@ -33,7 +33,7 @@
             </div>
 
             <div class="flex items-center justify-center px-4 pb-6 pt-4 md1:px-6 md1:pb-7">
-            <img class="h-auto w-full max-w-[520px] object-cover" src="{{ $customProcess['center']['image_url'] ?? '' }}" alt="Product" loading="lazy" />
+            <img class="h-auto w-full max-w-[520px] object-cover" src="{{ $customProcess['center']['image_url'] ?? '' }}" alt="{{ __('Product') }}" loading="lazy" />
             </div>
 
             <div class="px-6 pb-6 text-center leading-5 md1:px-7 md1:pb-7 text-f16 font-poppins-regular">

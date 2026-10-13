@@ -340,8 +340,8 @@
                 <use xlink:href="#icon-whatsapp1"></use>
             </svg>
             <div>
-                <div class="h4">Start a Conversation</div>
-                <p>Hi! Click one of our members below to chat on </p>
+                <div class="h4">{{ __('Start a Conversation') }}</div>
+                <p>{{ __('Hi! Click one of our members below to chat on') }} </p>
             </div>
         </div>
         <div class="li">

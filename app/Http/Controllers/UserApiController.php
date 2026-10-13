@@ -63,7 +63,7 @@ class UserApiController extends Controller
         if (empty($productIds)) {
             return response()->json([
                 'success' => false,
-                'errors' => ['product_ids' => ['The product_ids field is required.']],
+                'errors' => ['product_ids' => [__('The product_ids field is required.')]],
             ], 422);
         }
 

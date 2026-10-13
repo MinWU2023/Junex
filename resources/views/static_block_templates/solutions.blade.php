@@ -9,7 +9,7 @@
         <div class="relative mx-auto max-w-[520px] md4:max-w-none">
             <div class="relative">
             <div class="overflow-hidden">
-                <img class="h-auto w-full object-cover" src="{{ $solutions['left_image_url'] ?? '' }}" alt="Solutions" loading="lazy" />
+                <img class="h-auto w-full object-cover" src="{{ $solutions['left_image_url'] ?? '' }}" alt="{{ __('Solutions') }}" loading="lazy" />
             </div>
             </div>
         </div>

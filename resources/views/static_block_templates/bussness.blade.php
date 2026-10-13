@@ -11,7 +11,7 @@
     <div class="mt-8 flex flex-col gap-5 md4:mt-10 md4:flex-row md4:gap-5">
         <div class="md4:w-[32.25%] md4:flex-shrink-0">
         <div class="overflow-hidden">
-            <img class="w-full object-cover" src="{{ $bussness['left_image_url'] ?? '' }}" alt="{{ $bussness['left_image_alt'] ?? 'Business philosophy' }}" loading="lazy" />
+            <img class="w-full object-cover" src="{{ $bussness['left_image_url'] ?? '' }}" alt="{{ $bussness['left_image_alt'] ?? __('Business philosophy') }}" loading="lazy" />
         </div>
         </div>
 

@@ -23,7 +23,7 @@
  <section class="w-full breadcrumb bg-themeBg-a md4:bg-themeBg-g">
     <div >
         <div class="mx-auto w-full max-w-[1200px] px-4 py-4 sm2:px-5 md1:px-6 lg1:px-0">
-            <nav aria-label="Breadcrumb">
+            <nav aria-label="{{ __('Breadcrumb') }}">
             <ol class="flex flex-wrap items-center gap-x-3 gap-y-1">
                 @if(isset($breadcrumbs) && count($breadcrumbs))
                     @foreach($breadcrumbs as $index => $crumb)
@@ -31,12 +31,12 @@
                             <li class="inline-flex items-center">
                                 @if(!empty($crumb['url']))
                                     <a href="{{ $crumb['url'] }}" class="inline-flex items-center gap-2 transition hover:text-themeText-h">
-                                        <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="Home" class="w-[14px] h-[14px]" />
+                                        <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
                                         <span class="font-poppins-regular  text-f14 text-themeText-p">{{ $crumb['label'] }}</span>
                                     </a>
                                 @else
                                     <span class="inline-flex items-center gap-2">
-                                        <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="Home" class="w-[14px] h-[14px]" />
+                                        <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
                                         <span class="font-poppins-regular  text-f14 text-themeText-p">{{ $crumb['label'] }}</span>
                                     </span>
                                 @endif
@@ -61,8 +61,8 @@
                 @else
                 <li class="inline-flex items-center">
                 <a href="#" class="inline-flex items-center gap-2 transition hover:text-themeText-h">
-                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="Home" class="w-[14px] h-[14px]" />
-                    <span class="font-poppins-regular  text-f14 text-themeText-p">Home</span>
+                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
+                    <span class="font-poppins-regular  text-f14 text-themeText-p">{{ __('Home') }}</span>
                 </a>
                 </li>
 
@@ -73,7 +73,7 @@
                 </li>
 
                 <li class="inline-flex items-center">
-                <span class="font-poppins-regular text-f14 text-themeText-g" aria-current="page">Products</span>
+                <span class="font-poppins-regular text-f14 text-themeText-g" aria-current="page">{{ __('Products') }}</span>
                 </li>
                 @endif
             </ol>
@@ -135,7 +135,7 @@
             @endforeach
             <div class="flex items-center justify-center bg-themeBg-d py-10 text-center text-white">
                 <div>
-                <img class="mx-auto h-14 w-14 object-contain" src="{{ $whyChoose['center']['logo_url'] ?? '' }}" alt="Junex" loading="lazy" />
+                <img class="mx-auto h-14 w-14 object-contain" src="{{ $whyChoose['center']['logo_url'] ?? '' }}" alt="{{ __('Junex') }}" loading="lazy" />
                 <div class="mt-3 text-[16px] font-poppins-semibold uppercase tracking-[3px]">{{ $whyChoose['center']['title'] ?? '' }}</div>
                 <div class="mx-auto mt-3 h-[1px] w-[40px] bg-white/60"></div>
                 <div class="mt-3 text-[11px] leading-5 text-white px-4 font-poppins-regular">{{ $whyChoose['center']['subtitle'] ?? '' }}</div>
@@ -194,7 +194,7 @@
             </div>
             <!-- Center Red Block -->
             <div class="absolute z-10 flex flex-col items-center justify-center bg-themeBg-d text-center text-white" style="left:39%;top:33.33%;width:22%;height:33.34%;">
-                <img class="h-auto w-[200px] object-contain" src="{{ $whyChoose['center']['logo_url'] ?? '' }}" alt="Junex" loading="lazy" />
+                <img class="h-auto w-[200px] object-contain" src="{{ $whyChoose['center']['logo_url'] ?? '' }}" alt="{{ __('Junex') }}" loading="lazy" />
                 <div class="mt-3 text-f12 leading-5 text-white px-4 font-poppins-regular">{{ $whyChoose['center']['description_desktop'] ?? '' }}</div>
             </div>
             </div>
@@ -207,16 +207,16 @@
         <div class="flex flex-col items-center gap-10 md3:flex-row md3:items-center md3:justify-between md3:gap-12 lg1:gap-16">
             <div class="order-2 w-full flex-1 text-center md3:order-1 md3:text-left">
                 <div class="inline-flex items-center rounded-full bg-[#FEECEC] px-4 py-1.5 text-f12 font-poppins-semibold uppercase tracking-[0.18em] text-themeBg-d md1:text-f14">
-                    No Products
+                    {{ __('No Products') }}
                 </div>
                 <h1 class="mt-5 text-f32 font-poppins-extrabold leading-tight text-themeText-a sm6:text-f36 md1:text-f40 lg1:text-f48">
-                    No Matching Products
+                    {{ __('No Matching Products') }}
                 </h1>
                 <p class="mx-auto mt-4 max-w-xl text-f15 font-poppins-regular leading-relaxed text-themeText-g md1:mt-5 md1:text-f16 md3:mx-0">
                     @if(!empty($q))
-                        Sorry, we could not find any products for "{{ $q }}". Try another keyword, or browse our catalog to find the styles you need.
+                        {{ __('Sorry, we could not find any products for ":q". Try another keyword, or browse our catalog to find the styles you need.', ['q' => $q]) }}
                     @else
-                        Sorry, there are no products to show right now. Please browse our catalog or return to the homepage.
+                        {{ __('Sorry, there are no products to show right now. Please browse our catalog or return to the homepage.') }}
                     @endif
                 </p>
                 <div class="mt-8 flex flex-wrap items-center justify-center gap-3 md3:justify-start md1:mt-10">
@@ -224,13 +224,13 @@
                         href="{{ route('home') }}"
                         class="inline-flex h-12 min-w-[200px] items-center justify-center rounded-none bg-themeBg-d px-8 text-f14 font-poppins-semibold uppercase tracking-wide text-white transition hover:bg-[#c22522] md1:h-[52px] md1:px-10 md1:text-f15"
                     >
-                        Back to Homepage
+                        {{ __('Back to Homepage') }}
                     </a>
                     <a
                         href="{{ route('products') }}"
                         class="inline-flex h-12 min-w-[200px] items-center justify-center rounded-none border border-themeBg-d bg-white px-8 text-f14 font-poppins-semibold uppercase tracking-wide text-themeText-a transition hover:bg-themeBg-d hover:text-white md1:h-[52px] md1:px-10 md1:text-f15"
                     >
-                        View Products
+                        {{ __('View Products') }}
                     </a>
                 </div>
             </div>
@@ -240,7 +240,7 @@
                     <div class="pointer-events-none absolute -inset-3 rounded-[28px] bg-gradient-to-br from-[#FEECEC] via-white to-[#F7F8FA] md1:-inset-4" aria-hidden="true"></div>
                     <img
                         src="{{ front_webp_url('/front/imgs/no-products-illustration.svg') }}"
-                        alt="No products"
+                        alt="{{ __('No products') }}"
                         class="relative z-[1] h-auto w-full max-w-[420px] object-contain"
                         width="420"
                         height="315"

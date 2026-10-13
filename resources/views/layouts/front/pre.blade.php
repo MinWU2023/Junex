@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
     <meta http-equiv="X-UA-Compatible" content="IE=9" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>预览</title>
+    <title>{{ __('预览') }}</title>
     <link type="text/css" rel="stylesheet" href="{{ asset('pre/css/font-awesome.min.css') }}">
     <link type="text/css" rel="stylesheet" href="{{ asset('pre/css/animate.css') }}" />
     <link type="text/css" rel="stylesheet" href="{{ asset('pre/css/style.css') }}">
@@ -91,8 +91,8 @@
     <div class="top_section">
         <div class="container clearfix">
             <div class="top_con">
-                <a href="#"><svg class="icon"><use xlink:href="#con-email"></use></svg>Email : jane.tang@nokelab.com</a>
-                <a href="#"><svg class="icon"><use xlink:href="#con-tel"></use></svg>Tel :+86 13373847308</a>
+                <a href="#"><svg class="icon"><use xlink:href="#con-email"></use></svg>{{ __('Email : jane.tang@nokelab.com') }}</a>
+                <a href="#"><svg class="icon"><use xlink:href="#con-tel"></use></svg>{{ __('Tel :+86 13373847308') }}</a>
             </div>
             <div class="top_r">
                 <div class="top_sns">
@@ -103,11 +103,11 @@
                     <a href="#"><img src="/pre/images/sns_t.png" alt=""/></a>
                 </div>
                 <div class="language">
-                    <p><img src="/pre/images/en.jpg" alt=""/>English<i class="fa fa-angle-down"></i></p>
+                    <p><img src="/pre/images/en.jpg" alt=""/>{{ __('English') }}<i class="fa fa-angle-down"></i></p>
                     <div class="language_ul">
                         <ul>
-                            <li class="active"><a href="#"><img src="/pre/images/en.jpg" alt=""/>English</a></li>
-                            <li><a href="#"><img src="/pre/images/en.jpg" alt=""/>English</a></li>
+                            <li class="active"><a href="#"><img src="/pre/images/en.jpg" alt=""/>{{ __('English') }}</a></li>
+                            <li><a href="#"><img src="/pre/images/en.jpg" alt=""/>{{ __('English') }}</a></li>
                         </ul>
                     </div>
                 </div>
@@ -124,67 +124,67 @@
                             <div class="main-navigation-inner">
                                 <div class="hidden_web nav_con clearfix">
                                     <a href="#">+86 19956450605</a>
-                                    <a href="#" class="email_btn">Get A Quote</a>
+                                    <a href="#" class="email_btn">{{ __('Get A Quote') }}</a>
                                 </div>
                                 <ul id="menu-main-menu" class="main-menu clearfix">
-                                    <li class="active"><a href="#">Home</a></li>
-                                    <li class="menu-children"><a href="#">About Us</a>
+                                    <li class="active"><a href="#">{{ __('Home') }}</a></li>
+                                    <li class="menu-children"><a href="#">{{ __('About Us') }}</a>
                                         <ul class="sub-menu">
-                                            <li><a href="#" class="title">Our Honor</a></li>
-                                            <li><a href="#" class="title">Our Factory</a></li>
-                                            <li><a href="#" class="title">Our Team</a></li>
+                                            <li><a href="#" class="title">{{ __('Our Honor') }}</a></li>
+                                            <li><a href="#" class="title">{{ __('Our Factory') }}</a></li>
+                                            <li><a href="#" class="title">{{ __('Our Team') }}</a></li>
                                         </ul>
                                     </li>
-                                    <li class="menu-children"><a href="#">Products</a>
+                                    <li class="menu-children"><a href="#">{{ __('Products') }}</a>
                                         <ul class="sub-menu">
                                             <li class="menu-children">
-                                                <a href="#" class="title">Rice Sorting</a>
+                                                <a href="#" class="title">{{ __('Rice Sorting') }}</a>
                                                 <ul class="sub-menu">
-                                                    <li><a href="#" >Metal Crush Machine</a></li>
-                                                    <li><a href="#" >Aluminium Extrusion Machine</a></li>
+                                                    <li><a href="#" >{{ __('Metal Crush Machine') }}</a></li>
+                                                    <li><a href="#" >{{ __('Aluminium Extrusion Machine') }}</a></li>
                                                 </ul>
                                             </li>
                                             <li class="menu-children">
-                                                <a href="#" class="title">Rice Sorting</a>
+                                                <a href="#" class="title">{{ __('Rice Sorting') }}</a>
                                                 <ul class="sub-menu">
-                                                    <li><a href="#" >Metal Crush Machine</a></li>
-                                                    <li><a href="#" >Aluminium Extrusion Machine</a></li>
+                                                    <li><a href="#" >{{ __('Metal Crush Machine') }}</a></li>
+                                                    <li><a href="#" >{{ __('Aluminium Extrusion Machine') }}</a></li>
                                                 </ul>
                                             </li>
                                             <li class="menu-children">
-                                                <a href="#" class="title">Rice Sorting</a>
+                                                <a href="#" class="title">{{ __('Rice Sorting') }}</a>
                                                 <ul class="sub-menu">
-                                                    <li><a href="#" >Metal Crush Machine</a></li>
-                                                    <li><a href="#" >Aluminium Extrusion Machine</a></li>
+                                                    <li><a href="#" >{{ __('Metal Crush Machine') }}</a></li>
+                                                    <li><a href="#" >{{ __('Aluminium Extrusion Machine') }}</a></li>
                                                 </ul>
                                             </li>
                                             <li class="menu-children">
-                                                <a href="#" class="title">Rice Sorting</a>
+                                                <a href="#" class="title">{{ __('Rice Sorting') }}</a>
                                                 <ul class="sub-menu">
-                                                    <li><a href="#" >Metal Crush Machine</a></li>
-                                                    <li><a href="#" >Aluminium Extrusion Machine</a></li>
+                                                    <li><a href="#" >{{ __('Metal Crush Machine') }}</a></li>
+                                                    <li><a href="#" >{{ __('Aluminium Extrusion Machine') }}</a></li>
                                                 </ul>
                                             </li>
                                             <li class="menu-children">
-                                                <a href="#" class="title">Rice Sorting</a>
+                                                <a href="#" class="title">{{ __('Rice Sorting') }}</a>
                                                 <ul class="sub-menu">
-                                                    <li><a href="#" >Metal Crush Machine</a></li>
-                                                    <li><a href="#" >Aluminium Extrusion Machine</a></li>
+                                                    <li><a href="#" >{{ __('Metal Crush Machine') }}</a></li>
+                                                    <li><a href="#" >{{ __('Aluminium Extrusion Machine') }}</a></li>
                                                 </ul>
                                             </li>
                                         </ul>
                                     </li>
-                                    <li><a href="#">Download</a></li>
-                                    <li><a href="#">News</a></li>
-                                    <li><a href="#">Contact us</a></li>
+                                    <li><a href="#">{{ __('Download') }}</a></li>
+                                    <li><a href="#">{{ __('News') }}</a></li>
+                                    <li><a href="#">{{ __('Contact us') }}</a></li>
                                 </ul>
                                 <div class="mob_language clearfix">
-                                    <p>Please select your language :</p>
-                                    <a href="#">EN</a>
-                                    <a href="#">CN</a>
+                                    <p>{{ __('Please select your language :') }}</p>
+                                    <a href="#">{{ __('EN') }}</a>
+                                    <a href="#">{{ __('CN') }}</a>
                                 </div>
                                 <div class="mob_sns">
-                                    <p>social sharing :</p>
+                                    <p>{{ __('social sharing :') }}</p>
                                     <a href="#"><img src="/pre/images/sns_f.png" alt=""></a>
                                     <a href="#"><img src="/pre/images/sns_t.png" alt=""></a>
                                     <a href="#"><img src="/pre/images/sns_ins.png" alt=""></a>
@@ -198,18 +198,18 @@
                         <i class="ico_search"></i>
                         <div class="search_input">
                             <div class="close-search"><i class="fa fa-close"></i></div>
-                            <div class="search_title">What Are You Looking For?</div>
+                            <div class="search_title">{{ __('What Are You Looking For?') }}</div>
                             <form>
                                 <div class="search_main">
-                                    <input name="search_keyword" onkeydown="javascript:enterIn(event);" type="text" class="form-control" value="Search..." onfocus="if(this.value=='Search...'){this.value='';}" onblur="if(this.value==''){this.value='Search...';}" placeholder="Search...">
+                                    <input name="search_keyword" onkeydown="javascript:enterIn(event);" type="text" class="form-control" value="{{ __('Search...') }}" onfocus="if(this.value==this.defaultValue){this.value='';}" onblur="if(this.value==''){this.value=this.defaultValue;}" placeholder="{{ __('Search...') }}">
                                     <input type="submit" class="search_btn btn_search1" value="">
                                 </div>
                             </form>
                             <div class="search_tags">
-                                <a href="#">Tags 01</a>
-                                <a href="#">Tags 02</a>
-                                <a href="#">Tags 03</a>
-                                <a href="#">Tags 04</a>
+                                <a href="#">{{ __('Tags 01') }}</a>
+                                <a href="#">{{ __('Tags 02') }}</a>
+                                <a href="#">{{ __('Tags 03') }}</a>
+                                <a href="#">{{ __('Tags 04') }}</a>
                             </div>
                         </div>
                     </div>
@@ -228,11 +228,11 @@
 
 <div class="mbx_section">
     <div class="container clearfix">
-        <div class="n_title">products</div>
+        <div class="n_title">{{ __('products') }}</div>
         <div class="mbx">
-            <a href="#"><span class="fa fa-home"></span>Home</a>
+            <a href="#"><span class="fa fa-home"></span>{{ __('Home') }}</a>
             <i class="fa fa-angle-right"></i>
-            <h2>Products</h2>
+            <h2>{{ __('Products') }}</h2>
         </div>
     </div>
 </div>
@@ -244,7 +244,7 @@
                     <div id="anypos"></div>
                     <div class="swiper-wrapper zoom-small-image">
                         @isset($product->video)
-                        <div class="swiper-slide" style="background:url(/{{$product->productImages[0]->path}}) no-repeat center center;"><iframe width="582" height="540" src="{{$product->video}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <div class="swiper-slide" style="background:url(/{{$product->productImages[0]->path}}) no-repeat center center;"><iframe width="582" height="540" src="{{$product->video}}" title="{{ __('YouTube video player') }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                         </div>
                         @endif
                         @foreach($product->productImages as $key => $productImage)
@@ -290,7 +290,7 @@
                         @endforeach
                     </ul>
                     <div class="pro_more">
-                        <div class="main-more"><a href="#content" class="inquiry_pro"><i class="fa fa-commenting"></i>Inquire Now</a></div>
+                        <div class="main-more"><a href="#content" class="inquiry_pro"><i class="fa fa-commenting"></i>{{ __('Inquire Now') }}</a></div>
                     </div>
                 </div>
             </div>
@@ -328,7 +328,7 @@
             <div >
                 <div class="modules">
                     <section class="block left_nav">
-                        <div class="unfold nav_h4">Product categories</div>
+                        <div class="unfold nav_h4">{{ __('Product categories') }}</div>
                         <div class="toggle_content clearfix">
                             <ul class="mtree">
                                 @foreach($productCategories as $productCategory)
@@ -355,7 +355,7 @@
                         <script type="text/javascript" src="/pre/js/mtree.js"></script>
                     </section>
                     <section class="hot_left hidden_mob">
-                        <div class="left_h4">New Products</div>
+                        <div class="left_h4">{{ __('New Products') }}</div>
                         <div class="clearfix">
                             @inject('imagePresenter','App\Presenters\ShowThumbImagePresenter')
                             <ul>
@@ -364,7 +364,7 @@
                                         <div class="li clearfix">
                                             <a class="img" href="/preProduct/{{ $newProduct->id }}"><img src="{{ asset($imagePresenter->showImage($newProduct->productMainImage->path, 250)) }}" alt=""></a>
                                             <div class="h4"><a href="/preProduct/{{ $newProduct->id }}">{{ $newProduct->name }}</a></div>
-                                            <a href="/preProduct/{{ $newProduct->id }}" class="more">read More<i class="fa fa-caret-right"></i></a>
+                                            <a href="/preProduct/{{ $newProduct->id }}" class="more">{{ __('read More') }}<i class="fa fa-caret-right"></i></a>
                                         </div>
                                     </li>
                                 @endforeach
@@ -379,7 +379,7 @@
                 <div class="features-tab indicator-style clearfix">
                     <ul class="nav nav-tabs moz clearfix" role="tablist">
                         <li role="presentation" class="active">
-                            <a href="#about01" aria-controls="home" role="tab" data-toggle="tab">Product Details</a>
+                            <a href="#about01" aria-controls="home" role="tab" data-toggle="tab">{{ __('Product Details') }}</a>
                         </li>
                     </ul>
                     <div class="tab-content page">
@@ -390,33 +390,33 @@
                         </div>
                     </div>
                 </div>
-                <div class="tags_ul"><span> Hot Tags : </span>
+                <div class="tags_ul"><span> {{ __('Hot Tags :') }} </span>
                     @foreach($product->productTags as $tag)
                         <a href="javascript:;">{!! $tag->name !!}</a>
                     @endforeach
                 </div>
                 <div id="content"></div>
                 <div class="pro_inq">
-                    <div class="title">leave a message</div>
-                    <div class="text">If you are interested in our products and want to know more details,please leave a message here,we will reply you as soon as we can.</div>
+                    <div class="title">{{ __('leave a message') }}</div>
+                    <div class="text">{{ __('If you are interested in our products and want to know more details,please leave a message here,we will reply you as soon as we can.') }}</div>
                     <div class="inquiry">
                         <form id="email_form" method="post" action="#" onsubmit="return false">
                             <ul class="row clearfix">
                                 <li class="col-xs-12">
-                                    <div class="subject_title">Subject : <a href="/products-06_p6.html">{{ $product->name }}</a></div>
+                                    <div class="subject_title">{{ __('Subject :') }} <a href="/products-06_p6.html">{{ $product->name }}</a></div>
                                 </li>
                                 <li class=" col-sm-6 col-xs-12">
-                                    <span class="ms_e"><input type="text" name="msg_email" id="msg_email" class="meInput" placeholder="* Your Email"></span>
+                                    <span class="ms_e"><input type="text" name="msg_email" id="msg_email" class="meInput" placeholder="{{ __('* Your Email') }}"></span>
                                 </li>
                                 <li class=" col-sm-6 col-xs-12">
-                                    <span class="ms_p"><input type="text" name="msg_phone" id="msg_phone" class="meInput" placeholder="Tel/Whatsapp"></span>
+                                    <span class="ms_p"><input type="text" name="msg_phone" id="msg_phone" class="meInput" placeholder="{{ __('Tel/Whatsapp') }}"></span>
                                 </li>
                                 <li class="meText col-xs-12">
-                                    <span class="ms_m"><textarea id="meText" placeholder="* Enter product details (such as color, size, materials etc.) and other specific requirements to receive an accurate quote." maxlength="3000" name="msg_content"></textarea></span>
+                                    <span class="ms_m"><textarea id="meText" placeholder="{{ __('* Enter product details (such as color, size, materials etc.) and other specific requirements to receive an accurate quote.') }}" maxlength="3000" name="msg_content"></textarea></span>
                                 </li>
                                 <div class="clearfix"></div>
                             </ul>
-                            <span class="ms_btn">submit</span>
+                            <span class="ms_btn">{{ __('submit') }}</span>
                         </form>
                     </div>
                 </div>
@@ -441,8 +441,8 @@
 <div class="pro_section">
     <div class="container">
         <div class="i_title">
-            <div class="h4">Related Products</div>
-            <p>Our PM components offer excellent optical performance, e.g., high extinction ratio and low insertion loss, as well as high reliability and have become the key enablers</p>
+            <div class="h4">{{ __('Related Products') }}</div>
+            <p>{{ __('Our PM components offer excellent optical performance, e.g., high extinction ratio and low insertion loss, as well as high reliability and have become the key enablers') }}</p>
         </div>
         <div class="button_outside">
             <div class="swiper-container pro_scrollbar">
@@ -451,8 +451,8 @@
                         <div class="li">
                             <a href="#" class="img"><img src="/pre/images/pro_img1.jpg" alt="" /><span class="icon"></span></a>
                             <div class="text">
-                                <a href="#" class="h4">linewidth fiber laser</a>
-                                <p>FIBERTOP SFP/SPC-BL45TG-80Dx 1490T/1550R 80km</p>
+                                <a href="#" class="h4">{{ __('linewidth fiber laser') }}</a>
+                                <p>{{ __('FIBERTOP SFP/SPC-BL45TG-80Dx 1490T/1550R 80km') }}</p>
                             </div>
                         </div>
                     </div>
@@ -460,8 +460,8 @@
                         <div class="li">
                             <a href="#" class="img"><img src="/pre/images/pro_img1.jpg" alt="" /><span class="icon"></span></a>
                             <div class="text">
-                                <a href="#" class="h4">linewidth fiber laser</a>
-                                <p>FIBERTOP SFP/SPC-BL45TG-80Dx 1490T/1550R 80km</p>
+                                <a href="#" class="h4">{{ __('linewidth fiber laser') }}</a>
+                                <p>{{ __('FIBERTOP SFP/SPC-BL45TG-80Dx 1490T/1550R 80km') }}</p>
                             </div>
                         </div>
                     </div>
@@ -469,8 +469,8 @@
                         <div class="li">
                             <a href="#" class="img"><img src="/pre/images/pro_img1.jpg" alt="" /><span class="icon"></span></a>
                             <div class="text">
-                                <a href="#" class="h4">linewidth fiber laser</a>
-                                <p>FIBERTOP SFP/SPC-BL45TG-80Dx 1490T/1550R 80km</p>
+                                <a href="#" class="h4">{{ __('linewidth fiber laser') }}</a>
+                                <p>{{ __('FIBERTOP SFP/SPC-BL45TG-80Dx 1490T/1550R 80km') }}</p>
                             </div>
                         </div>
                     </div>
@@ -478,8 +478,8 @@
                         <div class="li">
                             <a href="#" class="img"><img src="/pre/images/pro_img1.jpg" alt="" /><span class="icon"></span></a>
                             <div class="text">
-                                <a href="#" class="h4">linewidth fiber laser</a>
-                                <p>FIBERTOP SFP/SPC-BL45TG-80Dx 1490T/1550R 80km</p>
+                                <a href="#" class="h4">{{ __('linewidth fiber laser') }}</a>
+                                <p>{{ __('FIBERTOP SFP/SPC-BL45TG-80Dx 1490T/1550R 80km') }}</p>
                             </div>
                         </div>
                     </div>
@@ -487,8 +487,8 @@
                         <div class="li">
                             <a href="#" class="img"><img src="/pre/images/pro_img1.jpg" alt="" /><span class="icon"></span></a>
                             <div class="text">
-                                <a href="#" class="h4">linewidth fiber laser</a>
-                                <p>FIBERTOP SFP/SPC-BL45TG-80Dx 1490T/1550R 80km</p>
+                                <a href="#" class="h4">{{ __('linewidth fiber laser') }}</a>
+                                <p>{{ __('FIBERTOP SFP/SPC-BL45TG-80Dx 1490T/1550R 80km') }}</p>
                             </div>
                         </div>
                     </div>
@@ -504,7 +504,7 @@
     <div class="container">
         <div class="footer_about">
             <a href="#" class="footer_logo"><img src="/pre/images/footer_logo.png" alt=""/></a>
-            <div class="p">Jinhua Noke Biotechnology Co., Ltd has its headquarters in Jinhua, Zhejiang, near Shanghai. As one of the leading manufacturers of high quality Laboratory glassware, biological consumables, equipments and some medical consumables, all NOKE LAB products are designed and manufactured in accordance with ISO9001/13485. We are positioned to be an one-stop supplier of a wide range of general laboratory consumables & instruments, covering chemical, biological, and clinical diagnostic labs.</div>
+            <div class="p">{{ __('Jinhua Noke Biotechnology Co., Ltd has its headquarters in Jinhua, Zhejiang, near Shanghai. As one of the leading manufacturers of high quality Laboratory glassware, biological consumables, equipments and some medical consumables, all NOKE LAB products are designed and manufactured in accordance with ISO9001/13485. We are positioned to be an one-stop supplier of a wide range of general laboratory consumables & instruments, covering chemical, biological, and clinical diagnostic labs.') }}</div>
             <div class="footer_sns">
                 <a href="#"><img src="/pre/images/sns_f.png" alt=""/></a>
                 <a href="#"><img src="/pre/images/sns_in.png" alt=""/></a>
@@ -514,27 +514,27 @@
             </div>
         </div>
         <div class="ul footer_follow hidden_mob">
-            <div class="title_h4">Follow Us</div>
+            <div class="title_h4">{{ __('Follow Us') }}</div>
             <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Products</a></li>
-                <li><a href="#">About Us</a></li>
-                <li><a href="#">Contact Us</a></li>
-                <li><a href="#">News</a></li>
-                <li><a href="#">Sitemap</a></li>
-                <li><a href="#">Blog</a></li>
+                <li><a href="#">{{ __('Home') }}</a></li>
+                <li><a href="#">{{ __('Products') }}</a></li>
+                <li><a href="#">{{ __('About Us') }}</a></li>
+                <li><a href="#">{{ __('Contact Us') }}</a></li>
+                <li><a href="#">{{ __('News') }}</a></li>
+                <li><a href="#">{{ __('Sitemap') }}</a></li>
+                <li><a href="#">{{ __('Blog') }}</a></li>
             </ul>
         </div>
         <div class="ul footer_tags hidden_mob">
-            <div class="title_h4">Hot Tags</div>
+            <div class="title_h4">{{ __('Hot Tags') }}</div>
             <ul>
-                <li><a href="#">Bath & Shower Grab Bars</a></li>
-                <li><a href="#">Mop Broom Holder</a></li>
-                <li><a href="#">Soap Holder</a></li>
-                <li><a href="#">Toothbrush Holder</a></li>
-                <li><a href="#">Over Door Hooks</a></li>
-                <li><a href="#">Hair Dryer Holder</a></li>
-                <li><a href="#">Toilet Brushes & Holders</a></li>
+                <li><a href="#">{{ __('Bath & Shower Grab Bars') }}</a></li>
+                <li><a href="#">{{ __('Mop Broom Holder') }}</a></li>
+                <li><a href="#">{{ __('Soap Holder') }}</a></li>
+                <li><a href="#">{{ __('Toothbrush Holder') }}</a></li>
+                <li><a href="#">{{ __('Over Door Hooks') }}</a></li>
+                <li><a href="#">{{ __('Hair Dryer Holder') }}</a></li>
+                <li><a href="#">{{ __('Toilet Brushes & Holders') }}</a></li>
             </ul>
         </div>
         <div class="footer_pro">
@@ -542,7 +542,7 @@
                 <ul class="swiper-wrapper">
                     <li class="swiper-slide">
                         <a href="#" class="img"><img src="/pre/images/pro_img1.jpg" alt=""/></a>
-                        <a href="#" class="title">Hollywood Vanity Mirror With Lights And Table</a>
+                        <a href="#" class="title">{{ __('Hollywood Vanity Mirror With Lights And Table') }}</a>
                     </li>
 
 
@@ -569,10 +569,10 @@
     </div>
     <div class="clear"></div>
     <div class="footer_bottom">
-        <div class="mob_follow hidden_web"><a href="#">Sitemap</a><a href="#">Blog</a><a href="#">News</a></div>
-        <div class="cop">©Jinhua NOKE BIOTECHNOLOGY Co., Ltd. All Rights Reserved. <a href="#">XML</a>|<a href="#">Privacy Policy</a>  </div>
-        <div class="ipv6"><img src="/pre/images/ipv6.png" alt="">IPv6 network supported</div>
-        <div class="link">Links : <a href="#">google</a></div>
+        <div class="mob_follow hidden_web"><a href="#">{{ __('Sitemap') }}</a><a href="#">{{ __('Blog') }}</a><a href="#">{{ __('News') }}</a></div>
+        <div class="cop">{{ __('©Jinhua NOKE BIOTECHNOLOGY Co., Ltd. All Rights Reserved.') }} <a href="#">{{ __('XML') }}</a>|<a href="#">{{ __('Privacy Policy') }}</a>  </div>
+        <div class="ipv6"><img src="/pre/images/ipv6.png" alt="">{{ __('IPv6 network supported') }}</div>
+        <div class="link">{{ __('Links :') }} <a href="#">{{ __('google') }}</a></div>
     </div>
 </div>
 
@@ -589,32 +589,32 @@
                 <span class="online_open"><svg><use xlink:href="#fixed-email-open"></use></svg></span>
                 <span class="online_mobile"><svg><use xlink:href="#con-mes"></use></svg></span>
             </div>
-            <p>Need Help? leave a message</p></a>
+            <p>{{ __('Need Help? leave a message') }}</p></a>
         <a id="floatHide2" rel="nofollow" href="javascript:void(0);" ></a>
     </div>
     <div id="onlineService2">
         <div class="title">
             <svg><use xlink:href="#icon-im"></use></svg>
             <div>
-                <div class="h4">leave a message</div>
+                <div class="h4">{{ __('leave a message') }}</div>
             </div>
         </div>
         <div class="inquiry">
-            <div class="p">If you are interested in our products and want to know more details,please leave a message here,we will reply you as soon as we can.</div>
+            <div class="p">{{ __('If you are interested in our products and want to know more details,please leave a message here,we will reply you as soon as we can.') }}</div>
             <form id="email_form" method="post" action="/inquiry/addinquiry">
                 <ul class="row clearfix">
                     <li class=" col-sm-12 col-xs-12">
-                        <span class="ms_e"><input type="text" name="msg_email" id="msg_email" class="meInput" placeholder="* Your Email"></span>
+                        <span class="ms_e"><input type="text" name="msg_email" id="msg_email" class="meInput" placeholder="{{ __('* Your Email') }}"></span>
                     </li>
                     <li class=" col-sm-12 col-xs-12">
-                        <span class="ms_p"><input type="text" name="msg_phone" id="msg_phone" class="meInput" placeholder="Tel/Whatsapp"></span>
+                        <span class="ms_p"><input type="text" name="msg_phone" id="msg_phone" class="meInput" placeholder="{{ __('Tel/Whatsapp') }}"></span>
                     </li>
                     <li class="meText col-xs-12">
-                        <span class="ms_m"><textarea id="meText" placeholder="* Enter product details (such as color, size, materials etc.) and other specific requirements to receive an accurate quote." maxlength="3000" name="msg_content"></textarea></span>
+                        <span class="ms_m"><textarea id="meText" placeholder="{{ __('* Enter product details (such as color, size, materials etc.) and other specific requirements to receive an accurate quote.') }}" maxlength="3000" name="msg_content"></textarea></span>
                     </li>
                     <div class="clearfix"></div>
                 </ul>
-                <span class="ms_btn"><input type="submit" value="">Submit</span>
+                <span class="ms_btn"><input type="submit" value="">{{ __('Submit') }}</span>
             </form>
         </div>
     </div>
@@ -643,14 +643,14 @@
         <li>
             <div class="column">
                 <svg class="icon"><use xlink:href="#con-skype"></use></svg>
-                <a rel="nofollow" target="_blank" href="#">beisite</a>
+                <a rel="nofollow" target="_blank" href="#">{{ __('beisite') }}</a>
             </div>
         </li>
         <li class="online_code">
             <div class="column">
                 <svg class="icon"><use xlink:href="#con-code"></use></svg>
                 <a>
-                    <p>Scan to wechat :</p><img src="/pre/images/right-wx.png" alt="" />
+                    <p>{{ __('Scan to wechat :') }}</p><img src="/pre/images/right-wx.png" alt="" />
                 </a>
             </div>
         </li>
@@ -658,10 +658,10 @@
 </div>
 
 <div class="mobile_nav clearfix">
-    <a href="#"><svg class="icon"><use xlink:href="#icon-home"></use></svg><p>home</p></a>
-    <a href="#"><svg class="icon"><use xlink:href="#icon-product"></use></svg><p>products</p></a>
-    <a href="#"><svg class="icon"><use xlink:href="#icon-whatsapp"></use></svg><p>whatsApp</p></a>
-    <a href="#"><svg class="icon"><use xlink:href="#con-mes"></use></svg><p>contact</p></a>
+    <a href="#"><svg class="icon"><use xlink:href="#icon-home"></use></svg><p>{{ __('home') }}</p></a>
+    <a href="#"><svg class="icon"><use xlink:href="#icon-product"></use></svg><p>{{ __('products') }}</p></a>
+    <a href="#"><svg class="icon"><use xlink:href="#icon-whatsapp"></use></svg><p>{{ __('whatsApp') }}</p></a>
+    <a href="#"><svg class="icon"><use xlink:href="#con-mes"></use></svg><p>{{ __('contact') }}</p></a>
 </div>
 
 <script type="text/javascript" src="/pre/js/main.js"></script>

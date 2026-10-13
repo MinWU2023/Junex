@@ -28,6 +28,6 @@
             <a href="javascript:;" class="disabled"><i class="layui-icon layui-icon-right"></i></a>
         @endif
 
-        <p>A total of<strong>{{$paginator->lastPage()}}</strong>pages</p>
+        <p>{{ __('A total of') }}<strong>{{$paginator->lastPage()}}</strong>{{ __('pages') }}</p>
     </div>
 @endif

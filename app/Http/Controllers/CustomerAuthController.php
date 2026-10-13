@@ -52,7 +52,7 @@ class CustomerAuthController extends Controller
                     if ($request->expectsJson()) {
                         return response()->json([
                             'ok' => true,
-                            'message' => 'Login successful.',
+                            'message' => __('Login successful.'),
                             'redirect' => $redirect ?: '/',
                         ]);
                     }
@@ -60,7 +60,7 @@ class CustomerAuthController extends Controller
                     return redirect()
                         ->route('login', ['redirect' => $redirect])
                         ->with([
-                            'success' => 'Login successful.',
+                            'success' => __('Login successful.'),
                             'success_redirect' => $redirect ?: '/',
                         ]);
                 }
@@ -73,7 +73,7 @@ class CustomerAuthController extends Controller
             if ($request->expectsJson()) {
                 return response()->json([
                     'ok' => true,
-                    'message' => 'Login successful.',
+                    'message' => __('Login successful.'),
                     'redirect' => $redirect ?: '/',
                 ]);
             }
@@ -81,7 +81,7 @@ class CustomerAuthController extends Controller
             return redirect()
                 ->route('login', ['redirect' => $redirect])
                 ->with([
-                    'success' => 'Login successful.',
+                    'success' => __('Login successful.'),
                     'success_redirect' => $redirect ?: '/',
                 ]);
         }
@@ -89,9 +89,9 @@ class CustomerAuthController extends Controller
         if ($request->expectsJson()) {
             return response()->json([
                 'ok' => false,
-                'message' => 'The provided credentials are incorrect.',
+                'message' => __('The provided credentials are incorrect.'),
                 'errors' => [
-                    'email' => ['The provided credentials are incorrect.'],
+                    'email' => [__('The provided credentials are incorrect.')],
                 ],
             ], 422);
         }
@@ -99,7 +99,7 @@ class CustomerAuthController extends Controller
         return back()
             ->withInput($request->only(['email', 'redirect']))
             ->withErrors([
-                'email' => 'The provided credentials are incorrect.',
+                'email' => __('The provided credentials are incorrect.'),
             ]);
     }
 
@@ -154,7 +154,7 @@ class CustomerAuthController extends Controller
         if ($request->expectsJson()) {
             return response()->json([
                 'ok' => true,
-                'message' => 'Registration successful.',
+                'message' => __('Registration successful.'),
                 'redirect' => $redirect ?: '/',
             ]);
         }
@@ -162,7 +162,7 @@ class CustomerAuthController extends Controller
         return redirect()
             ->route('register', ['redirect' => $redirect])
             ->with([
-                'success' => 'Registration successful.',
+                'success' => __('Registration successful.'),
                 'success_redirect' => $redirect ?: '/',
             ]);
     }
@@ -194,7 +194,7 @@ class CustomerAuthController extends Controller
         if ($request->expectsJson()) {
             return response()->json([
                 'ok' => true,
-                'message' => 'If the email exists, reset instructions have been sent.',
+                'message' => __('If the email exists, reset instructions have been sent.'),
                 'redirect' => $redirect ?: '/',
             ]);
         }
@@ -202,7 +202,7 @@ class CustomerAuthController extends Controller
         return redirect()
             ->route('forget', ['redirect' => $redirect])
             ->with([
-                'success' => 'If the email exists, reset instructions have been sent.',
+                'success' => __('If the email exists, reset instructions have been sent.'),
                 'success_redirect' => $redirect ?: '/',
             ]);
     }

@@ -62,8 +62,8 @@ class FaqController extends Controller
             'faqGroupsData' => $faqGroupsData,
             'pageBanner' => $pageBanner,
             'breadcrumbs' => $this->buildBreadcrumbs([
-                ['label' => 'Home', 'url' => '/'],
-                ['label' => 'Faqs', 'url' => null],
+                ['label' => __('Home'), 'url' => '/'],
+                ['label' => __('FAQs'), 'url' => null],
             ]),
             'injectToView' => $injectToView,
             'tdk' => $tdk,

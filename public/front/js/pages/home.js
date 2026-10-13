@@ -527,7 +527,7 @@
 
       el = document.createElement('div');
       el.className = 'swiper partners-swiper';
-      el.setAttribute('aria-label', 'Partner logos');
+      el.setAttribute('aria-label', typeof __ === 'function' ? __('Partner logos') : 'Partner logos');
       const wrapper = document.createElement('div');
       wrapper.className = 'swiper-wrapper';
       imgs.forEach((img) => {

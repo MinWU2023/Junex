@@ -1,6 +1,6 @@
 <div class="top_title container">
     <div class="main clr">
-        <p>Banned in mainland China IP, please enter the password!</p>
+        <p>{{ __('Banned in mainland China IP, please enter the password!') }}</p>
     </div>
 
     <div class="main_m clr">
@@ -8,13 +8,13 @@
             <p><img src="{{ asset(app('settings')['setting']->logo) }}"></p>
         </div>
         @if ($errors->any())
-            <p style="color: red;text-align: center">Password mistake</p>
+            <p style="color: red;text-align: center">{{ __('Password mistake') }}</p>
         @endif
         <div class="main_form">
             <form method="post" action="/lockSubmit">
                 @csrf
                 <input type="password" name="lock_password" required class="search_txt_a"
-                       placeholder="please enter your password">
+                       placeholder="{{ __('please enter your password') }}">
                 <input type="submit" value="Submit" class="search_txt_b">
             </form>
         </div>

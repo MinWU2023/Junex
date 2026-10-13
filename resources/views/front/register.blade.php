@@ -28,7 +28,7 @@
         <div class="py-10 md1:py-12 md4:py-16">
             <div class="mx-auto w-full max-w-[1008px] bg-white shadow-[0_18px_40px_rgba(0,0,0,0.12)] ring-1 ring-black/5">
                 <div class="px-5 py-7 sm6:px-8 md1:px-12">
-                    <h1 class="text-center text-f26 md1:text-f32 font-poppins-semibold uppercase tracking-wide text-themeText-f">Create Account</h1>
+                    <h1 class="text-center text-f26 md1:text-f32 font-poppins-semibold uppercase tracking-wide text-themeText-f">{{ __('Create Account') }}</h1>
                     <div class="mx-auto mt-3 h-[7px] w-[46px] rounded bg-themeBg-d" aria-hidden="true"></div>
 
                     @if ($errors->any())
@@ -45,68 +45,68 @@
 
                         <div class="grid grid-cols-1 gap-6 md2:grid-cols-2">
                             <div>
-                                <label class="block text-f14 font-poppins-regular text-themeText-g">Username <span class="text-themeBg-d">*</span></label>
+                                <label class="block text-f14 font-poppins-regular text-themeText-g">{{ __('Username') }} <span class="text-themeBg-d">*</span></label>
                                 <input
                                     type="text"
                                     name="username"
                                     value="{{ old('username') }}"
-                                    placeholder="Please enter username"
+                                    placeholder="{{ __('Please enter username') }}"
                                     class="mt-2 h-[46px] md1:h-[51px] w-full rounded border border-themeBg-h bg-white px-3 text-f14 text-themeText-a placeholder-themeText-i outline-none transition focus:border-themeBg-d"
                                     required
                                 />
                             </div>
 
                             <div>
-                                <label class="block text-f14 font-poppins-regular text-themeText-g">Email <span class="text-themeBg-d">*</span></label>
+                                <label class="block text-f14 font-poppins-regular text-themeText-g">{{ __('Email') }} <span class="text-themeBg-d">*</span></label>
                                 <input
                                     type="email"
                                     name="email"
                                     value="{{ old('email') }}"
-                                    placeholder="Please enter email"
+                                    placeholder="{{ __('Please enter email') }}"
                                     class="mt-2 h-[46px] md1:h-[51px] w-full rounded border border-themeBg-h bg-white px-3 text-f14 text-themeText-a placeholder-themeText-i outline-none transition focus:border-themeBg-d"
                                     required
                                 />
                             </div>
 
                             <div>
-                                <label class="block text-f14 font-poppins-regular text-themeText-g">Telephone</label>
+                                <label class="block text-f14 font-poppins-regular text-themeText-g">{{ __('Telephone') }}</label>
                                 <input
                                     type="text"
                                     name="telephone"
                                     value="{{ old('telephone') }}"
-                                    placeholder="Optional"
+                                    placeholder="{{ __('Optional') }}"
                                     class="mt-2 h-[46px] md1:h-[51px] w-full rounded border border-themeBg-h bg-white px-3 text-f14 text-themeText-a placeholder-themeText-i outline-none transition focus:border-themeBg-d"
                                 />
                             </div>
 
                             <div>
-                                <label class="block text-f14 font-poppins-regular text-themeText-g">Country</label>
+                                <label class="block text-f14 font-poppins-regular text-themeText-g">{{ __('Country') }}</label>
                                 <input
                                     type="text"
                                     name="country"
                                     value="{{ old('country') }}"
-                                    placeholder="Optional"
+                                    placeholder="{{ __('Optional') }}"
                                     class="mt-2 h-[46px] md1:h-[51px] w-full rounded border border-themeBg-h bg-white px-3 text-f14 text-themeText-a placeholder-themeText-i outline-none transition focus:border-themeBg-d"
                                 />
                             </div>
 
                             <div>
-                                <label class="block text-f14 font-poppins-regular text-themeText-g">Password <span class="text-themeBg-d">*</span></label>
+                                <label class="block text-f14 font-poppins-regular text-themeText-g">{{ __('Password') }} <span class="text-themeBg-d">*</span></label>
                                 <input
                                     type="password"
                                     name="password"
-                                    placeholder="At least 6 characters"
+                                    placeholder="{{ __('At least 6 characters') }}"
                                     class="mt-2 h-[46px] md1:h-[51px] w-full rounded border border-themeBg-h bg-white px-3 text-f14 text-themeText-a placeholder-themeText-i outline-none transition focus:border-themeBg-d"
                                     required
                                 />
                             </div>
 
                             <div>
-                                <label class="block text-f14 font-poppins-regular text-themeText-g">Confirm Password <span class="text-themeBg-d">*</span></label>
+                                <label class="block text-f14 font-poppins-regular text-themeText-g">{{ __('Confirm Password') }} <span class="text-themeBg-d">*</span></label>
                                 <input
                                     type="password"
                                     name="password_confirmation"
-                                    placeholder="Please confirm password"
+                                    placeholder="{{ __('Please confirm password') }}"
                                     class="mt-2 h-[46px] md1:h-[51px] w-full rounded border border-themeBg-h bg-white px-3 text-f14 text-themeText-a placeholder-themeText-i outline-none transition focus:border-themeBg-d"
                                     required
                                 />
@@ -114,12 +114,12 @@
                         </div>
 
                         <button type="submit" class="mt-6 h-[48px] md1:h-[54px] w-full bg-themeText-f font-poppins-medium text-f16 uppercase tracking-wide text-white transition hover:opacity-90">
-                            Create Account
+                            {{ __('Create Account') }}
                         </button>
 
                         <div class="mt-5 text-center text-f14 font-poppins-regular text-themeText-g">
-                            Already have an account?
-                            <a href="{{ route('login', ['redirect' => request('redirect', $redirect ?? '/')]) }}" class="text-themeText-h transition hover:underline">Sign in</a>
+                            {{ __('Already have an account?') }}
+                            <a href="{{ route('login', ['redirect' => request('redirect', $redirect ?? '/')]) }}" class="text-themeText-h transition hover:underline">{{ __('Sign in') }}</a>
                         </div>
                     </form>
 
@@ -156,7 +156,7 @@
         var errorBox = document.querySelector('.auth_error');
         var showError = function (msg) {
             if (!errorBox) return;
-            errorBox.textContent = msg || 'Invalid request.';
+            errorBox.textContent = msg || (typeof __ === 'function' ? __('Invalid request.') : 'Invalid request.');
             errorBox.classList.remove('hidden');
         };
         var hideError = function () {
@@ -177,13 +177,13 @@
                 headers: { 'Accept': 'application/json' }
             }).then(function (res) {
                 if (typeof window.showMessage === 'function') {
-                    window.showMessage({ type: 'success', message: res.message || 'Success', duration: 2000 });
+                    window.showMessage({ type: 'success', message: res.message || (typeof __ === 'function' ? __('Success') : 'Success'), duration: 2000 });
                 }
                 setTimeout(function () {
                     window.location.href = (res && res.redirect) ? res.redirect : '/';
                 }, 2000);
             }).catch(function (err) {
-                var msg = (err && err.response && err.response.message) ? err.response.message : (err && err.message ? err.message : 'Request failed.');
+                var msg = (err && err.response && err.response.message) ? err.response.message : (err && err.message ? err.message : (typeof __ === 'function' ? __('Request failed.') : 'Request failed.'));
                 if (err && err.response && err.response.errors) {
                     var firstKey = Object.keys(err.response.errors)[0];
                     if (firstKey && err.response.errors[firstKey] && err.response.errors[firstKey][0]) {

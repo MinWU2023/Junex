@@ -24,7 +24,7 @@
         </div>
 
         <div class="relative overflow-hidden">
-            <img class="h-auto w-full object-contain" src="{{ $definedServices['right_image_url'] ?? '' }}" alt="Customize services products" loading="lazy" />
+            <img class="h-auto w-full object-contain" src="{{ $definedServices['right_image_url'] ?? '' }}" alt="{{ __('Customize services products') }}" loading="lazy" />
         </div>
         </div>
     </div>
