@@ -23,7 +23,7 @@
                         @method('PUT')
 
                         <x-admin.multilingualism
-                            :translateField="config('multilingual.hotStyleTab.value.translateField')"
+                            :translateField="config('multilingual.hot_style_tab.value.translateField')"
                             :value="$model"
                         >
                         </x-admin.multilingualism>

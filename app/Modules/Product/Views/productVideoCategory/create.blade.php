@@ -29,7 +29,7 @@
                         <div class="layui-tab-content">
                             <div class="layui-tab-item layui-show">
                                 <x-admin.multilingualism
-                                    :translateField="config('multilingual.productVideoCategory.value.translateField')"
+                                    :translateField="config('multilingual.product_video_category.value.translateField')"
                                     value=""
                                 ></x-admin.multilingualism>
                                 <div class="layui-form-item">
@@ -60,7 +60,7 @@
                             @role('超级管理员')
                             <div class="layui-tab-item">
                                 <x-admin.multilingualism
-                                    :translateField="config('multilingual.productVideoCategory.value.seoTranslateField')"
+                                    :translateField="config('multilingual.product_video_category.value.seoTranslateField')"
                                     value=""
                                 ></x-admin.multilingualism>
                             </div>

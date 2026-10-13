@@ -551,7 +551,7 @@ return [
         ],
         'model' => \App\Modules\Page\Models\Page::class
     ],
-    'staticBlock' => [
+    'static_block' => [
         'label' => '静态块',
         'value' => [
             'translateField' => [
@@ -683,7 +683,7 @@ return [
         ],
         'model' => \App\Modules\Setting\Models\Slogan::class
     ],
-    'productVideo' => [
+    'product_video' => [
         'label' => '产品视频管理',
         'value' => [
             'translateField' => [
@@ -710,7 +710,7 @@ return [
         ],
         'model' => \App\Modules\Product\Models\ProductVideo::class
     ],
-    'productVideoCategory' => [
+    'product_video_category' => [
         'label' => '产品视频分类',
         'value' => [
             'translateField' => [
@@ -758,7 +758,7 @@ return [
         'model' => \App\Modules\User\Models\Faq::class
     ],
 
-    'productFaq' => [
+    'product_faq' => [
         'label' => '产品问答',
         'value' => [
             'translateField' => [
@@ -779,7 +779,7 @@ return [
         'model' => \App\Modules\Product\Models\ProductFaq::class
     ],
 
-    'faqGroup' => [
+    'faq_group' => [
         'label' => 'Faqs分组管理',
         'value' => [
             'translateField' => [
@@ -799,7 +799,7 @@ return [
         ],
         'model' => \App\Modules\User\Models\FaqGroup::class
     ],
-    'customerReview' => [
+    'customer_review' => [
         'label' => '评论管理',
         'value' => [
             'translateField' => [
@@ -903,7 +903,7 @@ return [
         'model' => \App\Modules\Navigation\Models\Navigation::class
     ],
 
-    'brandSolution' => [
+    'brand_solution' => [
         'label' => '品牌解决方案',
         'value' => [
             'translateField' => [
@@ -936,7 +936,7 @@ return [
         'model' => \App\Modules\Setting\Models\BrandSolution::class
     ],
 
-    'homeProductCategory' => [
+    'home_product_category' => [
         'label' => '首页产品分类',
         'value' => [
             'translateField' => [
@@ -971,7 +971,7 @@ return [
         'model' => \App\Modules\Setting\Models\HomeProductCategory::class
     ],
 
-    'hotStyleTab' => [
+    'hot_style_tab' => [
         'label' => '热门款式Tab',
         'value' => [
             'translateField' => [
@@ -986,7 +986,7 @@ return [
         'model' => \App\Modules\Setting\Models\HotStyleTab::class
     ],
 
-    'excitingUpdate' => [
+    'exciting_update' => [
         'label' => '精彩动态',
         'value' => [
             'translateField' => [
@@ -1013,7 +1013,7 @@ return [
         'model' => \App\Modules\Setting\Models\ExcitingUpdate::class
     ],
 
-    'whyChooseCard' => [
+    'why_choose_card' => [
         'label' => '为何选择我们',
         'value' => [
             'translateField' => [
@@ -1046,7 +1046,7 @@ return [
         'model' => \App\Modules\Setting\Models\WhyChooseCard::class
     ],
 
-    'customService' => [
+    'custom_service' => [
         'label' => '定制服务',
         'value' => [
             'translateField' => [
@@ -1073,7 +1073,7 @@ return [
         'model' => \App\Modules\Setting\Models\CustomService::class
     ],
 
-    'customServiceItem' => [
+    'custom_service_item' => [
         'label' => '定制服务项',
         'value' => [
             'translateField' => [
@@ -1088,7 +1088,7 @@ return [
         'model' => \App\Modules\Setting\Models\CustomServiceItem::class
     ],
 
-    'sectionTitle' => [
+    'section_title' => [
         'label' => '板块标题',
         'value' => [
             'translateField' => [
@@ -1109,7 +1109,7 @@ return [
         'model' => \App\Modules\Setting\Models\SectionTitle::class
     ],
 
-    'snsIcon' => [
+    'sns_icon' => [
         'label' => 'SNS图标',
         'value' => [
             'translateField' => [
@@ -1124,7 +1124,7 @@ return [
         'model' => \App\Modules\Setting\Models\SnsIcon::class
     ],
 
-    'whyChooseSetting' => [
+    'why_choose_setting' => [
         'label' => '为何选择我们-中间板块',
         'value' => [
             'translateField' => [

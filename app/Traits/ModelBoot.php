@@ -28,8 +28,18 @@ trait ModelBoot
                 }
                 $request_url = trim(config("cloud_api") ?? env('MIX_API_CLOUD'), '/') . '/api/customerWebsite/translateOne';
                 $translateFields = [];
-                foreach (config('multilingual.' . self::MODEL_TYPE . '.value') as $translateField) {
-                    $translateFields = array_merge($translateField, $translateFields);
+                $multilingualValue = config('multilingual.' . self::MODEL_TYPE . '.value');
+                if (!is_array($multilingualValue)) {
+                    // 兼容历史驼峰键名，避免云端拉不到 translateFields
+                    $camelKey = lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', self::MODEL_TYPE))));
+                    $multilingualValue = config('multilingual.' . $camelKey . '.value');
+                }
+                if (is_array($multilingualValue)) {
+                    foreach ($multilingualValue as $translateField) {
+                        if (is_array($translateField)) {
+                            $translateFields = array_merge($translateField, $translateFields);
+                        }
+                    }
                 }
                 $status = 2;
                 $error_msg = '';

@@ -22,7 +22,7 @@
                         @csrf
 
                         <x-admin.multilingualism
-                            :translateField="config('multilingual.hotStyleTab.value.translateField')"
+                            :translateField="config('multilingual.hot_style_tab.value.translateField')"
                             value=""
                         >
                         </x-admin.multilingualism>

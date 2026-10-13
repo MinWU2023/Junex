@@ -24,7 +24,7 @@
                         @method('PUT')
 
                         <x-admin.multilingualism
-                            :translateField="config('multilingual.faqGroup.value.translateField')"
+                            :translateField="config('multilingual.faq_group.value.translateField')"
                             :value="$model"
                         >
                         </x-admin.multilingualism>

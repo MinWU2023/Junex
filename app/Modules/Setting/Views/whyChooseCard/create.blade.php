@@ -22,7 +22,7 @@
                         @csrf
 
                         <x-admin.multilingualism
-                            :translateField="config('multilingual.whyChooseCard.value.translateField')"
+                            :translateField="config('multilingual.why_choose_card.value.translateField')"
                             value=""
                         >
                         </x-admin.multilingualism>

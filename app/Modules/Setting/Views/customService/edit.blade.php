@@ -14,7 +14,7 @@
                     @csrf
                     @method('PUT')
                     <x-admin.multilingualism
-                        :translateField="config('multilingual.customService.value.translateField')"
+                        :translateField="config('multilingual.custom_service.value.translateField')"
                         :value="$model"
                     ></x-admin.multilingualism>
 

@@ -22,7 +22,7 @@
                     @method('PUT')
 
                     <x-admin.multilingualism
-                        :translateField="config('multilingual.staticBlock.value.translateField')"
+                        :translateField="config('multilingual.static_block.value.translateField')"
                         :value="$model"
                     >
                     </x-admin.multilingualism>

@@ -34,7 +34,7 @@
                         <div class="layui-tab-content">
                             <div class="layui-tab-item layui-show">
                                 <x-admin.multilingualism
-                                    :translateField="config('multilingual.productVideo.value.translateField')"
+                                    :translateField="config('multilingual.product_video.value.translateField')"
                                     :value="$model"
                                 ></x-admin.multilingualism>
 
@@ -101,7 +101,7 @@
                             @role('超级管理员')
                             <div class="layui-tab-item">
                                 <x-admin.multilingualism
-                                    :translateField="config('multilingual.productVideo.value.seoTranslateField')"
+                                    :translateField="config('multilingual.product_video.value.seoTranslateField')"
                                     :value="$model"
                                 ></x-admin.multilingualism>
                             </div>

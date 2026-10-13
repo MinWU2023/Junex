@@ -23,7 +23,7 @@
                         @method('PUT')
 
                         <x-admin.multilingualism
-                            :translateField="config('multilingual.whyChooseSetting.value.translateField')"
+                            :translateField="config('multilingual.why_choose_setting.value.translateField')"
                             :value="$model"
                         >
                         </x-admin.multilingualism>

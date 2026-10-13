@@ -50,7 +50,7 @@
                     <div class="pf-form-section">
                         <div class="pf-form-section-title"><i class="layui-icon layui-icon-fonts-strong"></i>{{ __('多语言内容') }}</div>
                         <x-admin.multilingualism
-                            :translateField="config('multilingual.productFaq.value.translateField')"
+                            :translateField="config('multilingual.product_faq.value.translateField')"
                             value=""
                         />
                     </div>

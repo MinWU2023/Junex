@@ -22,7 +22,7 @@
                         @csrf
 
                         <x-admin.multilingualism
-                            :translateField="config('multilingual.homeProductCategory.value.translateField')"
+                            :translateField="config('multilingual.home_product_category.value.translateField')"
                             value=""
                         >
                         </x-admin.multilingualism>

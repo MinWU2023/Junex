@@ -70,7 +70,7 @@
                         </div>
 
                         <x-admin.multilingualism
-                            :translateField="config('multilingual.snsIcon.value.translateField')"
+                            :translateField="config('multilingual.sns_icon.value.translateField')"
                             :value="$model"
                         />
 

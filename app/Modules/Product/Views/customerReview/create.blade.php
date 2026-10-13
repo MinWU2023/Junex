@@ -29,7 +29,7 @@
                         </div>
 
                         <x-admin.multilingualism
-                            :translateField="config('multilingual.customerReview.value.translateField')"
+                            :translateField="config('multilingual.customer_review.value.translateField')"
                             value=""
                         >
                         </x-admin.multilingualism>
