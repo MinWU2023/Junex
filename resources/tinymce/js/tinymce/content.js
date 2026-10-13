@@ -113,8 +113,9 @@ layui.use(['jquery', 'layer'], function () {
                                 convert_urls: false,  //自动转换URL
                                 custom_undo_redo_levels: 30,  //撤销次数
                                 //toolbar_sticky: true, //工具栏浮动
-                                content_css: '/images/moban.css,/tinymce/tpl/css/det_bootstrap.css,/tinymce/tpl/css/det_font-awesome.min.css,/tinymce/tpl/css/det_style.css',
-                                content_style: 'ul,ol{margin-top:0;margin-bottom:10px;padding-left:1.5em;list-style-position:outside;}ul{list-style-type:disc;}ol{list-style-type:decimal;}ul>li,ol>li{list-style-type:inherit!important;list-style-position:outside!important;}',
+                                content_css: '/images/moban.css,/tinymce/tpl/css/det_bootstrap.css,/tinymce/tpl/css/det_font-awesome.min.css,/tinymce/tpl/css/det_style.css,/tinymce/tpl/css/editor-lists.css?v=2026101315',
+                                content_style: '.mce-content-body ul,.mce-content-body ol{margin-top:0;margin-bottom:10px;padding-left:2em!important;list-style-position:outside!important;}.mce-content-body ul{list-style-type:disc;}.mce-content-body ol{list-style-type:decimal;}.mce-content-body ul>li,.mce-content-body ol>li{display:list-item!important;list-style-type:inherit!important;list-style-position:outside!important;}',
+                                fix_list_elements: false,
                                 plugins: 'gpt print preview searchreplace autolink directionality visualblocks visualchars fullscreen image link media template code codesample table charmap hr pagebreak nonbreaking insertdatetime advlist lists wordcount imagetools textpattern help autosave axupimgs',
                                 toolbar: 'gpt code template undo redo restoredraft bullist numlist | fontselect fontsizeselect | forecolor backcolor bold italic underline strikethrough link | alignleft aligncenter alignright alignjustify outdent indent |\
                       table image media charmap hr pagebreak insertdatetime | blockquote subscript superscript removeformat print fullscreen |searchreplace lineheight formatpainter',
@@ -150,6 +151,44 @@ layui.use(['jquery', 'layer'], function () {
                                 //content_security_policy: "script-src *;",
                                 extended_valid_elements: 'script[src]',
                                 setup: function (editor) {
+                                        var fixListMarkersTimer;
+                                        var fixListMarkers = function () {
+                                                var dom = editor.dom;
+                                                var body = editor.getBody();
+                                                if (!body) {
+                                                        return;
+                                                }
+                                                tinymce.each(dom.select('ul, ol', body), function (list) {
+                                                        var tag = list.nodeName.toLowerCase();
+                                                        var listType = dom.getStyle(list, 'list-style-type', true);
+                                                        if (!listType || listType === 'none') {
+                                                                dom.setStyle(list, 'list-style-type', tag === 'ol' ? 'decimal' : 'disc');
+                                                        }
+                                                        tinymce.each(dom.select('li', list), function (li) {
+                                                                if (dom.getStyle(li, 'list-style-type', true) === 'none') {
+                                                                        li.style.removeProperty('list-style-type');
+                                                                }
+                                                                if (dom.getStyle(li, 'display', true) !== 'list-item') {
+                                                                        dom.setStyle(li, 'display', 'list-item');
+                                                                }
+                                                        });
+                                                });
+                                        };
+                                        var scheduleFixListMarkers = function () {
+                                                clearTimeout(fixListMarkersTimer);
+                                                fixListMarkersTimer = setTimeout(fixListMarkers, 30);
+                                        };
+                                        editor.on('init', function () {
+                                                fixListMarkers();
+                                                setTimeout(fixListMarkers, 200);
+                                        });
+                                        editor.on('SetContent Change Undo Redo', scheduleFixListMarkers);
+                                        editor.on('NodeChange', scheduleFixListMarkers);
+                                        editor.on('ExecCommand', function (e) {
+                                                if (/Insert(Unordered|Ordered)List|Apply(Unordered|Ordered)ListStyle|RemoveList|Indent|Outdent/.test(e.command || '')) {
+                                                        scheduleFixListMarkers();
+                                                }
+                                        });
                                         editor.on('OpenWindow', function () {
                                                 setTimeout(function () {
                                                         var dialogs = document.querySelectorAll('.tox-dialog');

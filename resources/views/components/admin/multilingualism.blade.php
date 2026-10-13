@@ -122,7 +122,7 @@
     @section('ext')
         @if(app('settings')['setting']->switch_editor == 1)
             <script charset="utf-8" src="{{ asset('tinymce/js/tinymce/tinymce.js') }}"></script>
-            <script charset="utf-8" src="{{ asset('tinymce/js/tinymce/content.js') }}"></script>
+            <script charset="utf-8" src="{{ asset('tinymce/js/tinymce/content.js') }}?v=2026101315"></script>
         @elseif(app('settings')['setting']->switch_editor == 2)
             <script charset="utf-8" src="{{ asset('/kindeditor/kindeditor-all.js') }}"></script>
             <script charset="utf-8" src="{{ asset('/kindeditor/lang/zh-CN.js') }}"></script>

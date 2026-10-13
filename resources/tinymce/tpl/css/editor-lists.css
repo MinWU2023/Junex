@@ -1,0 +1,20 @@
+/* TinyMCE 编辑器列表符号：覆盖 li 上的 list-style-type:none 与 padding 重置 */
+.mce-content-body ul,
+.mce-content-body ol {
+  margin-top: 0;
+  margin-bottom: 10px;
+  padding-left: 2em !important;
+  list-style-position: outside !important;
+}
+.mce-content-body ul {
+  list-style-type: disc;
+}
+.mce-content-body ol {
+  list-style-type: decimal;
+}
+.mce-content-body ul > li,
+.mce-content-body ol > li {
+  display: list-item !important;
+  list-style-type: inherit !important;
+  list-style-position: outside !important;
+}
