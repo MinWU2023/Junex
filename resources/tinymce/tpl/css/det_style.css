@@ -28,10 +28,17 @@ body{
 /* 富文本正文需显示列表符；模板装饰列表仍用下方 .adv_list 等单独 none */
 ul, ol {
   padding-left: 1.5em;
-  list-style: revert;
+  list-style-position: outside;
 }
-li {
-  list-style: revert;
+ul {
+  list-style-type: disc;
+}
+ol {
+  list-style-type: decimal;
+}
+ul > li, ol > li {
+  list-style-type: inherit !important;
+  list-style-position: outside !important;
 }
 
 

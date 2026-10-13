@@ -114,6 +114,7 @@ layui.use(['jquery', 'layer'], function () {
                                 custom_undo_redo_levels: 30,  //撤销次数
                                 //toolbar_sticky: true, //工具栏浮动
                                 content_css: '/images/moban.css,/tinymce/tpl/css/det_bootstrap.css,/tinymce/tpl/css/det_font-awesome.min.css,/tinymce/tpl/css/det_style.css',
+                                content_style: 'ul,ol{margin-top:0;margin-bottom:10px;padding-left:1.5em;list-style-position:outside;}ul{list-style-type:disc;}ol{list-style-type:decimal;}ul>li,ol>li{list-style-type:inherit!important;list-style-position:outside!important;}',
                                 plugins: 'gpt print preview searchreplace autolink directionality visualblocks visualchars fullscreen image link media template code codesample table charmap hr pagebreak nonbreaking insertdatetime advlist lists wordcount imagetools textpattern help autosave axupimgs',
                                 toolbar: 'gpt code template undo redo restoredraft bullist numlist | fontselect fontsizeselect | forecolor backcolor bold italic underline strikethrough link | alignleft aligncenter alignright alignjustify outdent indent |\
                       table image media charmap hr pagebreak insertdatetime | blockquote subscript superscript removeformat print fullscreen |searchreplace lineheight formatpainter',

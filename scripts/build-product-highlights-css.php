@@ -309,8 +309,20 @@ function isolationHelpers(array $prefixes): string
 /* Undo common Tailwind preflight conflicts inside editor HTML */
 {$prefix} ul,
 {$prefix} ol {
-  margin: 0;
-  padding: 0;
+  margin: 0 0 0.65rem;
+  padding-left: 1.5em;
+  list-style-position: outside;
+}
+{$prefix} ul:not([style*="list-style-type"]) {
+  list-style-type: disc;
+}
+{$prefix} ol:not([style*="list-style-type"]) {
+  list-style-type: decimal;
+}
+{$prefix} ul > li,
+{$prefix} ol > li {
+  list-style-type: inherit !important;
+  list-style-position: outside;
 }
 {$prefix} p {
   margin: 0;
