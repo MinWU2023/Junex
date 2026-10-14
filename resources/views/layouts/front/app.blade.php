@@ -1973,5 +1973,13 @@
     <script src="/front/js/swiper-bundle.min.js" defer></script>
     <script src="/front/js/swiper-common.js?v=20261010f" defer></script>
     @yield('page-js-footer')
+@php
+    // 线上排障：locale 已是 es 但 json 未部署时，源码可见此注释
+    $__langFile = resource_path('lang/' . app()->getLocale() . '.json');
+    $__langShare = __('Share');
+@endphp
+@if(app()->getLocale() !== 'en' && $__langShare === 'Share')
+<!-- LANG_JSON_MISSING locale={{ app()->getLocale() }} file={{ $__langFile }} exists={{ is_file($__langFile) ? '1' : '0' }} size={{ is_file($__langFile) ? filesize($__langFile) : 0 }} -->
+@endif
 </body>
 </html>

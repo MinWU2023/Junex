@@ -1,3 +1,7 @@
+# 前台 JSON 语言包必须入库（勿忽略 resources/lang）
+!/resources/lang/
+!/resources/lang/**
+
 # Dependencies
 /vendor
 /node_modules
