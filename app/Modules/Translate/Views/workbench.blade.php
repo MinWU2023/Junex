@@ -38,6 +38,29 @@
             .tw-workbench .tw-form-group label .tw-required { color: #ff5722; margin-right: 2px; }
             .tw-workbench .tw-form-group .layui-input,
             .tw-workbench .tw-form-group select { width: 100%; }
+            /* 必须覆盖 layui-form select{display:none}，下拉框不能放在 .layui-form 内 */
+            .tw-workbench select.tw-select,
+            .tw-workbench .tw-form-group select.tw-select {
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                height: 38px !important;
+                min-height: 38px !important;
+                line-height: 38px !important;
+                padding: 0 12px !important;
+                border: 1px solid #e6e6e6 !important;
+                border-radius: 2px !important;
+                background: #fff !important;
+                color: #333 !important;
+                box-sizing: border-box !important;
+                appearance: auto !important;
+                -webkit-appearance: menulist !important;
+                cursor: pointer !important;
+            }
+            .tw-workbench .tw-form-group select.tw-select:focus {
+                border-color: #16a291 !important;
+                outline: none !important;
+            }
             .tw-workbench .tw-search-row { display: flex; gap: 8px; }
             .tw-workbench .tw-search-row .layui-input { flex: 1; }
             .tw-workbench .tw-fields-box {
@@ -47,7 +70,10 @@
                 border: 1px dashed #e2e8f0;
                 border-radius: 6px;
             }
-            .tw-workbench .tw-fields-box .layui-form-checkbox { margin: 6px 16px 6px 0; }
+            .tw-workbench .tw-fields-box .tw-field-check { margin: 6px 16px 6px 0; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font-size: 13px; color: #333; }
+            .tw-workbench .tw-fields-box .tw-field-check input { width: 16px; height: 16px; cursor: pointer; }
+            .tw-workbench .tw-native-check { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px; color: #555; margin-top: 14px; }
+            .tw-workbench .tw-native-check input { width: 16px; height: 16px; cursor: pointer; }
             .tw-workbench .tw-empty-hint { color: #999; font-size: 13px; padding: 8px 0; }
             .tw-workbench .tw-actions {
                 display: flex;
@@ -117,29 +143,35 @@
                 <div class="layui-card tw-panel">
                     <div class="layui-card-header">{{ __('① 选择数据源') }}</div>
                     <div class="layui-card-body">
-                        <form class="layui-form" lay-filter="translate-workbench-form">
+                        <div class="tw-form" id="translate-workbench-form">
                             <div class="tw-form-grid">
                                 <div class="tw-form-group">
-                                    <label><span class="tw-required">*</span>{{ __('数据表') }}</label>
-                                    <select id="tw-module" lay-filter="tw-module">
+                                    <label for="tw-module"><span class="tw-required">*</span>{{ __('数据表') }}</label>
+                                    <select id="tw-module" class="tw-select" style="display:block!important;width:100%;height:38px;">
                                         <option value="">{{ __('请选择数据表') }}</option>
+                                        @foreach($modules ?? [] as $module)
+                                            <option value="{{ $module['key'] }}">{{ $module['label'] }} ({{ $module['main_table'] }})</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="tw-form-group">
-                                    <label><span class="tw-required">*</span>{{ __('目标语言') }}</label>
-                                    <select id="tw-locale" lay-filter="tw-locale">
+                                    <label for="tw-locale"><span class="tw-required">*</span>{{ __('目标语言') }}</label>
+                                    <select id="tw-locale" class="tw-select" style="display:block!important;width:100%;height:38px;">
                                         <option value="">{{ __('请选择目标语言') }}</option>
+                                        @foreach($locales ?? [] as $locale)
+                                            <option value="{{ $locale['code'] }}">{{ $locale['label'] }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="tw-form-group">
-                                    <label><span class="tw-required">*</span>{{ __('记录') }}</label>
-                                    <select id="tw-record" lay-search>
+                                    <label for="tw-record"><span class="tw-required">*</span>{{ __('记录') }}</label>
+                                    <select id="tw-record" class="tw-select" style="display:block!important;width:100%;height:38px;">
                                         <option value="">{{ __('请先选择数据表') }}</option>
                                     </select>
                                     <input type="number" id="tw-record-manual" class="layui-input" style="margin-top:8px;" placeholder="{{ __('或手动输入 ID') }}">
                                 </div>
                                 <div class="tw-form-group">
-                                    <label>{{ __('搜索记录') }}</label>
+                                    <label for="tw-keyword">{{ __('搜索记录') }}</label>
                                     <div class="tw-search-row">
                                         <input type="text" id="tw-keyword" class="layui-input" placeholder="{{ __('ID 或名称') }}">
                                         <button type="button" class="layui-btn layui-btn-primary" id="tw-reload-records">
@@ -148,19 +180,24 @@
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
 
                 <div class="layui-card tw-panel">
                     <div class="layui-card-header">{{ __('② 选择翻译字段') }}</div>
                     <div class="layui-card-body">
+                        <div class="tw-fields-toolbar" style="margin-bottom:8px;display:none;" id="tw-fields-toolbar">
+                            <button type="button" class="layui-btn layui-btn-xs layui-btn-primary" id="tw-fields-all">{{ __('全选') }}</button>
+                            <button type="button" class="layui-btn layui-btn-xs layui-btn-primary" id="tw-fields-none">{{ __('全不选') }}</button>
+                        </div>
                         <div class="tw-fields-box" id="tw-fields">
                             <div class="tw-empty-hint">{{ __('请先选择数据表，系统将自动加载可翻译字段') }}</div>
                         </div>
-                        <div class="layui-form" style="margin-top:14px;">
-                            <input type="checkbox" id="tw-skip-existing" title="{{ __('跳过目标语言已有内容的字段') }}" lay-skin="primary">
-                        </div>
+                        <label class="tw-native-check" for="tw-skip-existing">
+                            <input type="checkbox" id="tw-skip-existing" name="tw-skip-existing" checked>
+                            <span>{{ __('跳过目标语言已有内容的字段') }}</span>
+                        </label>
                     </div>
                 </div>
 
@@ -205,7 +242,7 @@
         </div>
     </div>
     @section('scripts')
-        <script src="{{ asset('/js/admin/admin.translate.workbench.js') }}?v=2026101415"></script>
+        <script src="{{ asset('/js/admin/admin.translate.workbench.js') }}?v=2026101418"></script>
     @endsection
     </body>
 </x-layui-layout>

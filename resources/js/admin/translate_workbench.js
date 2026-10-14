@@ -84,19 +84,20 @@ layui.config({
             html += '<option value="' + item[valueKey] + '">' + item[labelKey] + '</option>';
         });
         $el.html(html);
-        form.render('select');
     }
 
     function renderFields(fields) {
         if (!fields.length) {
+            $('#tw-fields-toolbar').hide();
             $('#tw-fields').html('<div class="tw-empty-hint">该数据表暂无可翻译字段</div>');
             return;
         }
+        $('#tw-fields-toolbar').show();
         var html = fields.map(function (field) {
-            return '<input type="checkbox" name="tw-field" value="' + field.name + '" title="' + field.label + ' (' + field.name + ')" lay-skin="primary" checked>';
+            return '<label class="tw-field-check"><input type="checkbox" name="tw-field" value="' + field.name + '" checked> ' +
+                field.label + ' (' + field.name + ')</label>';
         }).join('');
         $('#tw-fields').html(html);
-        form.render('checkbox');
     }
 
     function loadModules() {
@@ -150,7 +151,6 @@ layui.config({
                 html += '<option value="' + row.id + '">#' + row.id + ' - ' + row.label + '</option>';
             });
             $('#tw-record').html(html);
-            form.render('select');
             log('已加载 <strong>' + state.records.length + '</strong> 条记录', 'success');
         }).fail(function () {
             setStatus('加载失败', false);
@@ -327,7 +327,6 @@ layui.config({
                     }
                     $('#tw-record').val(id);
                     $('#tw-record-manual').val('');
-                    form.render('select');
                     state.translated = {};
                     return translateCurrent(true, id);
                 });
@@ -341,15 +340,23 @@ layui.config({
         });
     }
 
-    form.on('select(tw-module)', function (obj) {
-        if (!obj.value) {
+    $('#tw-module').on('change', function () {
+        var val = $(this).val();
+        if (!val) {
+            $('#tw-fields-toolbar').hide();
             $('#tw-fields').html('<div class="tw-empty-hint">请先选择数据表，系统将自动加载可翻译字段</div>');
             $('#tw-record').html('<option value="">请先选择数据表</option>');
-            form.render('select');
             return;
         }
-        loadFields(obj.value);
+        loadFields(val);
         loadRecords();
+    });
+
+    $('#tw-fields-all').on('click', function () {
+        $('#tw-fields input[name="tw-field"]').prop('checked', true);
+    });
+    $('#tw-fields-none').on('click', function () {
+        $('#tw-fields input[name="tw-field"]').prop('checked', false);
     });
 
     $('#tw-reload-records').on('click', loadRecords);
@@ -393,7 +400,25 @@ layui.config({
         $('#tw-log').html('<div class="tw-log-empty">选择数据后开始翻译，过程将显示在这里</div>');
     });
 
-    form.render();
-    loadModules();
-    loadLocales();
+    if (!$('#tw-module option').length || $('#tw-module option').length <= 1) {
+        loadModules();
+    } else {
+        state.modules = [];
+        $('#tw-module option').each(function () {
+            var val = $(this).val();
+            if (val) {
+                var text = $(this).text();
+                var match = text.match(/^(.+?)\s*\(([^)]+)\)$/);
+                state.modules.push({
+                    key: val,
+                    label: match ? match[1] : text,
+                    main_table: match ? match[2] : ''
+                });
+            }
+        });
+        log('已加载 <strong>' + state.modules.length + '</strong> 个可翻译数据表', 'success');
+    }
+    if (!$('#tw-locale option').length || $('#tw-locale option').length <= 1) {
+        loadLocales();
+    }
 });

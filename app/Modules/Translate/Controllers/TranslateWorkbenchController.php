@@ -32,7 +32,26 @@ class TranslateWorkbenchController extends BaseController
 
     public function index()
     {
-        return view($this->viewPath . '.workbench');
+        try {
+            $modules = $this->registry->modules();
+        } catch (\Throwable $e) {
+            $modules = [];
+        }
+
+        $locales = Locale::query()
+            ->orderByDesc('sort')
+            ->get(['language', 'language_code'])
+            ->filter(fn ($row) => $row->language_code !== 'en')
+            ->values()
+            ->map(fn ($row) => [
+                'code' => $row->language_code,
+                'label' => $row->language ?: $row->language_code,
+            ]);
+
+        return view($this->viewPath . '.workbench', [
+            'modules' => $modules,
+            'locales' => $locales,
+        ]);
     }
 
     public function modules()
