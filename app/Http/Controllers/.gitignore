@@ -16,3 +16,5 @@
 !UserApiController.php
 !CustomerAuthController.php
 !NewStyleController.php
+!FrontLangController.php
+!VideoController.php

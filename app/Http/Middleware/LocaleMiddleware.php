@@ -94,9 +94,16 @@ class LocaleMiddleware
             }
         }
 
-        // 子域启发式：es.x.com / spanish.x.com → 对应语言包
-        $sub = explode('.', $host)[0] ?? '';
+        // 子域启发式（先去掉 www）：es.x.com / www.es.x.com / spanish.x.com
+        $hostNoWww = preg_replace('/^www\./', '', $host) ?: $host;
+        $sub = strtolower((string)(explode('.', $hostNoWww)[0] ?? ''));
         if ($sub !== '' && $sub !== 'www') {
+            // 后台 language_code 与子域一致时优先（即使 url 配错）
+            foreach ($locales as $row) {
+                if (strtolower((string)$row->language_code) === $sub && (string)$row->language_code !== '') {
+                    return (string)$row->language_code;
+                }
+            }
             $guess = $this->normalizeLocaleCode($sub);
             if ($this->langFileExists($guess)) {
                 return $guess;
