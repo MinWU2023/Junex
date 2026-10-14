@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Http;
 
 class FreeTranslateService
 {
+    protected static int $lastCallAt = 0;
+
     public function translate(string $text, string $targetLocale, string $sourceLocale = 'en'): string
     {
         $text = trim($text);
@@ -15,6 +17,8 @@ class FreeTranslateService
         if ($targetLocale === $sourceLocale) {
             return $text;
         }
+
+        $this->throttle();
 
         try {
             $lingva = Http::timeout(20)->get(sprintf(
@@ -45,5 +49,16 @@ class FreeTranslateService
         }
 
         throw new \RuntimeException('Translation service unavailable');
+    }
+
+    protected function throttle(): void
+    {
+        $gap = 400000; // 400ms between API calls
+        $now = (int) (microtime(true) * 1000000);
+        $elapsed = $now - self::$lastCallAt;
+        if (self::$lastCallAt > 0 && $elapsed < $gap) {
+            usleep($gap - $elapsed);
+        }
+        self::$lastCallAt = (int) (microtime(true) * 1000000);
     }
 }

@@ -47,6 +47,10 @@ layui.config({
     }
 
     function selectedRecordId() {
+        var manual = $('#tw-record-manual').val();
+        if (manual) {
+            return manual;
+        }
         return $('#tw-record').val();
     }
 
@@ -141,7 +145,8 @@ layui.config({
             return apiPost('translateWorkbench/translate', {
                 text: field.value,
                 locale: target,
-                type: field.type || 'text'
+                type: field.type || 'text',
+                is_rich: field.is_rich ? 1 : 0
             }).then(function (res) {
                 if (res.code !== 0) {
                     throw new Error(res.message || '翻译失败');
@@ -151,11 +156,12 @@ layui.config({
         }
     };
 
-    function fetchSource(module, id, fields) {
+    function fetchSource(module, id, fields, locale) {
         return apiGet('translateWorkbench/source', {
             module: module,
             id: id,
-            fields: fields
+            fields: fields,
+            locale: locale || ''
         });
     }
 
@@ -168,10 +174,10 @@ layui.config({
         });
     }
 
-    function ensureSelection() {
+    function ensureSelection(overrideId) {
         var module = selectedModule();
         var locale = selectedLocale();
-        var id = selectedRecordId();
+        var id = overrideId || selectedRecordId();
         var fields = selectedFields();
         if (!module) {
             layer.msg('请选择数据表');
@@ -192,12 +198,12 @@ layui.config({
         return { module: module, locale: locale, id: id, fields: fields };
     }
 
-    function translateCurrent(autoSave) {
-        var sel = ensureSelection();
+    function translateCurrent(autoSave, overrideId) {
+        var sel = ensureSelection(overrideId);
         if (!sel) {
             return Promise.resolve();
         }
-        return fetchSource(sel.module, sel.id, sel.fields).then(function (res) {
+        return fetchSource(sel.module, sel.id, sel.fields, sel.locale).then(function (res) {
             if (res.code !== 0) {
                 log('读取原文失败：' + (res.message || ''), 'error');
                 return;
@@ -210,7 +216,14 @@ layui.config({
             });
             return jobs.reduce(function (chain, job) {
                 return chain.then(function () {
-                    log('<div><strong>字段：' + job.meta.label + ' (' + job.name + ')</strong><br>类型：' + (job.meta.is_rich ? '富文本' : '纯文本') + '</div><pre style="white-space:pre-wrap;background:#f7f8fa;padding:8px;">' + $('<div>').text(job.meta.value).html() + '</pre>');
+                    if ($('#tw-skip-existing').prop('checked') && job.meta.existing && String(job.meta.existing).trim()) {
+                        log('<div><strong>字段：' + job.meta.label + ' (' + job.name + ')</strong> — 已有翻译，已跳过</div>', 'success');
+                        return;
+                    }
+                    var existingHtml = job.meta.existing
+                        ? '<div style="margin-top:6px;color:#888;">当前目标语言已有内容：</div><pre style="white-space:pre-wrap;background:#fff7e6;padding:8px;">' + $('<div>').text(job.meta.existing).html() + '</pre>'
+                        : '<div style="margin-top:6px;color:#888;">当前目标语言暂无该字段内容</div>';
+                    log('<div><strong>字段：' + job.meta.label + ' (' + job.name + ')</strong><br>类型：' + (job.meta.is_rich ? '富文本' : '纯文本') + '</div><div>英文原文：</div><pre style="white-space:pre-wrap;background:#f7f8fa;padding:8px;">' + $('<div>').text(job.meta.value).html() + '</pre>' + existingHtml);
                     return TranslateEngine.translateField(job.meta, sel.locale).then(function (translated) {
                         state.translated[job.name] = translated;
                         log('<div>翻译结果：</div><pre style="white-space:pre-wrap;background:#eefaf7;padding:8px;">' + $('<div>').text(translated).html() + '</pre>', 'success');
@@ -223,6 +236,8 @@ layui.config({
                                 }
                             });
                         }
+                    }).catch(function (err) {
+                        log('字段 ' + job.name + ' 翻译失败：' + (err.message || err), 'error');
                     });
                 });
             }, Promise.resolve()).then(function () {
@@ -268,7 +283,7 @@ layui.config({
                     $('#tw-record').val(id);
                     form.render('select');
                     state.translated = {};
-                    return translateCurrent(true);
+                    return translateCurrent(true, id);
                 });
             });
             chain.finally(function () {
@@ -293,7 +308,10 @@ layui.config({
     $('#tw-reload-records').on('click', loadRecords);
     $('#tw-translate-one').on('click', function () {
         state.translated = {};
-        translateCurrent(false);
+        var loading = layer.load(2);
+        translateCurrent(false).finally(function () {
+            layer.close(loading);
+        });
     });
     $('#tw-save-one').on('click', function () {
         var sel = ensureSelection();
@@ -312,7 +330,12 @@ layui.config({
             }
         });
     });
-    $('#tw-batch').on('click', runBatch);
+    $('#tw-batch').on('click', function () {
+        layer.confirm('确认按当前所选数据表、语言和字段批量翻译全部记录？', function (index) {
+            layer.close(index);
+            runBatch();
+        });
+    });
     $('#tw-stop-batch').on('click', function () {
         state.batchStop = true;
     });

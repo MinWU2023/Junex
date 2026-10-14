@@ -14,11 +14,31 @@ class TranslationPersistenceService
             $english = $model->translate(config('app.locale', 'en'), false);
         }
         foreach ($fields as $field) {
-            $value = $english ? ($english->{$field} ?? '') : '';
+            $value = '';
+            if ($english && isset($english->{$field})) {
+                $value = $english->{$field};
+            } elseif (in_array($field, $model->translatedAttributes ?? [], true) === false && isset($model->{$field})) {
+                $value = $model->{$field};
+            }
+            if (($value === null || $value === '') && $english) {
+                $value = $english->{$field} ?? '';
+            }
             $source[$field] = is_scalar($value) ? (string) $value : json_encode($value, JSON_UNESCAPED_UNICODE);
         }
 
         return $source;
+    }
+
+    public function getLocaleTranslation(Model $model, string $locale, array $fields): array
+    {
+        $result = [];
+        $translation = $model->translate($locale, false);
+        foreach ($fields as $field) {
+            $value = $translation ? ($translation->{$field} ?? '') : '';
+            $result[$field] = is_scalar($value) ? (string) $value : json_encode($value, JSON_UNESCAPED_UNICODE);
+        }
+
+        return $result;
     }
 
     /**

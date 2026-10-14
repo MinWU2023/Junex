@@ -120,13 +120,18 @@ class TranslateWorkbenchController extends BaseController
             return $this->badRequest('Record not found');
         }
 
+        $targetLocale = (string) $request->get('locale', '');
         $fieldMeta = collect($this->registry->fields($module))->keyBy('name');
         $source = $this->persistence->getEnglishSource($model, $fields);
+        $existing = $targetLocale !== '' && $targetLocale !== 'en'
+            ? $this->persistence->getLocaleTranslation($model, $targetLocale, $fields)
+            : [];
         $payload = [];
         foreach ($source as $field => $value) {
             $meta = $fieldMeta->get($field, []);
             $payload[$field] = [
                 'value' => $value,
+                'existing' => $existing[$field] ?? '',
                 'type' => $meta['type'] ?? 'text',
                 'label' => $meta['label'] ?? $field,
                 'is_rich' => $this->richText->isRich($meta['type'] ?? 'text', $value),
@@ -136,6 +141,7 @@ class TranslateWorkbenchController extends BaseController
         return $this->data([
             'id' => $id,
             'label' => $this->registry->displayNameForRecord($model),
+            'locale' => $targetLocale,
             'fields' => $payload,
         ]);
     }
@@ -158,12 +164,13 @@ class TranslateWorkbenchController extends BaseController
         $text = (string) $request->get('text', '');
         $target = (string) $request->get('locale', '');
         $type = (string) $request->get('type', 'text');
+        $isRich = filter_var($request->get('is_rich', false), FILTER_VALIDATE_BOOLEAN);
         if ($target === '' || $target === 'en') {
             return $this->badRequest('Invalid locale');
         }
 
         try {
-            if ($this->richText->isRich($type, $text)) {
+            if ($isRich || $this->richText->isRich($type, $text)) {
                 $pack = $this->richText->extract($text);
                 $translated = [];
                 foreach ($pack['segments'] as $segment) {
@@ -218,7 +225,7 @@ class TranslateWorkbenchController extends BaseController
         } catch (\Throwable $e) {
             return response()->json([
                 'code' => 500,
-                'msg' => $e->getMessage(),
+                'message' => $e->getMessage(),
             ], 500);
         }
 

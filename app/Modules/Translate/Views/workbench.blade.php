@@ -4,6 +4,9 @@
         <div class="layui-card">
             <div class="layui-card-header">{{ __('翻译工作台') }}</div>
             <div class="layui-card-body">
+                <blockquote class="layui-elem-quote">
+                    {{ __('原文固定为英语(en)；目标语言来自多语言设置。纯文本直接翻译；富文本会提取 alt/title/placeholder 及标签文案后翻译并还原。同语言同记录同字段存在则更新，不存在则创建。') }}
+                </blockquote>
                 <input type="hidden" id="tw-token" value="{{ csrf_token() }}">
                 <form class="layui-form" lay-filter="translate-workbench-form">
                     <div class="layui-row layui-col-space15">
@@ -29,6 +32,7 @@
                                 <select id="tw-record" lay-search>
                                     <option value="">{{ __('请先选择数据表') }}</option>
                                 </select>
+                                <input type="number" id="tw-record-manual" class="layui-input" style="margin-top:8px;" placeholder="{{ __('或手动输入ID') }}">
                             </div>
                         </div>
                         <div class="layui-col-md3">
@@ -43,6 +47,13 @@
                     <div class="layui-form-item" style="margin-top:10px;">
                         <label class="layui-form-label">{{ __('翻译字段') }}</label>
                         <div class="layui-input-block" id="tw-fields"></div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{{ __('选项') }}</label>
+                        <div class="layui-input-block">
+                            <input type="checkbox" id="tw-skip-existing" title="{{ __('跳过目标语言已有内容的字段') }}" lay-skin="primary">
+                        </div>
                     </div>
 
                     <div class="layui-form-item">
@@ -63,7 +74,7 @@
         </div>
     </div>
     @section('scripts')
-        <script src="{{ asset('/js/admin/admin.translate.workbench.js') }}?v=2026101411"></script>
+        <script src="{{ asset('/js/admin/admin.translate.workbench.js') }}?v=2026101414"></script>
     @endsection
     </body>
 </x-layui-layout>
