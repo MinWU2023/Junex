@@ -2,12 +2,15 @@
 
 namespace App\Services\Translate;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class FreeTranslateService
 {
     protected static int $lastCallAt = 0;
+    protected static int $minGapUs = 1500000; // 1.5s between API calls
+    protected static int $cooldownUntil = 0; // unix timestamp when global cooldown ends
 
     /** @var array<string, string> */
     protected array $localeMap = [
@@ -42,23 +45,52 @@ class FreeTranslateService
             return $text;
         }
 
+        $cacheKey = 'tw_tr:' . md5($source . '|' . $target . '|' . $text);
+        $cached = Cache::get($cacheKey);
+        if (is_string($cached) && $cached !== '') {
+            return $cached;
+        }
+
         $errors = [];
-        foreach ([
-            fn () => $this->viaMyMemory($text, $source, $target),
-            fn () => $this->viaGoogle($text, $source, $target),
-            fn () => $this->viaLingva($text, $source, $target),
-        ] as $provider) {
-            try {
-                $this->throttle();
-                $translated = $provider();
-                if ($this->isValidTranslation($text, $translated, $source, $target)) {
-                    return $translated;
+        // Libre 放前：Google/MyMemory 免费通道易 429；Lingva 易 5xx/Cloudflare
+        $providers = [
+            'libre' => fn () => $this->viaLibre($text, $source, $target),
+            'mymemory' => fn () => $this->viaMyMemory($text, $source, $target),
+            'google' => fn () => $this->viaGoogle($text, $source, $target),
+            'lingva' => fn () => $this->viaLingva($text, $source, $target),
+        ];
+
+        foreach ($providers as $name => $provider) {
+            for ($attempt = 1; $attempt <= 3; $attempt++) {
+                try {
+                    $this->throttle();
+                    $translated = $provider();
+                    if ($this->isValidTranslation($text, $translated, $source, $target)) {
+                        Cache::put($cacheKey, $translated, now()->addDays(7));
+                        return $translated;
+                    }
+                    if ($translated !== '') {
+                        $errors[] = $name . ' same/invalid text';
+                    }
+                    break; // no point retrying invalid content
+                } catch (\Throwable $e) {
+                    $msg = $e->getMessage();
+                    $errors[] = $msg;
+                    $retryable = $this->isRateLimited($msg) || $this->isServerError($msg);
+                    if ($retryable && $attempt < 3) {
+                        // 429 / 5xx：指数退避后重试同一通道
+                        $wait = (int) pow(2, $attempt); // 2s, 4s
+                        self::$cooldownUntil = time() + $wait;
+                        usleep($wait * 1000000);
+                        continue;
+                    }
+                    if ($this->isRateLimited($msg)) {
+                        // 本通道放弃，冷却后再试下一通道
+                        self::$cooldownUntil = time() + 4;
+                        self::$minGapUs = min(3500000, self::$minGapUs + 500000);
+                    }
+                    break;
                 }
-                if ($translated !== '') {
-                    $errors[] = 'provider returned same/invalid text';
-                }
-            } catch (\Throwable $e) {
-                $errors[] = $e->getMessage();
             }
         }
 
@@ -69,7 +101,17 @@ class FreeTranslateService
             'sample' => mb_substr($text, 0, 80),
         ]);
 
-        throw new \RuntimeException('翻译服务不可用或结果仍为原文：' . implode(' | ', array_slice($errors, 0, 3)));
+        throw new \RuntimeException('翻译服务不可用或结果仍为原文：' . implode(' | ', array_slice($errors, 0, 4)));
+    }
+
+    protected function isRateLimited(string $message): bool
+    {
+        return (bool) preg_match('/\b(429|rate limit|too many|quota)\b/i', $message);
+    }
+
+    protected function isServerError(string $message): bool
+    {
+        return (bool) preg_match('/\b(500|502|503|504)\b/', $message);
     }
 
     protected function normalizeLocale(string $locale): string
@@ -81,7 +123,6 @@ class FreeTranslateService
         if (isset($this->localeMap[$locale])) {
             return $this->localeMap[$locale];
         }
-        // es-ES -> es
         if (str_contains($locale, '-')) {
             $locale = explode('-', $locale)[0];
         }
@@ -95,13 +136,10 @@ class FreeTranslateService
         if ($translated === '') {
             return false;
         }
-        // Cloudflare / HTML error pages
         if (preg_match('/<\s*(!doctype|html|script)/i', $translated)) {
             return false;
         }
-        // Brand-only / short identical text may stay same; for longer text same language is failure
         if (mb_strtolower($translated) === mb_strtolower(trim($source))) {
-            // Allow short proper nouns (e.g. brand names) only when very short
             return mb_strlen(trim($source)) <= 12;
         }
 
@@ -110,8 +148,8 @@ class FreeTranslateService
 
     protected function viaGoogle(string $text, string $source, string $target): string
     {
-        $response = Http::timeout(25)
-            ->withHeaders(['User-Agent' => 'Mozilla/5.0'])
+        $response = Http::timeout(30)
+            ->withHeaders(['User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'])
             ->get('https://translate.googleapis.com/translate_a/single', [
                 'client' => 'gtx',
                 'sl' => $source,
@@ -120,6 +158,9 @@ class FreeTranslateService
                 'q' => $text,
             ]);
 
+        if ($response->status() === 429) {
+            throw new \RuntimeException('Google HTTP 429');
+        }
         if (!$response->ok()) {
             throw new \RuntimeException('Google HTTP ' . $response->status());
         }
@@ -145,9 +186,8 @@ class FreeTranslateService
 
     protected function viaMyMemory(string $text, string $source, string $target): string
     {
-        // MyMemory has 500 char soft limit per request
         if (mb_strlen($text) > 450) {
-            return $this->chunkTranslate($text, $source, $target, function (string $chunk) use ($source, $target) {
+            return $this->chunkTranslate($text, function (string $chunk) use ($source, $target) {
                 return $this->viaMyMemoryChunk($chunk, $source, $target);
             });
         }
@@ -157,24 +197,76 @@ class FreeTranslateService
 
     protected function viaMyMemoryChunk(string $text, string $source, string $target): string
     {
-        $response = Http::timeout(25)->get('https://api.mymemory.translated.net/get', [
+        $params = [
             'q' => $text,
             'langpair' => $source . '|' . $target,
-        ]);
+        ];
+        // 带邮箱可大幅提高 MyMemory 日限额（无需注册）
+        $email = (string) config('services.translate.mymemory_email', env('TRANSLATE_MYMEMORY_EMAIL', ''));
+        if ($email !== '') {
+            $params['de'] = $email;
+        }
+
+        $response = Http::timeout(30)->get('https://api.mymemory.translated.net/get', $params);
+        if ($response->status() === 429) {
+            throw new \RuntimeException('MyMemory HTTP 429');
+        }
         if (!$response->ok()) {
             throw new \RuntimeException('MyMemory HTTP ' . $response->status());
         }
         $status = (int) ($response->json('responseStatus') ?? 0);
         $translated = (string) ($response->json('responseData.translatedText') ?? '');
+        if ($status === 429 || stripos((string) ($response->json('responseDetails') ?? ''), 'LIMIT') !== false) {
+            throw new \RuntimeException('MyMemory HTTP 429');
+        }
         if ($status !== 200 || $translated === '') {
             throw new \RuntimeException('MyMemory empty: ' . ($response->json('responseDetails') ?? ''));
         }
-        // MyMemory sometimes returns "MYMEMORY WARNING:..." prefix
         if (stripos($translated, 'MYMEMORY WARNING') === 0) {
             throw new \RuntimeException('MyMemory quota warning');
         }
 
         return $translated;
+    }
+
+    protected function viaLibre(string $text, string $source, string $target): string
+    {
+        $hosts = [
+            'https://libretranslate.com',
+            'https://translate.argosopentech.com',
+            'https://libretranslate.de',
+        ];
+        $last = 'LibreTranslate unavailable';
+        foreach ($hosts as $host) {
+            try {
+                $this->throttle();
+                $response = Http::timeout(30)
+                    ->asJson()
+                    ->post(rtrim($host, '/') . '/translate', [
+                        'q' => $text,
+                        'source' => $source,
+                        'target' => $target,
+                        'format' => 'text',
+                    ]);
+                if ($response->status() === 429) {
+                    $last = 'Libre HTTP 429';
+                    continue;
+                }
+                if (!$response->ok()) {
+                    $last = 'Libre HTTP ' . $response->status();
+                    continue;
+                }
+                $translated = trim((string) ($response->json('translatedText') ?? ''));
+                if ($translated !== '') {
+                    return $translated;
+                }
+                $last = 'Libre empty';
+            } catch (\Throwable $e) {
+                $last = $e->getMessage();
+            }
+        }
+
+        throw new \RuntimeException($last);
     }
 
     protected function viaLingva(string $text, string $source, string $target): string
@@ -221,7 +313,7 @@ class FreeTranslateService
     /**
      * @param callable(string):string $translator
      */
-    protected function chunkTranslate(string $text, string $source, string $target, callable $translator): string
+    protected function chunkTranslate(string $text, callable $translator): string
     {
         $chunks = preg_split('/(?<=[.!?。！？\n])\s+/u', $text) ?: [$text];
         $out = [];
@@ -257,9 +349,14 @@ class FreeTranslateService
 
     protected function throttle(): void
     {
-        $gap = 350000; // 350ms
-        $now = (int) (microtime(true) * 1000000);
-        $elapsed = $now - self::$lastCallAt;
+        $now = time();
+        if (self::$cooldownUntil > $now) {
+            usleep((self::$cooldownUntil - $now) * 1000000);
+        }
+
+        $gap = self::$minGapUs;
+        $nowUs = (int) (microtime(true) * 1000000);
+        $elapsed = $nowUs - self::$lastCallAt;
         if (self::$lastCallAt > 0 && $elapsed < $gap) {
             usleep($gap - $elapsed);
         }

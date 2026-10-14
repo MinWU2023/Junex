@@ -392,11 +392,17 @@
         translateOneField(job.meta, locale).done(function (text) {
             twBootLog('✓ ' + job.name + ' → ' + locale + ' 完成', false);
             onFieldDone(job.name, job.meta, text, false);
-            translateRecordJobs(jobs, locale, index + 1, onFieldDone, onDone);
+            // 字段间隔，避免批量连打触发 429
+            setTimeout(function () {
+                translateRecordJobs(jobs, locale, index + 1, onFieldDone, onDone);
+            }, 800);
         }).fail(function (err) {
+            var is429 = /429|限流|rate|quota/i.test(String(err || ''));
             twBootLog('✗ ' + job.name + ' 翻译失败：' + err + '（预览暂填原文）', true);
             onFieldDone(job.name, job.meta, job.meta.value || '', false);
-            translateRecordJobs(jobs, locale, index + 1, onFieldDone, onDone);
+            setTimeout(function () {
+                translateRecordJobs(jobs, locale, index + 1, onFieldDone, onDone);
+            }, is429 ? 3500 : 1000);
         });
     }
 
@@ -542,11 +548,16 @@
                     $('#tw-preview-panel').show();
                     updateSaveButtonState();
                 }
-                translateBatchRecord(ids, index + 1);
+                // 记录之间再歇一会，减轻 429
+                setTimeout(function () {
+                    translateBatchRecord(ids, index + 1);
+                }, 1500);
             });
         }).fail(function (xhr) {
             twBootLog('#' + id + ' 读取原文失败（' + xhr.status + '）', true);
-            translateBatchRecord(ids, index + 1);
+            setTimeout(function () {
+                translateBatchRecord(ids, index + 1);
+            }, 1000);
         });
     }
 

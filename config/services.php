@@ -30,4 +30,12 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    /*
+    | 免费翻译通道（工作台）
+    | TRANSLATE_MYMEMORY_EMAIL 填任意有效邮箱可提高 MyMemory 日限额（无需注册）
+    */
+    'translate' => [
+        'mymemory_email' => env('TRANSLATE_MYMEMORY_EMAIL', ''),
+    ],
+
 ];

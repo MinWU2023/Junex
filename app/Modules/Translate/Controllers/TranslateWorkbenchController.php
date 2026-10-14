@@ -223,8 +223,12 @@ class TranslateWorkbenchController extends BaseController
                     }
                 } else {
                     $translated = [];
-                    foreach ($pack['segments'] as $segment) {
+                    foreach ($pack['segments'] as $i => $segment) {
                         try {
+                            // 段与段之间稍作间隔，降低富文本多段连打导致的 429
+                            if ($i > 0) {
+                                usleep(400000);
+                            }
                             $one = $this->translator->translate($segment, $target);
                             $translated[] = $one;
                             if (mb_strtolower(trim($one)) !== mb_strtolower(trim($segment))) {
