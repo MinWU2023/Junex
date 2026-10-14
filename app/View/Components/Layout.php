@@ -313,8 +313,15 @@ class Layout extends Component
 
     private function buildSearchData($setting): array
     {
-        $placeholder = trim((string)($setting->search_placeholder ?? ''));
-        $hotKeywords = trim((string)($setting->search_hot_keywords ?? ''));
+        // 只用当前语言自己的 Setting 翻译，禁止回退到英文（否则标题会一直显示英文）
+        $locale = app()->getLocale();
+        $row = null;
+        if (is_object($setting) && method_exists($setting, 'translate')) {
+            $row = $setting->translate($locale, false);
+        }
+        $title = trim((string)($row->search_title ?? ''));
+        $placeholder = trim((string)($row->search_placeholder ?? ''));
+        $hotKeywords = trim((string)($row->search_hot_keywords ?? ''));
         $hotItems = [];
         if ($hotKeywords !== '') {
             foreach (explode(',', $hotKeywords) as $keyword) {
@@ -331,7 +338,8 @@ class Layout extends Component
         }
 
         return [
-            'placeholder' => $placeholder ?: 'Search For...',
+            'title' => $title !== '' ? $title : __('What Are You Looking For?'),
+            'placeholder' => $placeholder !== '' ? $placeholder : __('Search For...'),
             'hot' => $hotItems,
             'q' => $query,
             'action' => route('search'),

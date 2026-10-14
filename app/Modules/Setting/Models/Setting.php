@@ -67,6 +67,7 @@ class Setting extends Model implements TranslatableContract
         'seo_home_title',
         'seo_home_description',
         'seo_home_keywords',
+        'search_title',
         'search_placeholder',
         'search_hot_keywords'
     ];

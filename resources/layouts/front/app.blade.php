@@ -577,7 +577,7 @@
       <div class="relative flex min-h-full w-full flex-col">
         <div class="w-full bg-white search_main">
           <div class="mx-auto w-full max-w-[1200px] px-4 py-10 sm2:px-5 md1:px-6 md1:py-12 lg1:px-0">
-            <h2 class="text-center text-[18px] font-extrabold text-slate-900 md1:text-[22px]">What Are You Looking For?</h2>
+            <h2 class="text-center text-[18px] font-extrabold text-slate-900 md1:text-[22px]">{{ $data['search']['title'] ?? __('What Are You Looking For?') }}</h2>
 
             <form class="mx-auto mt-6 w-[1200px] max-w-[calc(100%-30px)] md1:mt-7" action="/search" method="get">
               <div class="relative w-full">

@@ -198,7 +198,7 @@
                         <i class="ico_search"></i>
                         <div class="search_input">
                             <div class="close-search"><i class="fa fa-close"></i></div>
-                            <div class="search_title">{{ __('What Are You Looking For?') }}</div>
+                            <div class="search_title">{{ $data['search']['title'] ?? __('What Are You Looking For?') }}</div>
                             <form>
                                 <div class="search_main">
                                     <input name="search_keyword" onkeydown="javascript:enterIn(event);" type="text" class="form-control" value="{{ __('Search...') }}" onfocus="if(this.value==this.defaultValue){this.value='';}" onblur="if(this.value==''){this.value=this.defaultValue;}" placeholder="{{ __('Search...') }}">

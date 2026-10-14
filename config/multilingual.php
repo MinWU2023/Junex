@@ -31,6 +31,12 @@ return [
                     'require' => true
                 ],
                 [
+                    'name' => 'search_title',
+                    'label' => '搜索框标题',
+                    'type' => 'text',
+                    'require' => false
+                ],
+                [
                     'name' => 'search_placeholder',
                     'label' => '搜索提示词',
                     'type' => 'text',

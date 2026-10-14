@@ -198,7 +198,7 @@
                         <i class="ico_search"></i>
                         <div class="search_input">
                             <div class="close-search"><i class="fa fa-close"></i></div>
-                            <div class="search_title">What Are You Looking For?</div>
+                            <div class="search_title">{{ $data['search']['title'] ?? __('What Are You Looking For?') }}</div>
                             <form>
                                 <div class="search_main">
                                     <input name="search_keyword" onkeydown="javascript:enterIn(event);" type="text" class="form-control" value="Search..." onfocus="if(this.value=='Search...'){this.value='';}" onblur="if(this.value==''){this.value='Search...';}" placeholder="Search...">

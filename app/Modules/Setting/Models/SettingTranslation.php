@@ -27,6 +27,6 @@ class SettingTranslation extends Model
         'seo_article_category_title','seo_article_category_description','seo_article_category_keywords',
         'seo_sitemap_title','seo_sitemap_description','seo_sitemap_keywords','product_alt_template',
         'seo_home_title','seo_home_description','seo_home_keywords',
-        'search_placeholder','search_hot_keywords'
+        'search_title','search_placeholder','search_hot_keywords'
     ];
 }
