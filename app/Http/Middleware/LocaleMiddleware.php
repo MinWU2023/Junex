@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\App;
 
 class LocaleMiddleware
 {
-    /** @var array<string, string> 仅当 language_code 无对应 json 时才映射（不改已有 es/de 等短码） */
+    /** @var array<string, string> 子域/后台全称 → resources/lang/{code}.json */
     protected array $localeAliases = [
         'spanish' => 'es',
         'german' => 'de',
@@ -22,11 +22,10 @@ class LocaleMiddleware
         'french' => 'fr',
         'chinese' => 'zh',
         'english' => 'en',
+        'jp' => 'ja',
     ];
 
     /**
-     * Handle an incoming request.
-     *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
      * @return mixed
@@ -36,7 +35,11 @@ class LocaleMiddleware
         $host = strtolower((string)$request->getHost());
         $localeCode = $this->normalizeLocaleCode($this->resolveLocaleCode($host));
 
+        // 同时写入 Application + Translator，避免仅改 config 时 __() 仍用旧 locale
         App::setLocale($localeCode);
+        if (app()->bound('translator')) {
+            app('translator')->setLocale($localeCode);
+        }
         config([
             'app.locale' => $localeCode,
             'translatable.locale' => $localeCode,
@@ -48,36 +51,54 @@ class LocaleMiddleware
             // ignore unsupported carbon locale
         }
 
+        $request->attributes->set('front_locale', $localeCode);
+
         return $next($request);
     }
 
     /**
-     * Match request host against locales.url (host only, ignore scheme/path/case).
+     * 按域名解析语种：精确匹配 → 去 www 匹配 → 子域启发式。
      */
     protected function resolveLocaleCode(string $host): string
     {
         if ($host === '') {
-            return (string)config('app.locale', 'en');
+            return (string)config('app.fallback_locale', 'en');
         }
 
-        $exact = Locale::query()->where('url', $host)->first();
-        if ($exact && $exact->language_code) {
-            return (string)$exact->language_code;
+        $candidates = array_values(array_unique(array_filter([
+            $host,
+            preg_replace('/^www\./', '', $host) ?: '',
+            'www.' . preg_replace('/^www\./', '', $host),
+        ])));
+
+        try {
+            $locales = Locale::query()->get(['url', 'language_code']);
+        } catch (\Throwable $e) {
+            $locales = collect();
         }
 
-        $locales = Locale::query()->get(['url', 'language_code']);
         foreach ($locales as $row) {
             $normalized = $this->normalizeHost((string)$row->url);
-            if ($normalized !== '' && $normalized === $host && $row->language_code) {
-                return (string)$row->language_code;
+            if ($normalized === '' || !(string)$row->language_code) {
+                continue;
+            }
+            $rowHosts = array_values(array_unique(array_filter([
+                $normalized,
+                preg_replace('/^www\./', '', $normalized) ?: '',
+                'www.' . preg_replace('/^www\./', '', $normalized),
+            ])));
+            foreach ($candidates as $candidate) {
+                if (in_array($candidate, $rowHosts, true)) {
+                    return (string)$row->language_code;
+                }
             }
         }
 
-        // 子域启发式：es.example.com → es（库未配 url 时仍能加载语言包）
+        // 子域启发式：es.x.com / spanish.x.com → 对应语言包
         $sub = explode('.', $host)[0] ?? '';
-        if ($sub !== '' && $sub !== 'www' && strlen($sub) <= 5) {
+        if ($sub !== '' && $sub !== 'www') {
             $guess = $this->normalizeLocaleCode($sub);
-            if (is_file(resource_path('lang/' . $guess . '.json'))) {
+            if ($this->langFileExists($guess)) {
                 return $guess;
             }
         }
@@ -86,7 +107,7 @@ class LocaleMiddleware
     }
 
     /**
-     * 保证能命中 resources/lang/{locale}.json；有短码文件则优先短码。
+     * 映射到真实存在的 json 语言包短码。
      */
     protected function normalizeLocaleCode(string $code): string
     {
@@ -95,25 +116,27 @@ class LocaleMiddleware
             return 'en';
         }
 
-        if (is_file(resource_path('lang/' . $code . '.json'))) {
-            return $code;
+        if (isset($this->localeAliases[$code])) {
+            $code = $this->localeAliases[$code];
         }
 
-        if (isset($this->localeAliases[$code])) {
-            $aliased = $this->localeAliases[$code];
-            if (is_file(resource_path('lang/' . $aliased . '.json'))) {
-                return $aliased;
-            }
+        if ($this->langFileExists($code)) {
+            return $code;
         }
 
         if (str_contains($code, '-')) {
             $short = explode('-', $code)[0];
-            if (is_file(resource_path('lang/' . $short . '.json'))) {
+            if ($this->langFileExists($short)) {
                 return $short;
             }
         }
 
         return $code;
+    }
+
+    protected function langFileExists(string $code): bool
+    {
+        return $code !== '' && is_file(resource_path('lang/' . $code . '.json'));
     }
 
     protected function normalizeHost(string $url): string
@@ -126,6 +149,7 @@ class LocaleMiddleware
         $url = preg_replace('#^https?://#i', '', $url) ?? $url;
         $url = explode('/', $url, 2)[0];
         $url = explode('?', $url, 2)[0];
+        $url = explode(':', $url, 2)[0]; // 去掉端口
         $url = rtrim($url, '.');
 
         return $url;

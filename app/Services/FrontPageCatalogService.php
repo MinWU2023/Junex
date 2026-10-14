@@ -404,6 +404,16 @@ class FrontPageCatalogService
     public function forgetPageCaches(array $paths): void
     {
         $base = rtrim((string)config('app.url'), '/');
+        $localeCodes = ['en', 'es', 'de', 'ja', 'jp', 'pt', 'ru', 'it'];
+        try {
+            $fromDb = \App\Modules\Setting\Models\Locale::query()->pluck('language_code')->filter()->all();
+            if (!empty($fromDb)) {
+                $localeCodes = array_values(array_unique(array_merge($localeCodes, $fromDb)));
+            }
+        } catch (\Throwable $e) {
+            // keep defaults
+        }
+
         foreach ($paths as $path) {
             $path = $this->normalizePath($path);
             $urls = [];
@@ -414,7 +424,11 @@ class FrontPageCatalogService
                 $urls[] = $base . '/' . $path;
             }
             foreach ($urls as $url) {
+                // 兼容旧版 cachepage（直接用 fullUrl 当 key）
                 Cache::forget($url);
+                foreach ($localeCodes as $code) {
+                    Cache::forget('page_cache:' . strtolower((string)$code) . ':' . md5($url));
+                }
             }
         }
     }
