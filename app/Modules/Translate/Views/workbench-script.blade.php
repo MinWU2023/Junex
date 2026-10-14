@@ -11,7 +11,9 @@
     var state = {
         translated: {},
         previewMeta: {},
-        logCount: 0
+        logCount: 0,
+        loadSeq: 0,
+        currentModule: ''
     };
 
     function twBootLog(msg, isError) {
@@ -103,14 +105,18 @@
         return result;
     }
 
-    function renderRecordOptions(items, total) {
+    function renderRecordOptions(items, total, moduleKey) {
+        var moduleLabel = moduleKey || state.currentModule || '';
         var html = '<option value="">请选择记录' + (total ? '（共' + total + '条）' : '') + '</option>';
         (items || []).forEach(function (row) {
             html += '<option value="' + row.id + '">#' + row.id + ' - ' + row.label + '</option>';
         });
         $('#tw-record').html(html);
-        if (!items || !items.length) twBootLog('未找到记录，可手动输入 ID', true);
-        else twBootLog('已加载 <strong>' + items.length + '</strong> 条记录', false);
+        if (!items || !items.length) {
+            twBootLog('[' + moduleLabel + '] 未找到记录，可手动输入 ID', true);
+        } else {
+            twBootLog('[' + moduleLabel + '] 已加载 <strong>' + items.length + '</strong> 条记录', false);
+        }
     }
 
     function renderFieldOptions(fields) {
@@ -126,19 +132,82 @@
         $('#tw-fields').html(html);
     }
 
+    function resetPreviewState() {
+        state.translated = {};
+        state.previewMeta = {};
+        $('#tw-preview-panel').hide();
+        $('#tw-preview-body').empty();
+        updateSaveButtonState();
+    }
+
     window.twLoadModuleData = function (module) {
+        module = module || '';
+        state.currentModule = module;
+        state.loadSeq += 1;
+        var seq = state.loadSeq;
+
+        resetPreviewState();
+        $('#tw-record-manual').val('');
+        $('#tw-keyword').val('');
+
         if (!module) {
             $('#tw-fields-toolbar').hide();
             $('#tw-fields').html('<div class="tw-empty-hint">请先选择数据表</div>');
             $('#tw-record').html('<option value="">选择数据表后自动加载</option>');
             return;
         }
-        $.getJSON(apiPrefix + 'translateWorkbench/records', { module: module, limit: 100 })
-            .done(function (res) { if (res.code === 0) renderRecordOptions(res.data && res.data.items, res.data && res.data.total); else twBootLog('加载记录失败：' + (res.message || ''), true); })
-            .fail(function (xhr) { twBootLog('加载记录失败（' + xhr.status + '）', true); });
-        $.getJSON(apiPrefix + 'translateWorkbench/fields', { module: module })
-            .done(function (res) { if (res.code === 0) renderFieldOptions(res.data || []); else twBootLog('加载字段失败：' + (res.message || ''), true); })
-            .fail(function (xhr) { twBootLog('加载字段失败（' + xhr.status + '）', true); });
+
+        $('#tw-record').html('<option value="">加载中...</option>');
+        $('#tw-fields').html('<div class="tw-empty-hint">加载字段中...</div>');
+        $('#tw-fields-toolbar').hide();
+        setStatus('加载 ' + module + '...', true);
+
+        $.ajax({
+            url: apiPrefix + 'translateWorkbench/records',
+            data: { module: module, limit: 100, _t: Date.now() },
+            dataType: 'json',
+            cache: false
+        })
+            .done(function (res) {
+                if (seq !== state.loadSeq || state.currentModule !== module) return;
+                if (res.code === 0) {
+                    renderRecordOptions(res.data && res.data.items, res.data && res.data.total, module);
+                } else {
+                    twBootLog('加载记录失败：' + (res.message || ''), true);
+                    $('#tw-record').html('<option value="">加载失败，请手动输入 ID</option>');
+                }
+            })
+            .fail(function (xhr) {
+                if (seq !== state.loadSeq || state.currentModule !== module) return;
+                twBootLog('加载记录失败（' + xhr.status + '）', true);
+                $('#tw-record').html('<option value="">加载失败，请手动输入 ID</option>');
+            });
+
+        $.ajax({
+            url: apiPrefix + 'translateWorkbench/fields',
+            data: { module: module, _t: Date.now() },
+            dataType: 'json',
+            cache: false
+        })
+            .done(function (res) {
+                if (seq !== state.loadSeq || state.currentModule !== module) return;
+                if (res.code === 0) {
+                    renderFieldOptions(res.data || []);
+                } else {
+                    twBootLog('加载字段失败：' + (res.message || ''), true);
+                    $('#tw-fields').html('<div class="tw-empty-hint">加载字段失败</div>');
+                }
+            })
+            .fail(function (xhr) {
+                if (seq !== state.loadSeq || state.currentModule !== module) return;
+                twBootLog('加载字段失败（' + xhr.status + '）', true);
+                $('#tw-fields').html('<div class="tw-empty-hint">加载字段失败</div>');
+            })
+            .always(function () {
+                if (seq === state.loadSeq && state.currentModule === module) {
+                    setStatus('就绪', false);
+                }
+            });
     };
 
     function translateOneField(field, locale) {
@@ -273,16 +342,34 @@
     };
 
     $(function () {
-        $('#tw-module').on('change', function () { window.twLoadModuleData($(this).val()); });
-        $('#tw-reload-records').on('click', function () {
+        // change 事件由 select 的 onchange 内联触发，避免重复请求
+        $('#tw-reload-records').off('click.tw').on('click.tw', function () {
             var module = selectedModule();
             if (!module) return uiMsg('请先选择数据表');
-            $.getJSON(apiPrefix + 'translateWorkbench/records', {
-                module: module,
-                keyword: $('#tw-keyword').val(),
-                limit: 100
+            var seq = ++state.loadSeq;
+            setStatus('刷新记录...', true);
+            $.ajax({
+                url: apiPrefix + 'translateWorkbench/records',
+                data: {
+                    module: module,
+                    keyword: $('#tw-keyword').val(),
+                    limit: 100,
+                    _t: Date.now()
+                },
+                dataType: 'json',
+                cache: false
             }).done(function (res) {
-                if (res.code === 0) renderRecordOptions(res.data && res.data.items, res.data && res.data.total);
+                if (seq !== state.loadSeq || state.currentModule !== module) return;
+                if (res.code === 0) {
+                    renderRecordOptions(res.data && res.data.items, res.data && res.data.total, module);
+                } else {
+                    twBootLog('刷新记录失败：' + (res.message || ''), true);
+                }
+            }).fail(function (xhr) {
+                if (seq !== state.loadSeq) return;
+                twBootLog('刷新记录失败（' + xhr.status + '）', true);
+            }).always(function () {
+                if (seq === state.loadSeq) setStatus('就绪', false);
             });
         });
         $('#tw-translate-one').on('click', function () { window.twPreviewTranslate(); });

@@ -211,7 +211,7 @@
                             <div class="tw-form-grid">
                                 <div class="tw-form-group">
                                     <label for="tw-module"><span class="tw-required">*</span>{{ __('数据表') }}</label>
-                                    <select id="tw-module" class="tw-select" style="display:block!important;width:100%;height:38px;">
+                                    <select id="tw-module" class="tw-select" style="display:block!important;width:100%;height:38px;" onchange="window.twLoadModuleData&&window.twLoadModuleData(this.value);">
                                         <option value="">{{ __('请选择数据表') }}</option>
                                         @foreach($modules ?? [] as $module)
                                             <option value="{{ $module['key'] }}" @selected(($selectedModule ?? '') === $module['key'])>{{ $module['label'] }} ({{ $module['main_table'] }})</option>
