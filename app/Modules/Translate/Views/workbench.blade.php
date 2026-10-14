@@ -164,11 +164,11 @@
                                     </select>
                                 </div>
                                 <div class="tw-form-group">
-                                    <label for="tw-record"><span class="tw-required">*</span>{{ __('记录') }}</label>
+                                    <label for="tw-record">{{ __('记录') }} <span style="color:#999;font-weight:normal;">({{ __('下拉或手动输入ID，二选一') }})</span></label>
                                     <select id="tw-record" class="tw-select" style="display:block!important;width:100%;height:38px;">
-                                        <option value="">{{ __('请先选择数据表') }}</option>
+                                        <option value="">{{ __('选择数据表后自动加载，或下方手动输入ID') }}</option>
                                     </select>
-                                    <input type="number" id="tw-record-manual" class="layui-input" style="margin-top:8px;" placeholder="{{ __('或手动输入 ID') }}">
+                                    <input type="number" id="tw-record-manual" class="layui-input" style="margin-top:8px;" placeholder="{{ __('手动输入记录 ID（知道ID时可直接填）') }}">
                                 </div>
                                 <div class="tw-form-group">
                                     <label for="tw-keyword">{{ __('搜索记录') }}</label>
@@ -242,7 +242,78 @@
         </div>
     </div>
     @section('scripts')
-        <script src="{{ asset('/js/admin/admin.translate.workbench.js') }}?v=2026101418"></script>
+        <script>
+        (function ($) {
+            if (!$) return;
+            var apiPrefix = '/' + (window.admin_prefix || '{{ config('app.admin_prefix') }}') + '/';
+
+            function renderRecordOptions(items, total) {
+                var html = '<option value="">请选择记录' + (total ? '（共' + total + '条）' : '') + '</option>';
+                (items || []).forEach(function (row) {
+                    html += '<option value="' + row.id + '">#' + row.id + ' - ' + row.label + '</option>';
+                });
+                $('#tw-record').html(html);
+            }
+
+            function renderFieldOptions(fields) {
+                if (!fields || !fields.length) {
+                    $('#tw-fields-toolbar').hide();
+                    $('#tw-fields').html('<div class="tw-empty-hint">该数据表暂无可翻译字段</div>');
+                    return;
+                }
+                $('#tw-fields-toolbar').show();
+                var html = fields.map(function (field) {
+                    return '<label class="tw-field-check"><input type="checkbox" name="tw-field" value="' + field.name + '" checked> ' +
+                        field.label + ' (' + field.name + ')</label>';
+                }).join('');
+                $('#tw-fields').html(html);
+            }
+
+            window.twLoadModuleData = function (module) {
+                if (!module) {
+                    $('#tw-fields-toolbar').hide();
+                    $('#tw-fields').html('<div class="tw-empty-hint">请先选择数据表，系统将自动加载可翻译字段</div>');
+                    $('#tw-record').html('<option value="">选择数据表后自动加载，或下方手动输入ID</option>');
+                    return;
+                }
+                $.getJSON(apiPrefix + 'translateWorkbench/records', { module: module, limit: 100 }, function (res) {
+                    if (res.code === 0) {
+                        renderRecordOptions(res.data && res.data.items, res.data && res.data.total);
+                    }
+                });
+                $.getJSON(apiPrefix + 'translateWorkbench/fields', { module: module }, function (res) {
+                    if (res.code === 0) {
+                        renderFieldOptions(res.data || []);
+                    }
+                });
+            };
+
+            $(function () {
+                $('#tw-module').on('change', function () {
+                    window.twLoadModuleData($(this).val());
+                });
+                $('#tw-reload-records').on('click', function () {
+                    var module = $('#tw-module').val();
+                    if (!module) return;
+                    var keyword = $('#tw-keyword').val();
+                    $.getJSON(apiPrefix + 'translateWorkbench/records', {
+                        module: module,
+                        keyword: keyword,
+                        limit: 100
+                    }, function (res) {
+                        if (res.code === 0) {
+                            renderRecordOptions(res.data && res.data.items, res.data && res.data.total);
+                        }
+                    });
+                });
+                var initialModule = $('#tw-module').val();
+                if (initialModule) {
+                    window.twLoadModuleData(initialModule);
+                }
+            });
+        })(window.jQuery);
+        </script>
+        <script src="{{ asset('/js/admin/admin.translate.workbench.js') }}?v=2026101419"></script>
     @endsection
     </body>
 </x-layui-layout>

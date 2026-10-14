@@ -94,18 +94,29 @@ class TranslateWorkbenchController extends BaseController
 
         $limit = min(max((int) $request->get('limit', 50), 1), 200);
         $keyword = trim((string) $request->get('keyword', ''));
+        $table = $modelClass::make()->getTable();
         $query = $modelClass::query()->with('translations');
         if ($keyword !== '') {
             if (is_numeric($keyword)) {
-                $query->where('id', (int) $keyword);
+                $query->where($table . '.id', (int) $keyword);
             } else {
-                try {
-                    $query->whereTranslationLike('name', '%' . $keyword . '%');
-                } catch (\Throwable $e) {
-                    if (\Illuminate\Support\Facades\Schema::hasColumn($modelClass::make()->getTable(), 'name')) {
-                        $query->where('name', 'like', '%' . $keyword . '%');
+                $query->where(function ($builder) use ($keyword, $table, $modelClass) {
+                    foreach (['sign', 'name'] as $column) {
+                        if (\Illuminate\Support\Facades\Schema::hasColumn($table, $column)) {
+                            $builder->orWhere($table . '.' . $column, 'like', '%' . $keyword . '%');
+                        }
                     }
-                }
+                    try {
+                        $builder->orWhereTranslationLike('name', '%' . $keyword . '%');
+                    } catch (\Throwable $e) {
+                        // ignore
+                    }
+                    try {
+                        $builder->orWhereTranslationLike('title', '%' . $keyword . '%');
+                    } catch (\Throwable $e) {
+                        // ignore
+                    }
+                });
             }
         }
         $paginator = $query->orderByDesc('id')->paginate($limit);

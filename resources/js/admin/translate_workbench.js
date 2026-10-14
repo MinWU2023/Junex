@@ -342,10 +342,14 @@ layui.config({
 
     $('#tw-module').on('change', function () {
         var val = $(this).val();
+        if (typeof window.twLoadModuleData === 'function') {
+            window.twLoadModuleData(val);
+            return;
+        }
         if (!val) {
             $('#tw-fields-toolbar').hide();
             $('#tw-fields').html('<div class="tw-empty-hint">请先选择数据表，系统将自动加载可翻译字段</div>');
-            $('#tw-record').html('<option value="">请先选择数据表</option>');
+            $('#tw-record').html('<option value="">选择数据表后自动加载，或下方手动输入ID</option>');
             return;
         }
         loadFields(val);
@@ -420,5 +424,11 @@ layui.config({
     }
     if (!$('#tw-locale option').length || $('#tw-locale option').length <= 1) {
         loadLocales();
+    }
+
+    var initialModule = $('#tw-module').val();
+    if (initialModule && typeof window.twLoadModuleData !== 'function') {
+        loadFields(initialModule);
+        loadRecords();
     }
 });

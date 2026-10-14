@@ -93,15 +93,21 @@ class TranslateRegistryService
     {
         if (method_exists($model, 'translate')) {
             $en = $model->translate('en', false);
+            if ($en && !empty($en->title)) {
+                return (string) $en->title;
+            }
             if ($en && !empty($en->name)) {
                 return (string) $en->name;
             }
             $default = $model->translate(config('app.locale', 'en'), false);
+            if ($default && !empty($default->title)) {
+                return (string) $default->title;
+            }
             if ($default && !empty($default->name)) {
                 return (string) $default->name;
             }
         }
-        foreach (['name', 'title', 'sign'] as $column) {
+        foreach (['sign', 'name', 'title'] as $column) {
             if (!empty($model->{$column})) {
                 return (string) $model->{$column};
             }
