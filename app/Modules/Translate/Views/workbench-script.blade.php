@@ -324,6 +324,17 @@
                 return;
             }
             var text = (res.data && res.data.text) || '';
+            var seg = (res.data && res.data.segment_count) || 0;
+            var done = (res.data && res.data.translated_count) || 0;
+            if (res.data && res.data.is_rich) {
+                // 富文本：只要有段落翻成功就接受；全失败才报错
+                if (res.data.same_as_source && done === 0) {
+                    d.reject('富文本未提取到可译文案或全部翻译失败（segments=' + seg + '）');
+                    return;
+                }
+                d.resolve(text);
+                return;
+            }
             if (res.data && res.data.same_as_source) {
                 d.reject('翻译结果仍为原文，目标语言：' + ((res.data && res.data.target) || locale));
                 return;

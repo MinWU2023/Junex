@@ -202,16 +202,29 @@ class TranslateWorkbenchController extends BaseController
             return $this->badRequest('Invalid locale');
         }
 
+        $segmentCount = 0;
+        $translatedCount = 0;
+        $isRichContent = $isRich || $this->richText->isRich($type, $text);
+
         try {
-            if ($isRich || $this->richText->isRich($type, $text)) {
+            if ($isRichContent) {
                 $pack = $this->richText->extract($text);
+                $segmentCount = (int) ($pack['count'] ?? count($pack['segments']));
                 $translated = [];
                 foreach ($pack['segments'] as $segment) {
-                    $translated[] = $this->translator->translate($segment, $target);
+                    try {
+                        $translated[] = $this->translator->translate($segment, $target);
+                        $translatedCount++;
+                    } catch (\Throwable $e) {
+                        // Keep original segment so HTML structure still restores correctly
+                        $translated[] = $segment;
+                    }
                 }
                 $result = $this->richText->restore($pack['template'], $translated);
             } else {
                 $result = $this->translator->translate($text, $target);
+                $segmentCount = 1;
+                $translatedCount = 1;
             }
         } catch (\Throwable $e) {
             return response()->json([
@@ -221,12 +234,17 @@ class TranslateWorkbenchController extends BaseController
         }
 
         $sameAsSource = trim($result) !== '' && mb_strtolower(trim($result)) === mb_strtolower(trim($text));
+        if ($isRichContent && $segmentCount > 0 && $translatedCount === 0) {
+            $sameAsSource = true;
+        }
 
         return $this->data([
             'text' => $result,
-            'is_rich' => $this->richText->isRich($type, $text),
+            'is_rich' => $isRichContent,
             'target' => $target,
             'same_as_source' => $sameAsSource,
+            'segment_count' => $segmentCount,
+            'translated_count' => $translatedCount,
         ]);
     }
 
