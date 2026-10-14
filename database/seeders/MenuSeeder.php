@@ -505,6 +505,16 @@ class MenuSeeder extends Seeder
             [
                 'parent_id' => $system_success->id,
                 'sort' => 0,
+                'name' => '翻译工作台',
+                'route' => 'admin.translateWorkbench.index',
+                'icon' => '',
+                'created_at' => $created_at,
+                'updated_at' => $updated_at
+            ],
+
+            [
+                'parent_id' => $system_success->id,
+                'sort' => 0,
                 'name' => 'url管理',
                 'route' => 'admin.url.index',
                 'icon' => '',

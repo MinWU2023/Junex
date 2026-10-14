@@ -30,7 +30,10 @@ $sources = [
     [
         'file' => $root . '/public/images/moban.css',
         'label' => 'TinyMCE template styles (moban.css)',
-        'before' => null,
+        'before' => function (string $css): string {
+            // Strip legacy commented resets that break when scoped (e.g. ul,li { list-style:none })
+            return preg_replace('/\/\*[^*]*list-style\s*:\s*none[^*]*\*\//s', '', $css) ?? $css;
+        },
         'after' => null,
     ],
 ];
@@ -310,19 +313,19 @@ function isolationHelpers(array $prefixes): string
 {$prefix} ul,
 {$prefix} ol {
   margin: 0 0 0.65rem;
-  padding-left: 1.5em;
-  list-style-position: outside;
+  padding-left: 1.5em !important;
+  list-style-position: outside !important;
 }
 {$prefix} ul:not([style*="list-style-type"]) {
-  list-style-type: disc;
+  list-style: disc outside !important;
 }
 {$prefix} ol:not([style*="list-style-type"]) {
-  list-style-type: decimal;
+  list-style: decimal outside !important;
 }
 {$prefix} ul > li,
 {$prefix} ol > li {
-  list-style-type: inherit !important;
-  list-style-position: outside;
+  display: list-item !important;
+  list-style: inherit !important;
 }
 {$prefix} p {
   margin: 0;

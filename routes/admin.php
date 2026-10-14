@@ -50,6 +50,7 @@ use App\Modules\Download\Controllers\DownloadController;
 use App\Modules\Download\Controllers\DownloadCategoryController;
 use App\Modules\Inquiry\Controllers\NewsLetterController;
 use App\Modules\Translate\Controllers\TranslateJobController;
+use App\Modules\Translate\Controllers\TranslateWorkbenchController;
 use App\Modules\Report\Controllers\DataManagerController;
 use App\Modules\Admin\Controllers\ManagerController;
 use App\Modules\Url\Controllers\UrlController;
@@ -234,6 +235,25 @@ Route::group(['middleware' => ['auth', 'admin.permission']], function () {
 
     Route::get('/translateJob', [TranslateJobController::class, 'index'])
         ->name('admin.translateJob.index');
+
+    Route::get('/translateWorkbench', [TranslateWorkbenchController::class, 'index'])
+        ->name('admin.translateWorkbench.index');
+    Route::get('/translateWorkbench/modules', [TranslateWorkbenchController::class, 'modules'])
+        ->name('admin.translateWorkbench.modules');
+    Route::get('/translateWorkbench/fields', [TranslateWorkbenchController::class, 'fields'])
+        ->name('admin.translateWorkbench.fields');
+    Route::get('/translateWorkbench/locales', [TranslateWorkbenchController::class, 'locales'])
+        ->name('admin.translateWorkbench.locales');
+    Route::get('/translateWorkbench/records', [TranslateWorkbenchController::class, 'records'])
+        ->name('admin.translateWorkbench.records');
+    Route::get('/translateWorkbench/source', [TranslateWorkbenchController::class, 'source'])
+        ->name('admin.translateWorkbench.source');
+    Route::get('/translateWorkbench/all-ids', [TranslateWorkbenchController::class, 'allIds'])
+        ->name('admin.translateWorkbench.allIds');
+    Route::post('/translateWorkbench/translate', [TranslateWorkbenchController::class, 'translateText'])
+        ->name('admin.translateWorkbench.translate');
+    Route::post('/translateWorkbench/save', [TranslateWorkbenchController::class, 'save'])
+        ->name('admin.translateWorkbench.save');
 
     //    Route::get('/product/attribute/category/getAllCategories/{id}',[\App\Modules\Product\Controllers\ProductAttributeCategoryController::class,'getAllCategories'])
     //        ->name('admin.product.attributeCategory.getAllCategories');

@@ -5869,13 +5869,9 @@
 }
 .product-highlights-content :focus, .product-details-content :focus {outline:0;}
 .product-highlights-content h1, .product-details-content h1, .product-highlights-content h2, .product-details-content h2, .product-highlights-content h3, .product-details-content h3, .product-highlights-content h4, .product-details-content h4, .product-highlights-content h5, .product-details-content h5, .product-highlights-content h6, .product-details-content h6 { margin:0px; padding:0; line-height:normal}
-/* 不含 ul/ol：富文本列表需要 padding-left 显示符号 */
 .product-highlights-content, .product-details-content, .product-highlights-content img, .product-details-content img, .product-highlights-content p, .product-details-content p, .product-highlights-content input, .product-details-content input, .product-highlights-content dl, .product-details-content dl, .product-highlights-content dd, .product-details-content dd, .product-highlights-content tr, .product-details-content tr, .product-highlights-content th, .product-details-content th, .product-highlights-content td, .product-details-content td {margin:0;padding:0;}
 .product-highlights-content img, .product-details-content img {border:none; max-width:100%}
-.product-highlights-content /*li, .product-details-content /*li, .product-highlights-content ul, .product-details-content ul, .product-highlights-content ol, .product-details-content ol {list-style:none;}
-.product-highlights-content */
-a, .product-details-content */
-a {text-decoration:none;color:#231815;}
+.product-highlights-content a, .product-details-content a {text-decoration:none;color:#231815;}
 .product-highlights-content input, .product-details-content input {padding:0px;vertical-align: middle;line-height: normal;border:none;}
 .product-highlights-content, .product-details-content {overflow-x:hidden;}
 .product-highlights-content button::-moz-focus-inner, .product-details-content button::-moz-focus-inner, .product-highlights-content input[type="reset"]::-moz-focus-inner, .product-details-content input[type="reset"]::-moz-focus-inner, .product-highlights-content input[type="button"]::-moz-focus-inner, .product-details-content input[type="button"]::-moz-focus-inner, .product-highlights-content input[type="submit"]::-moz-focus-inner, .product-details-content input[type="submit"]::-moz-focus-inner, .product-highlights-content input[type="file"]>input[type="button"]::-moz-focus-inner, .product-details-content input[type="file"]>input[type="button"]::-moz-focus-inner {border:none;padding:0;}
@@ -5894,18 +5890,22 @@ a {text-decoration:none;color:#231815;}
 .product-highlights-content .fontRed, .product-details-content .fontRed {color:red;}
 .product-highlights-content .clearfix:before, .product-details-content .clearfix:before, .product-highlights-content .clearfix:after, .product-details-content .clearfix:after {content:" ";display:table;}
 .product-highlights-content .clearfix:after, .product-details-content .clearfix:after {clear:both;}
-.product-highlights-content /*ul, .product-details-content /*ul, .product-highlights-content li, .product-details-content li { list-style:none}
-.product-highlights-content */
-
-
-
-
-a:hover, .product-details-content */
-
-
-
-
-a:hover, .product-highlights-content img:hover, .product-details-content img:hover {transition: 0.5s all;-webkit-transition: 0.5s all;-o-transition: 0.5s all; -moz-transition: 0.5s all;-ms-transition: 0.5s all;}
+.product-highlights-content ul, .product-details-content ul, .product-highlights-content ol, .product-details-content ol {
+  margin-bottom: 10px;
+  padding-left: 1.5em !important;
+  list-style-position: outside !important;
+}
+.product-highlights-content ul, .product-details-content ul {
+  list-style: disc outside !important;
+}
+.product-highlights-content ol, .product-details-content ol {
+  list-style: decimal outside !important;
+}
+.product-highlights-content ul > li, .product-details-content ul > li, .product-highlights-content ol > li, .product-details-content ol > li {
+  display: list-item !important;
+  list-style: inherit !important;
+}
+.product-highlights-content a:hover, .product-details-content a:hover, .product-highlights-content img:hover, .product-details-content img:hover {transition: 0.5s all;-webkit-transition: 0.5s all;-o-transition: 0.5s all; -moz-transition: 0.5s all;-ms-transition: 0.5s all;}
 .product-highlights-content a, .product-details-content a, .product-highlights-content img, .product-details-content img {transition: 0.5s all;-webkit-transition: 0.5s all;-o-transition: 0.5s all; -moz-transition: 0.5s all;-ms-transition: 0.5s all;}
 .product-highlights-content .det_content, .product-details-content .det_content { padding:2% 0px;}
 .product-highlights-content .det_content .adv_title, .product-details-content .det_content .adv_title { text-align:center; font-size:32px; font-weight:500; color:#222; line-height:40px; }
@@ -6163,8 +6163,20 @@ a:hover, .product-highlights-content img:hover, .product-details-content img:hov
 /* Undo common Tailwind preflight conflicts inside editor HTML */
 .product-highlights-content ul,
 .product-highlights-content ol {
-  margin: 0;
-  padding: 0;
+  margin: 0 0 0.65rem;
+  padding-left: 1.5em !important;
+  list-style-position: outside !important;
+}
+.product-highlights-content ul:not([style*="list-style-type"]) {
+  list-style: disc outside !important;
+}
+.product-highlights-content ol:not([style*="list-style-type"]) {
+  list-style: decimal outside !important;
+}
+.product-highlights-content ul > li,
+.product-highlights-content ol > li {
+  display: list-item !important;
+  list-style: inherit !important;
 }
 .product-highlights-content p {
   margin: 0;
@@ -6269,19 +6281,19 @@ a:hover, .product-highlights-content img:hover, .product-details-content img:hov
 .product-details-content ul,
 .product-details-content ol {
   margin: 0 0 0.65rem;
-  padding-left: 1.5em;
-  list-style-position: outside;
+  padding-left: 1.5em !important;
+  list-style-position: outside !important;
 }
 .product-details-content ul:not([style*="list-style-type"]) {
-  list-style-type: disc;
+  list-style: disc outside !important;
 }
 .product-details-content ol:not([style*="list-style-type"]) {
-  list-style-type: decimal;
+  list-style: decimal outside !important;
 }
 .product-details-content ul > li,
 .product-details-content ol > li {
-  list-style-type: inherit !important;
-  list-style-position: outside;
+  display: list-item !important;
+  list-style: inherit !important;
 }
 .product-details-content p {
   margin: 0;

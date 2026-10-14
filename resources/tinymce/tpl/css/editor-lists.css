@@ -1,4 +1,4 @@
-/* TinyMCE 编辑器列表符号：覆盖 li 上的 list-style-type:none 与 padding 重置 */
+/* TinyMCE 编辑器列表符号（最后加载，覆盖 det_style / moban 中的 reset） */
 .mce-content-body ul,
 .mce-content-body ol {
   margin-top: 0;
@@ -7,14 +7,13 @@
   list-style-position: outside !important;
 }
 .mce-content-body ul {
-  list-style-type: disc;
+  list-style: disc outside !important;
 }
 .mce-content-body ol {
-  list-style-type: decimal;
+  list-style: decimal outside !important;
 }
 .mce-content-body ul > li,
 .mce-content-body ol > li {
   display: list-item !important;
-  list-style-type: inherit !important;
-  list-style-position: outside !important;
+  list-style: inherit !important;
 }

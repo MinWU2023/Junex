@@ -1459,6 +1459,15 @@ class PermissionSeeder extends Seeder
 
             [
                 'pg_id' => 16,
+                'name' => 'admin.translateWorkbench.index',
+                'display_name' => '翻译工作台',
+                'guard_name' => 'web',
+                'created_at' => $created_at,
+                'updated_at' => $updated_at
+            ],
+
+            [
+                'pg_id' => 16,
                 'name' => 'admin.setting.banner.index',
                 'display_name' => 'banner列表',
                 'guard_name' => 'web',
@@ -2703,6 +2712,7 @@ class PermissionSeeder extends Seeder
             2, 3, 4, 5, 6,29,33
         ])->whereNotIn('name', [
             'admin.translateJob.index',
+            'admin.translateWorkbench.index',
             'admin.menu.manager.visibility',
             'admin.setting.clearCache'
         ])->pluck('id')->toArray();
@@ -2835,6 +2845,7 @@ class PermissionSeeder extends Seeder
                 2, 3, 4, 5, 6,29,33
             ])->whereNotIn('name', [
                 'admin.translateJob.index',
+                'admin.translateWorkbench.index',
                 'admin.menu.manager.visibility',
                 'admin.setting.clearCache'
             ])->pluck('id')->toArray();
@@ -2865,6 +2876,7 @@ class PermissionSeeder extends Seeder
         //去掉系统设置里面的指定权限
         $permission_ids = Permission::query()->whereIn('id',$permission_ids)->whereNotIn('name',[
             'admin.translateJob.index',
+            'admin.translateWorkbench.index',
             'admin.setting.clearCache'
         ])->pluck('id')->toArray();
         return $permission_ids;

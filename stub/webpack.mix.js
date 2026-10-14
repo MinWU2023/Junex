@@ -260,6 +260,11 @@ mix.combine([
     'resources/js/admin/blog_tag.js',
 ], 'public/js/admin/admin.blog.tag.js');
 
+// 翻译工作台
+mix.combine([
+    'resources/js/admin/translate_workbench.js',
+], 'public/js/admin/admin.translate.workbench.js');
+
 
 // 文章分类
 mix.combine([
