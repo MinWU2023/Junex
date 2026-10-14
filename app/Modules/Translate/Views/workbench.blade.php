@@ -274,10 +274,10 @@
                     <div class="layui-card-header">{{ __('④ 执行操作') }}</div>
                     <div class="layui-card-body">
                         <div class="tw-actions">
-                            <button type="button" class="layui-btn" id="tw-translate-one">
+                            <button type="button" class="layui-btn" id="tw-translate-one" onclick="window.twPreviewTranslate&&window.twPreviewTranslate();return false;">
                                 <i class="layui-icon layui-icon-fonts-i"></i> {{ __('预览翻译') }}
                             </button>
-                            <button type="button" class="layui-btn layui-btn-normal layui-btn-disabled" id="tw-save-one" disabled>
+                            <button type="button" class="layui-btn layui-btn-normal layui-btn-disabled" id="tw-save-one" disabled onclick="window.twConfirmSave&&window.twConfirmSave();return false;">
                                 <i class="layui-icon layui-icon-ok"></i> {{ __('确认写入数据库') }}
                             </button>
                             <button type="button" class="layui-btn layui-btn-warm" id="tw-batch">
@@ -311,103 +311,7 @@
         </div>
     </div>
     @section('scripts')
-        <script>
-        (function ($) {
-            if (!$) return;
-            var apiPrefix = '/' + (window.admin_prefix || '{{ config('app.admin_prefix') }}') + '/';
-
-            function twBootLog(msg, isError) {
-                var $log = $('#tw-log');
-                if (!$log.length) return;
-                $log.find('.tw-log-empty').remove();
-                var color = isError ? '#ff6b6b' : '#6ee7b7';
-                $log.prepend('<div class="tw-log-item" style="color:' + color + '"><div class="tw-log-time">' + new Date().toLocaleTimeString() + '</div>' + msg + '</div>');
-            }
-
-            function renderRecordOptions(items, total) {
-                var html = '<option value="">请选择记录' + (total ? '（共' + total + '条）' : '') + '</option>';
-                (items || []).forEach(function (row) {
-                    html += '<option value="' + row.id + '">#' + row.id + ' - ' + row.label + '</option>';
-                });
-                $('#tw-record').html(html);
-                if (!items || !items.length) {
-                    twBootLog('未找到记录，可直接在下方手动输入 ID', true);
-                } else {
-                    twBootLog('已加载 <strong>' + items.length + '</strong> 条记录');
-                }
-            }
-
-            function renderFieldOptions(fields) {
-                if (!fields || !fields.length) {
-                    $('#tw-fields-toolbar').hide();
-                    $('#tw-fields').html('<div class="tw-empty-hint">该数据表暂无可翻译字段</div>');
-                    return;
-                }
-                $('#tw-fields-toolbar').show();
-                var html = fields.map(function (field) {
-                    return '<label class="tw-field-check"><input type="checkbox" name="tw-field" value="' + field.name + '" checked> ' +
-                        field.label + ' (' + field.name + ')</label>';
-                }).join('');
-                $('#tw-fields').html(html);
-            }
-
-            window.twLoadModuleData = function (module) {
-                if (!module) {
-                    $('#tw-fields-toolbar').hide();
-                    $('#tw-fields').html('<div class="tw-empty-hint">请先选择数据表，系统将自动加载可翻译字段</div>');
-                    $('#tw-record').html('<option value="">选择数据表后自动加载，或下方手动输入ID</option>');
-                    return;
-                }
-                $.getJSON(apiPrefix + 'translateWorkbench/records', { module: module, limit: 100 })
-                    .done(function (res) {
-                        if (res.code === 0) {
-                            renderRecordOptions(res.data && res.data.items, res.data && res.data.total);
-                        } else {
-                            twBootLog('加载记录失败：' + (res.message || '未知错误'), true);
-                        }
-                    })
-                    .fail(function (xhr) {
-                        twBootLog('加载记录接口失败（' + xhr.status + '），可手动输入 ID', true);
-                    });
-                $.getJSON(apiPrefix + 'translateWorkbench/fields', { module: module })
-                    .done(function (res) {
-                        if (res.code === 0) {
-                            renderFieldOptions(res.data || []);
-                        } else {
-                            twBootLog('加载字段失败：' + (res.message || '未知错误'), true);
-                        }
-                    })
-                    .fail(function (xhr) {
-                        twBootLog('加载字段接口失败（' + xhr.status + '）', true);
-                    });
-            };
-
-            $(function () {
-                $('#tw-module').on('change', function () {
-                    window.twLoadModuleData($(this).val());
-                });
-                $('#tw-reload-records').on('click', function () {
-                    var module = $('#tw-module').val();
-                    if (!module) return;
-                    var keyword = $('#tw-keyword').val();
-                    $.getJSON(apiPrefix + 'translateWorkbench/records', {
-                        module: module,
-                        keyword: keyword,
-                        limit: 100
-                    }, function (res) {
-                        if (res.code === 0) {
-                            renderRecordOptions(res.data && res.data.items, res.data && res.data.total);
-                        }
-                    });
-                });
-                var initialModule = $('#tw-module').val();
-                if (initialModule) {
-                    window.twLoadModuleData(initialModule);
-                }
-            });
-        })(window.jQuery);
-        </script>
-        <script src="{{ asset('/js/admin/admin.translate.workbench.js') }}?v=2026101421"></script>
+        @include('Translate.Views.workbench-script')
     @endsection
     </body>
 </x-layui-layout>
