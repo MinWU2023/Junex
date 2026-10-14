@@ -228,10 +228,24 @@
                 is_rich: field.is_rich ? 1 : 0
             }
         }).done(function (res) {
-            if (res.code === 0) d.resolve(res.data.text || '');
-            else d.reject(res.message || '翻译失败');
+            if (res.code !== 0) {
+                d.reject(res.message || '翻译失败');
+                return;
+            }
+            var text = (res.data && res.data.text) || '';
+            if (res.data && res.data.same_as_source) {
+                d.reject('翻译结果仍为原文，目标语言：' + ((res.data && res.data.target) || locale));
+                return;
+            }
+            d.resolve(text);
         }).fail(function (xhr) {
-            d.reject('翻译接口失败(' + xhr.status + ')');
+            var msg = '翻译接口失败(' + xhr.status + ')';
+            try {
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    msg = xhr.responseJSON.message;
+                }
+            } catch (e) {}
+            d.reject(msg);
         });
         return d.promise();
     }
@@ -253,10 +267,12 @@
         twBootLog('正在翻译：<strong>' + job.meta.label + '</strong> (' + job.name + ')');
         translateOneField(job.meta, locale).done(function (text) {
             state.translated[job.name] = text;
-            twBootLog('✓ ' + job.name + ' 翻译完成', false);
+            twBootLog('✓ ' + job.name + ' → ' + locale + ' 完成', false);
             runJobsSequentially(jobs, locale, index + 1);
         }).fail(function (err) {
-            twBootLog('✗ ' + job.name + ' 失败：' + err, true);
+            // 失败时预览区仍填入原文，方便人工修改，但日志明确报错
+            state.translated[job.name] = job.meta.value || '';
+            twBootLog('✗ ' + job.name + ' 翻译失败：' + err + '（预览暂填原文，请人工修改）', true);
             runJobsSequentially(jobs, locale, index + 1);
         });
     }

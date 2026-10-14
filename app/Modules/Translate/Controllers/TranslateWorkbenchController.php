@@ -220,9 +220,13 @@ class TranslateWorkbenchController extends BaseController
             ], 500);
         }
 
+        $sameAsSource = trim($result) !== '' && mb_strtolower(trim($result)) === mb_strtolower(trim($text));
+
         return $this->data([
             'text' => $result,
             'is_rich' => $this->richText->isRich($type, $text),
+            'target' => $target,
+            'same_as_source' => $sameAsSource,
         ]);
     }
 
