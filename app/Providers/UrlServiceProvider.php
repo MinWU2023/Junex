@@ -54,8 +54,9 @@ class UrlServiceProvider extends ServiceProvider
     {
         Route::macro('customUrl', function () {
             // locale 已挂在 web 中间件组，此处无需重复
+            // 已去掉 cachepage：整页缓存会导致切换语言后仍吐旧英文 HTML
             if (app()->environment() === 'production') {
-                $middleware = ['web', 'optimize', 'cachepage', 'homeLock'];
+                $middleware = ['web', 'optimize', 'homeLock'];
             } else {
                 $middleware = ['web', 'homeLock'];
             }

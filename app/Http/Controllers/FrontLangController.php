@@ -95,6 +95,7 @@ class FrontLangController extends Controller
         return response()->json([
             'request_host' => $request->getHost(),
             'app_locale' => app()->getLocale(),
+            'translator_class' => app()->bound('translator') ? get_class(app('translator')) : null,
             'translator_locale' => app()->bound('translator') ? app('translator')->getLocale() : null,
             'lang_path' => method_exists(app(), 'langPath') ? app()->langPath() : resource_path('lang'),
             'loader_path' => $loaderPath,

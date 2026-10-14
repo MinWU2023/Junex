@@ -10,11 +10,10 @@ use App\Modules\Inquiry\Models\Newsletter;
 use App\Modules\Setting\Models\Locale;
 use App\Observers\InquiryObserver;
 use App\Services\SettingService;
+use App\Translation\ForcedJsonTranslator;
 use App\Utils\AcademyPaginator;
 use Illuminate\Contracts\Config\Repository as ConfigContract;
 use Illuminate\Contracts\Translation\Translator as TranslatorContract;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
@@ -65,9 +64,12 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot(ConfigContract $config, TranslatorContract $translator)
+    public function boot(ConfigContract $config)
     {
         Schema::defaultStringLength(191);
+
+        // 用 ForcedJsonTranslator 替换默认 Translator（解决线上 JSON 有词条但 __() 仍回原文）
+        $translator = $this->rebindForcedJsonTranslator();
 
         // 同步静态资源缓存 Nginx 标记文件（失败不影响站点）
         try {
@@ -139,6 +141,29 @@ class AppServiceProvider extends ServiceProvider
                 return new \App\Extend\Locales($config, $translator);
             });
             Inquiry::observe(InquiryObserver::class);
+        }
+    }
+
+    protected function rebindForcedJsonTranslator(): TranslatorContract
+    {
+        try {
+            $old = $this->app->make('translator');
+            if ($old instanceof ForcedJsonTranslator) {
+                return $old;
+            }
+            $loader = method_exists($old, 'getLoader') ? $old->getLoader() : $this->app->make('translation.loader');
+            $locale = method_exists($old, 'getLocale') ? $old->getLocale() : (string)config('app.locale', 'en');
+            $fallback = method_exists($old, 'getFallback') ? $old->getFallback() : (string)config('app.fallback_locale', 'en');
+
+            $trans = new ForcedJsonTranslator($loader, $locale);
+            $trans->setFallback($fallback);
+
+            $this->app->instance('translator', $trans);
+            $this->app->instance(TranslatorContract::class, $trans);
+
+            return $trans;
+        } catch (\Throwable $e) {
+            return $this->app->make('translator');
         }
     }
 }
