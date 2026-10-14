@@ -48,9 +48,12 @@ class TranslateWorkbenchController extends BaseController
                 'label' => $row->language ?: $row->language_code,
             ]);
 
+        $selectedModule = (string) request()->get('module', '');
+
         return view($this->viewPath . '.workbench', [
             'modules' => $modules,
             'locales' => $locales,
+            'selectedModule' => $selectedModule,
         ]);
     }
 

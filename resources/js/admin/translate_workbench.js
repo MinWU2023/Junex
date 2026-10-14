@@ -6,7 +6,7 @@ layui.config({
     var $ = layui.$;
     var form = layui.form;
     var layer = layui.layer;
-    var prefix = layui.setter.prefix;
+    var prefix = (layui.setter && layui.setter.prefix) || ('/' + (window.admin_prefix || 'nosay') + '/');
 
     var state = {
         modules: [],
@@ -363,7 +363,36 @@ layui.config({
         $('#tw-fields input[name="tw-field"]').prop('checked', false);
     });
 
-    $('#tw-reload-records').on('click', loadRecords);
+    $('#tw-reload-records').on('click', function () {
+        if (typeof window.twLoadModuleData === 'function') {
+            var module = selectedModule();
+            if (!module) {
+                return layer.msg('请先选择数据表');
+            }
+            var keyword = $('#tw-keyword').val();
+            var apiPrefix = prefix;
+            $.getJSON(apiPrefix + 'translateWorkbench/records', {
+                module: module,
+                keyword: keyword,
+                limit: 100
+            }).done(function (res) {
+                if (res.code !== 0) {
+                    return log('加载记录失败：' + (res.message || ''), 'error');
+                }
+                state.records = (res.data && res.data.items) || [];
+                var html = '<option value="">请选择记录</option>';
+                state.records.forEach(function (row) {
+                    html += '<option value="' + row.id + '">#' + row.id + ' - ' + row.label + '</option>';
+                });
+                $('#tw-record').html(html);
+                log('已加载 <strong>' + state.records.length + '</strong> 条记录', 'success');
+            }).fail(function () {
+                log('加载记录失败', 'error');
+            });
+            return;
+        }
+        loadRecords();
+    });
     $('#tw-translate-one').on('click', function () {
         state.translated = {};
         var loading = layer.load(2);

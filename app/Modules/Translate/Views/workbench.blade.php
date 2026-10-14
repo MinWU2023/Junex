@@ -150,7 +150,7 @@
                                     <select id="tw-module" class="tw-select" style="display:block!important;width:100%;height:38px;">
                                         <option value="">{{ __('请选择数据表') }}</option>
                                         @foreach($modules ?? [] as $module)
-                                            <option value="{{ $module['key'] }}">{{ $module['label'] }} ({{ $module['main_table'] }})</option>
+                                            <option value="{{ $module['key'] }}" @selected(($selectedModule ?? '') === $module['key'])>{{ $module['label'] }} ({{ $module['main_table'] }})</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -247,12 +247,25 @@
             if (!$) return;
             var apiPrefix = '/' + (window.admin_prefix || '{{ config('app.admin_prefix') }}') + '/';
 
+            function twBootLog(msg, isError) {
+                var $log = $('#tw-log');
+                if (!$log.length) return;
+                $log.find('.tw-log-empty').remove();
+                var color = isError ? '#ff6b6b' : '#6ee7b7';
+                $log.prepend('<div class="tw-log-item" style="color:' + color + '"><div class="tw-log-time">' + new Date().toLocaleTimeString() + '</div>' + msg + '</div>');
+            }
+
             function renderRecordOptions(items, total) {
                 var html = '<option value="">请选择记录' + (total ? '（共' + total + '条）' : '') + '</option>';
                 (items || []).forEach(function (row) {
                     html += '<option value="' + row.id + '">#' + row.id + ' - ' + row.label + '</option>';
                 });
                 $('#tw-record').html(html);
+                if (!items || !items.length) {
+                    twBootLog('未找到记录，可直接在下方手动输入 ID', true);
+                } else {
+                    twBootLog('已加载 <strong>' + items.length + '</strong> 条记录');
+                }
             }
 
             function renderFieldOptions(fields) {
@@ -276,16 +289,28 @@
                     $('#tw-record').html('<option value="">选择数据表后自动加载，或下方手动输入ID</option>');
                     return;
                 }
-                $.getJSON(apiPrefix + 'translateWorkbench/records', { module: module, limit: 100 }, function (res) {
-                    if (res.code === 0) {
-                        renderRecordOptions(res.data && res.data.items, res.data && res.data.total);
-                    }
-                });
-                $.getJSON(apiPrefix + 'translateWorkbench/fields', { module: module }, function (res) {
-                    if (res.code === 0) {
-                        renderFieldOptions(res.data || []);
-                    }
-                });
+                $.getJSON(apiPrefix + 'translateWorkbench/records', { module: module, limit: 100 })
+                    .done(function (res) {
+                        if (res.code === 0) {
+                            renderRecordOptions(res.data && res.data.items, res.data && res.data.total);
+                        } else {
+                            twBootLog('加载记录失败：' + (res.message || '未知错误'), true);
+                        }
+                    })
+                    .fail(function (xhr) {
+                        twBootLog('加载记录接口失败（' + xhr.status + '），可手动输入 ID', true);
+                    });
+                $.getJSON(apiPrefix + 'translateWorkbench/fields', { module: module })
+                    .done(function (res) {
+                        if (res.code === 0) {
+                            renderFieldOptions(res.data || []);
+                        } else {
+                            twBootLog('加载字段失败：' + (res.message || '未知错误'), true);
+                        }
+                    })
+                    .fail(function (xhr) {
+                        twBootLog('加载字段接口失败（' + xhr.status + '）', true);
+                    });
             };
 
             $(function () {
@@ -313,7 +338,7 @@
             });
         })(window.jQuery);
         </script>
-        <script src="{{ asset('/js/admin/admin.translate.workbench.js') }}?v=2026101419"></script>
+        <script src="{{ asset('/js/admin/admin.translate.workbench.js') }}?v=2026101420"></script>
     @endsection
     </body>
 </x-layui-layout>
