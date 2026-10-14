@@ -26,6 +26,9 @@ Route::get('/front/i18n/{locale}.js', [FrontLangController::class, 'script'])
 Route::get('/front/lang/{locale}.js', [FrontLangController::class, 'script'])
     ->where('locale', '[A-Za-z_-]+');
 
+// 线上语言包诊断（确认 json 路径/是否生效，排除静态缓存误判）
+Route::get('/__lang_check', [FrontLangController::class, 'diagnose'])->name('front.lang.check');
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/sitemap.xml', function () {

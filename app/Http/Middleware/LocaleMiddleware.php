@@ -45,6 +45,9 @@ class LocaleMiddleware
             'translatable.locale' => $localeCode,
         ]);
 
+        // 强制注入 resources/lang/{locale}.json（规避 Loader 路径不一致导致线上 __() 仍回原文）
+        $this->forceLoadJsonTranslations($localeCode);
+
         try {
             Carbon::setLocale($localeCode);
         } catch (\Throwable $e) {
@@ -54,6 +57,53 @@ class LocaleMiddleware
         $request->attributes->set('front_locale', $localeCode);
 
         return $next($request);
+    }
+
+    /**
+     * 把 JSON 语言包直接写入 Translator::$loaded['*']['*'][$locale]。
+     */
+    protected function forceLoadJsonTranslations(string $locale): void
+    {
+        if ($locale === '' || !app()->bound('translator')) {
+            return;
+        }
+
+        $path = resource_path('lang/' . $locale . '.json');
+        if (!is_file($path)) {
+            return;
+        }
+
+        $lines = json_decode((string)file_get_contents($path), true);
+        if (!is_array($lines) || $lines === []) {
+            return;
+        }
+
+        try {
+            $translator = app('translator');
+            $ref = new \ReflectionClass($translator);
+            if (!$ref->hasProperty('loaded')) {
+                return;
+            }
+            $prop = $ref->getProperty('loaded');
+            $prop->setAccessible(true);
+            $loaded = $prop->getValue($translator);
+            if (!is_array($loaded)) {
+                $loaded = [];
+            }
+            // 覆盖写入，避免先前空加载占住 isLoaded
+            $loaded['*']['*'][$locale] = $lines;
+            $prop->setValue($translator, $loaded);
+
+            // 同时登记 json path，供后续 load 使用
+            if (method_exists($translator, 'getLoader')) {
+                $loader = $translator->getLoader();
+                if (is_object($loader) && method_exists($loader, 'addJsonPath')) {
+                    $loader->addJsonPath(resource_path('lang'));
+                }
+            }
+        } catch (\Throwable $e) {
+            // 注入失败不阻断请求
+        }
     }
 
     /**

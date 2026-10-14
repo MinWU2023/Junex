@@ -789,11 +789,12 @@
     <script src="/front/js/swiper-bundle.min.js" defer></script>
     @yield('page-js-footer')
 @php
-    $__langFile = resource_path('lang/' . app()->getLocale() . '.json');
+    $__loc = app()->getLocale();
+    $__langFile = resource_path('lang/' . $__loc . '.json');
     $__langShare = __('Share');
 @endphp
-@if(app()->getLocale() !== 'en' && $__langShare === 'Share')
-<!-- LANG_JSON_MISSING locale={{ app()->getLocale() }} file={{ $__langFile }} exists={{ is_file($__langFile) ? '1' : '0' }} size={{ is_file($__langFile) ? filesize($__langFile) : 0 }} -->
+@if($__loc !== 'en' && $__langShare === 'Share')
+<!-- LANG_JSON_MISSING locale={{ $__loc }} file={{ $__langFile }} exists={{ is_file($__langFile) ? '1' : '0' }} size={{ is_file($__langFile) ? filesize($__langFile) : 0 }} __Share={{ $__langShare }} -->
 @endif
 </body>
 </html>

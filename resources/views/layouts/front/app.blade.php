@@ -1974,12 +1974,18 @@
     <script src="/front/js/swiper-common.js?v=20261010f" defer></script>
     @yield('page-js-footer')
 @php
-    // 线上排障：locale 已是 es 但 json 未部署时，源码可见此注释
-    $__langFile = resource_path('lang/' . app()->getLocale() . '.json');
+    // 线上排障：源码可见；完整诊断打开 /__lang_check?locale=es
+    $__loc = app()->getLocale();
+    $__langFile = resource_path('lang/' . $__loc . '.json');
     $__langShare = __('Share');
+    $__jsonShare = null;
+    if (is_file($__langFile)) {
+        $__decoded = json_decode((string)@file_get_contents($__langFile), true);
+        $__jsonShare = is_array($__decoded) ? ($__decoded['Share'] ?? 'NO_KEY') : ('INVALID:' . json_last_error_msg());
+    }
 @endphp
-@if(app()->getLocale() !== 'en' && $__langShare === 'Share')
-<!-- LANG_JSON_MISSING locale={{ app()->getLocale() }} file={{ $__langFile }} exists={{ is_file($__langFile) ? '1' : '0' }} size={{ is_file($__langFile) ? filesize($__langFile) : 0 }} -->
+@if($__loc !== 'en' && $__langShare === 'Share')
+<!-- LANG_JSON_MISSING locale={{ $__loc }} translator={{ app()->bound('translator') ? app('translator')->getLocale() : 'n/a' }} file={{ $__langFile }} exists={{ is_file($__langFile) ? '1' : '0' }} size={{ is_file($__langFile) ? filesize($__langFile) : 0 }} jsonShare={{ $__jsonShare }} __Share={{ $__langShare }} -->
 @endif
 </body>
 </html>
