@@ -29,3 +29,5 @@
 !videos.blade.php
 !video.blade.php
 !video-category.blade.php
+!partials/
+!partials/**

@@ -355,7 +355,7 @@
                         <script type="text/javascript" src="/pre/js/mtree.js"></script>
                     </section>
                     <section class="hot_left hidden_mob">
-                        <div class="left_h4">New Products</div>
+                        <div class="left_h4">{{ __('New Products') }}</div>
                         <div class="clearfix">
                             @inject('imagePresenter','App\Presenters\ShowThumbImagePresenter')
                             <ul>
@@ -441,7 +441,7 @@
 <div class="pro_section">
     <div class="container">
         <div class="i_title">
-            <div class="h4">Related Products</div>
+            <div class="h4">{{ __('Related Products') }}</div>
             <p>Our PM components offer excellent optical performance, e.g., high extinction ratio and low insertion loss, as well as high reliability and have become the key enablers</p>
         </div>
         <div class="button_outside">

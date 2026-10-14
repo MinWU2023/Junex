@@ -10,6 +10,20 @@ use Illuminate\Support\Facades\App;
 
 class LocaleMiddleware
 {
+    /** @var array<string, string> 仅当 language_code 无对应 json 时才映射（不改已有 es/de 等短码） */
+    protected array $localeAliases = [
+        'spanish' => 'es',
+        'german' => 'de',
+        'japanese' => 'ja',
+        'japan' => 'ja',
+        'portuguese' => 'pt',
+        'russian' => 'ru',
+        'italian' => 'it',
+        'french' => 'fr',
+        'chinese' => 'zh',
+        'english' => 'en',
+    ];
+
     /**
      * Handle an incoming request.
      *
@@ -20,7 +34,7 @@ class LocaleMiddleware
     public function handle(Request $request, Closure $next)
     {
         $host = strtolower((string)$request->getHost());
-        $localeCode = $this->resolveLocaleCode($host);
+        $localeCode = $this->normalizeLocaleCode($this->resolveLocaleCode($host));
 
         App::setLocale($localeCode);
         config([
@@ -59,7 +73,47 @@ class LocaleMiddleware
             }
         }
 
+        // 子域启发式：es.example.com → es（库未配 url 时仍能加载语言包）
+        $sub = explode('.', $host)[0] ?? '';
+        if ($sub !== '' && $sub !== 'www' && strlen($sub) <= 5) {
+            $guess = $this->normalizeLocaleCode($sub);
+            if (is_file(resource_path('lang/' . $guess . '.json'))) {
+                return $guess;
+            }
+        }
+
         return (string)config('app.fallback_locale', config('app.locale', 'en'));
+    }
+
+    /**
+     * 保证能命中 resources/lang/{locale}.json；有短码文件则优先短码。
+     */
+    protected function normalizeLocaleCode(string $code): string
+    {
+        $code = strtolower(trim(str_replace('_', '-', $code)));
+        if ($code === '') {
+            return 'en';
+        }
+
+        if (is_file(resource_path('lang/' . $code . '.json'))) {
+            return $code;
+        }
+
+        if (isset($this->localeAliases[$code])) {
+            $aliased = $this->localeAliases[$code];
+            if (is_file(resource_path('lang/' . $aliased . '.json'))) {
+                return $aliased;
+            }
+        }
+
+        if (str_contains($code, '-')) {
+            $short = explode('-', $code)[0];
+            if (is_file(resource_path('lang/' . $short . '.json'))) {
+                return $short;
+            }
+        }
+
+        return $code;
     }
 
     protected function normalizeHost(string $url): string
