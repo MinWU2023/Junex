@@ -90,6 +90,35 @@
                 margin-bottom: 14px;
                 font-size: 13px;
             }
+            .tw-workbench .tw-preview-switch {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 14px;
+                padding: 10px 12px;
+                background: #f6fffe;
+                border: 1px solid #b7eb8f;
+                border-radius: 6px;
+            }
+            .tw-workbench .tw-preview-switch label {
+                font-size: 13px;
+                color: #555;
+                white-space: nowrap;
+            }
+            .tw-workbench .tw-preview-switch select {
+                flex: 1;
+                min-width: 180px;
+                height: 36px;
+                padding: 0 10px;
+                border: 1px solid #e6e6e6;
+                border-radius: 2px;
+                background: #fff;
+            }
+            .tw-workbench .tw-preview-switch .tw-preview-count {
+                font-size: 12px;
+                color: #888;
+            }
             .tw-workbench .tw-preview-item {
                 border: 1px solid #e8e8e8;
                 border-radius: 8px;
@@ -267,7 +296,14 @@
 
                 <div class="layui-card tw-panel" id="tw-preview-panel" style="display:none;">
                     <div class="layui-card-header">{{ __('③ 翻译预览') }}</div>
-                    <div class="layui-card-body" id="tw-preview-body"></div>
+                    <div class="layui-card-body">
+                        <div class="tw-preview-switch" id="tw-preview-switch" style="display:none;">
+                            <label for="tw-preview-record">{{ __('切换预览记录') }}</label>
+                            <select id="tw-preview-record" class="tw-select" style="display:block!important;"></select>
+                            <span class="tw-preview-count" id="tw-preview-count"></span>
+                        </div>
+                        <div id="tw-preview-body"></div>
+                    </div>
                 </div>
 
                 <div class="layui-card tw-panel">
@@ -275,16 +311,16 @@
                     <div class="layui-card-body">
                         <div class="tw-actions">
                             <button type="button" class="layui-btn" id="tw-translate-one" onclick="window.twPreviewTranslate&&window.twPreviewTranslate();return false;">
-                                <i class="layui-icon layui-icon-fonts-i"></i> {{ __('预览翻译') }}
+                                <i class="layui-icon layui-icon-fonts-i"></i> {{ __('预览当前记录') }}
+                            </button>
+                            <button type="button" class="layui-btn layui-btn-warm" id="tw-batch" onclick="window.twBatchPreview&&window.twBatchPreview();return false;">
+                                <i class="layui-icon layui-icon-play"></i> {{ __('批量预览翻译') }}
+                            </button>
+                            <button type="button" class="layui-btn layui-btn-primary" id="tw-stop-batch" style="display:none;" onclick="window.twStopBatch&&window.twStopBatch();return false;">
+                                <i class="layui-icon layui-icon-pause"></i> {{ __('停止批量') }}
                             </button>
                             <button type="button" class="layui-btn layui-btn-normal layui-btn-disabled" id="tw-save-one" disabled onclick="window.twConfirmSave&&window.twConfirmSave();return false;">
                                 <i class="layui-icon layui-icon-ok"></i> {{ __('确认写入数据库') }}
-                            </button>
-                            <button type="button" class="layui-btn layui-btn-warm" id="tw-batch">
-                                <i class="layui-icon layui-icon-play"></i> {{ __('批量翻译并入库') }}
-                            </button>
-                            <button type="button" class="layui-btn layui-btn-primary" id="tw-stop-batch" style="display:none;">
-                                <i class="layui-icon layui-icon-pause"></i> {{ __('停止批量') }}
                             </button>
                             <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" id="tw-clear-log" style="margin-left:auto;">
                                 <i class="layui-icon layui-icon-delete"></i> {{ __('清空日志') }}
