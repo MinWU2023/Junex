@@ -81,6 +81,70 @@
                 gap: 10px;
                 padding-top: 4px;
             }
+            .tw-workbench .tw-preview-tip {
+                background: #fffbe6;
+                border: 1px solid #ffe58f;
+                color: #8c6d1f;
+                padding: 10px 12px;
+                border-radius: 6px;
+                margin-bottom: 14px;
+                font-size: 13px;
+            }
+            .tw-workbench .tw-preview-item {
+                border: 1px solid #e8e8e8;
+                border-radius: 8px;
+                padding: 12px;
+                margin-bottom: 12px;
+                background: #fff;
+            }
+            .tw-workbench .tw-preview-title { margin-bottom: 10px; font-size: 14px; }
+            .tw-workbench .tw-preview-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+            @media (max-width: 992px) {
+                .tw-workbench .tw-preview-grid { grid-template-columns: 1fr; }
+            }
+            .tw-workbench .tw-preview-label {
+                font-size: 12px;
+                color: #888;
+                margin-bottom: 6px;
+            }
+            .tw-workbench .tw-preview-box,
+            .tw-workbench .tw-preview-editor {
+                width: 100%;
+                box-sizing: border-box;
+                border: 1px solid #e6e6e6;
+                border-radius: 4px;
+                padding: 10px;
+                font-size: 13px;
+                line-height: 1.6;
+                background: #fafbfc;
+            }
+            .tw-workbench .tw-preview-source {
+                white-space: pre-wrap;
+                word-break: break-word;
+                margin: 0;
+                min-height: 80px;
+                max-height: 240px;
+                overflow: auto;
+            }
+            .tw-workbench .tw-preview-editor {
+                background: #f6fffe;
+                border-color: #b7eb8f;
+                resize: vertical;
+            }
+            .tw-workbench .tw-preview-existing {
+                margin-top: 8px;
+                font-size: 12px;
+                color: #999;
+                word-break: break-word;
+            }
+            .tw-workbench #tw-save-one.layui-btn-disabled {
+                opacity: .55;
+                cursor: not-allowed;
+            }
             .tw-workbench .tw-log-panel .layui-card-body { padding: 0; }
             .tw-workbench #tw-log {
                 min-height: 420px;
@@ -201,15 +265,20 @@
                     </div>
                 </div>
 
+                <div class="layui-card tw-panel" id="tw-preview-panel" style="display:none;">
+                    <div class="layui-card-header">{{ __('③ 翻译预览') }}</div>
+                    <div class="layui-card-body" id="tw-preview-body"></div>
+                </div>
+
                 <div class="layui-card tw-panel">
-                    <div class="layui-card-header">{{ __('③ 执行翻译') }}</div>
+                    <div class="layui-card-header">{{ __('④ 执行操作') }}</div>
                     <div class="layui-card-body">
                         <div class="tw-actions">
                             <button type="button" class="layui-btn" id="tw-translate-one">
-                                <i class="layui-icon layui-icon-fonts-i"></i> {{ __('翻译当前记录') }}
+                                <i class="layui-icon layui-icon-fonts-i"></i> {{ __('预览翻译') }}
                             </button>
-                            <button type="button" class="layui-btn layui-btn-normal" id="tw-save-one">
-                                <i class="layui-icon layui-icon-ok"></i> {{ __('保存当前翻译') }}
+                            <button type="button" class="layui-btn layui-btn-normal layui-btn-disabled" id="tw-save-one" disabled>
+                                <i class="layui-icon layui-icon-ok"></i> {{ __('确认写入数据库') }}
                             </button>
                             <button type="button" class="layui-btn layui-btn-warm" id="tw-batch">
                                 <i class="layui-icon layui-icon-play"></i> {{ __('批量翻译并入库') }}
@@ -338,7 +407,7 @@
             });
         })(window.jQuery);
         </script>
-        <script src="{{ asset('/js/admin/admin.translate.workbench.js') }}?v=2026101420"></script>
+        <script src="{{ asset('/js/admin/admin.translate.workbench.js') }}?v=2026101421"></script>
     @endsection
     </body>
 </x-layui-layout>
