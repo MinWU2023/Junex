@@ -301,12 +301,37 @@
         });
     };
 
+    function looksLikeHtml(value) {
+        return /<[^>]+>/.test(String(value || ''));
+    }
+
+    function normalizeCompare(text) {
+        return String(text || '')
+            .replace(/&nbsp;/gi, ' ')
+            .replace(/\s+/g, ' ')
+            .trim()
+            .toLowerCase();
+    }
+
+    /** 仅当目标语言已有内容，且与英文原文明显不同时才跳过 */
+    function shouldSkipExisting(meta) {
+        if (!$('#tw-skip-existing').prop('checked')) return false;
+        var existing = String(meta.existing || '').trim();
+        if (!existing) return false;
+        var source = String(meta.value || '').trim();
+        if (!source) return false;
+        // 库中仍是英文/与原文相同 → 不跳过，必须重翻
+        if (normalizeCompare(existing) === normalizeCompare(source)) return false;
+        return true;
+    }
+
     function translateOneField(field, locale) {
         var d = $.Deferred();
         if (!field.value || !String(field.value).trim()) {
             d.resolve('');
             return d.promise();
         }
+        var forceRich = !!(field.is_rich || looksLikeHtml(field.value));
         $.ajax({
             url: apiPrefix + 'translateWorkbench/translate',
             type: 'POST',
@@ -315,8 +340,8 @@
                 _token: csrfToken,
                 text: field.value,
                 locale: locale,
-                type: field.type || 'text',
-                is_rich: field.is_rich ? 1 : 0
+                type: forceRich ? (field.type || 'html') : (field.type || 'text'),
+                is_rich: forceRich ? 1 : 0
             }
         }).done(function (res) {
             if (res.code !== 0) {
@@ -326,8 +351,8 @@
             var text = (res.data && res.data.text) || '';
             var seg = (res.data && res.data.segment_count) || 0;
             var done = (res.data && res.data.translated_count) || 0;
-            if (res.data && res.data.is_rich) {
-                // 富文本：只要有段落翻成功就接受；全失败才报错
+            if (forceRich || (res.data && res.data.is_rich)) {
+                twBootLog('富文本提取 ' + seg + ' 段，成功翻译 ' + done + ' 段', done > 0 ? false : true);
                 if (res.data.same_as_source && done === 0) {
                     d.reject('富文本未提取到可译文案或全部翻译失败（segments=' + seg + '）');
                     return;
@@ -356,13 +381,14 @@
             return;
         }
         var job = jobs[index];
-        if ($('#tw-skip-existing').prop('checked') && job.meta.existing && String(job.meta.existing).trim()) {
-            twBootLog(job.meta.label + ' (' + job.name + ') 已有翻译，已跳过', false);
+        if (shouldSkipExisting(job.meta)) {
+            twBootLog(job.meta.label + ' (' + job.name + ') 目标语言已有不同内容，已跳过', false);
             onFieldDone(job.name, job.meta, job.meta.existing, true);
             translateRecordJobs(jobs, locale, index + 1, onFieldDone, onDone);
             return;
         }
-        twBootLog('正在翻译：<strong>' + job.meta.label + '</strong> (' + job.name + ')');
+        var richHint = looksLikeHtml(job.meta.value) ? ' [富文本]' : '';
+        twBootLog('正在翻译：<strong>' + job.meta.label + '</strong> (' + job.name + ')' + richHint);
         translateOneField(job.meta, locale).done(function (text) {
             twBootLog('✓ ' + job.name + ' → ' + locale + ' 完成', false);
             onFieldDone(job.name, job.meta, text, false);

@@ -15,11 +15,12 @@ class RichTextTranslateHelper
 
     public function isRich(string $type, string $value): bool
     {
-        if (in_array($type, ['uedit', 'editor', 'html'], true)) {
+        if (in_array($type, ['uedit', 'editor', 'html', 'tinymce', 'ckeditor'], true)) {
             return true;
         }
 
-        return $value !== '' && preg_match('/<[a-z][\s\S]*>/i', $value) === 1;
+        // 任意 HTML 标签（含自闭合、大写、带属性）都算富文本
+        return $value !== '' && preg_match('/<[^>]+>/', $value) === 1;
     }
 
     /**

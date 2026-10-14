@@ -288,8 +288,8 @@
                             <div class="tw-empty-hint">{{ __('请先选择数据表，系统将自动加载可翻译字段') }}</div>
                         </div>
                         <label class="tw-native-check" for="tw-skip-existing">
-                            <input type="checkbox" id="tw-skip-existing" name="tw-skip-existing" checked>
-                            <span>{{ __('跳过目标语言已有内容的字段') }}</span>
+                            <input type="checkbox" id="tw-skip-existing" name="tw-skip-existing">
+                            <span>{{ __('跳过目标语言已有「且与英文不同」的字段') }}</span>
                         </label>
                     </div>
                 </div>

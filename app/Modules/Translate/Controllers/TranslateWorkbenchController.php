@@ -204,23 +204,39 @@ class TranslateWorkbenchController extends BaseController
 
         $segmentCount = 0;
         $translatedCount = 0;
-        $isRichContent = $isRich || $this->richText->isRich($type, $text);
+        // 强制：只要原文带任何 HTML 标签，一律走富文本提取翻译
+        $isRichContent = $this->richText->isRich($type, $text) || $isRich;
 
         try {
             if ($isRichContent) {
                 $pack = $this->richText->extract($text);
                 $segmentCount = (int) ($pack['count'] ?? count($pack['segments']));
-                $translated = [];
-                foreach ($pack['segments'] as $segment) {
-                    try {
-                        $translated[] = $this->translator->translate($segment, $target);
-                        $translatedCount++;
-                    } catch (\Throwable $e) {
-                        // Keep original segment so HTML structure still restores correctly
-                        $translated[] = $segment;
+                if ($segmentCount === 0) {
+                    // 没抽到文案：退回整段纯文本翻译（去掉标签后翻再不行就保留结构）
+                    $plain = trim(html_entity_decode(strip_tags($text), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+                    if ($plain !== '') {
+                        $result = $this->translator->translate($plain, $target);
+                        $segmentCount = 1;
+                        $translatedCount = 1;
+                    } else {
+                        $result = $text;
                     }
+                } else {
+                    $translated = [];
+                    foreach ($pack['segments'] as $segment) {
+                        try {
+                            $one = $this->translator->translate($segment, $target);
+                            $translated[] = $one;
+                            if (mb_strtolower(trim($one)) !== mb_strtolower(trim($segment))) {
+                                $translatedCount++;
+                            }
+                        } catch (\Throwable $e) {
+                            // Keep original segment so HTML structure still restores correctly
+                            $translated[] = $segment;
+                        }
+                    }
+                    $result = $this->richText->restore($pack['template'], $translated);
                 }
-                $result = $this->richText->restore($pack['template'], $translated);
             } else {
                 $result = $this->translator->translate($text, $target);
                 $segmentCount = 1;
