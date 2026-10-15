@@ -54,5 +54,12 @@
     "What Are You Looking For?": "O que você está procurando?",
     "XML": "XML",
     "Your Email": "Sua",
-    "Your Message": "Sua"
+    "Your Message": "Sua",
+    "Please fill out this field.": "Preencha este campo.",
+    "Please enter a valid email address.": "Introduza um endereço de e-mail válido.",
+    "Please enter a valid URL.": "Introduza um URL válido.",
+    "Please match the requested format.": "Utilize o formato solicitado.",
+    "Please enter a number.": "Introduza um número.",
+    "Please select an item in the list.": "Selecione um item da lista.",
+    "Please enter a valid value.": "Introduza um valor válido."
 }

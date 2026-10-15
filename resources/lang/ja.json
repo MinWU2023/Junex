@@ -54,5 +54,12 @@
     "What Are You Looking For?": "何をお探しですか？",
     "XML": "XML",
     "Your Email": "君の",
-    "Your Message": "君の"
+    "Your Message": "君の",
+    "Please fill out this field.": "このフィールドを入力してください。",
+    "Please enter a valid email address.": "有効なメールアドレスを入力してください。",
+    "Please enter a valid URL.": "有効なURLを入力してください。",
+    "Please match the requested format.": "指定の形式で入力してください。",
+    "Please enter a number.": "数値を入力してください。",
+    "Please select an item in the list.": "リストから項目を選択してください。",
+    "Please enter a valid value.": "有効な値を入力してください。"
 }

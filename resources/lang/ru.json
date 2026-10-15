@@ -54,5 +54,12 @@
     "What Are You Looking For?": "Что вы ищете?",
     "XML": "XML",
     "Your Email": "Твой",
-    "Your Message": "Твой"
+    "Your Message": "Твой",
+    "Please fill out this field.": "Пожалуйста, заполните это поле.",
+    "Please enter a valid email address.": "Введите корректный адрес электронной почты.",
+    "Please enter a valid URL.": "Введите корректный URL.",
+    "Please match the requested format.": "Введите значение в требуемом формате.",
+    "Please enter a number.": "Введите число.",
+    "Please select an item in the list.": "Выберите элемент из списка.",
+    "Please enter a valid value.": "Введите корректное значение."
 }

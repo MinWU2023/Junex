@@ -43,6 +43,11 @@ class AdminAuthenticate
             return 'admin.translateWorkbench.index';
         }
 
+        if (str_starts_with($permission, 'admin.imageWorkbench.')
+            && $permission !== 'admin.imageWorkbench.index') {
+            return 'admin.imageWorkbench.index';
+        }
+
         return null;
     }
 }

@@ -51,6 +51,7 @@ use App\Modules\Download\Controllers\DownloadCategoryController;
 use App\Modules\Inquiry\Controllers\NewsLetterController;
 use App\Modules\Translate\Controllers\TranslateJobController;
 use App\Modules\Translate\Controllers\TranslateWorkbenchController;
+use App\Modules\Translate\Controllers\ImageWorkbenchController;
 use App\Modules\Report\Controllers\DataManagerController;
 use App\Modules\Admin\Controllers\ManagerController;
 use App\Modules\Url\Controllers\UrlController;
@@ -254,6 +255,21 @@ Route::group(['middleware' => ['auth', 'admin.permission']], function () {
         ->name('admin.translateWorkbench.translate');
     Route::post('/translateWorkbench/save', [TranslateWorkbenchController::class, 'save'])
         ->name('admin.translateWorkbench.save');
+
+    Route::get('/imageWorkbench', [ImageWorkbenchController::class, 'index'])
+        ->name('admin.imageWorkbench.index');
+    Route::get('/imageWorkbench/modules', [ImageWorkbenchController::class, 'modules'])
+        ->name('admin.imageWorkbench.modules');
+    Route::get('/imageWorkbench/fields', [ImageWorkbenchController::class, 'fields'])
+        ->name('admin.imageWorkbench.fields');
+    Route::get('/imageWorkbench/records', [ImageWorkbenchController::class, 'records'])
+        ->name('admin.imageWorkbench.records');
+    Route::get('/imageWorkbench/all-ids', [ImageWorkbenchController::class, 'allIds'])
+        ->name('admin.imageWorkbench.allIds');
+    Route::post('/imageWorkbench/preview', [ImageWorkbenchController::class, 'preview'])
+        ->name('admin.imageWorkbench.preview');
+    Route::post('/imageWorkbench/save', [ImageWorkbenchController::class, 'save'])
+        ->name('admin.imageWorkbench.save');
 
     //    Route::get('/product/attribute/category/getAllCategories/{id}',[\App\Modules\Product\Controllers\ProductAttributeCategoryController::class,'getAllCategories'])
     //        ->name('admin.product.attributeCategory.getAllCategories');

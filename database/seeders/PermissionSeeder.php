@@ -1468,6 +1468,15 @@ class PermissionSeeder extends Seeder
 
             [
                 'pg_id' => 16,
+                'name' => 'admin.imageWorkbench.index',
+                'display_name' => '图片工作台',
+                'guard_name' => 'web',
+                'created_at' => $created_at,
+                'updated_at' => $updated_at
+            ],
+
+            [
+                'pg_id' => 16,
                 'name' => 'admin.setting.banner.index',
                 'display_name' => 'banner列表',
                 'guard_name' => 'web',
@@ -2713,6 +2722,7 @@ class PermissionSeeder extends Seeder
         ])->whereNotIn('name', [
             'admin.translateJob.index',
             'admin.translateWorkbench.index',
+            'admin.imageWorkbench.index',
             'admin.menu.manager.visibility',
             'admin.setting.clearCache'
         ])->pluck('id')->toArray();
@@ -2846,6 +2856,7 @@ class PermissionSeeder extends Seeder
             ])->whereNotIn('name', [
                 'admin.translateJob.index',
                 'admin.translateWorkbench.index',
+                'admin.imageWorkbench.index',
                 'admin.menu.manager.visibility',
                 'admin.setting.clearCache'
             ])->pluck('id')->toArray();
@@ -2877,6 +2888,7 @@ class PermissionSeeder extends Seeder
         $permission_ids = Permission::query()->whereIn('id',$permission_ids)->whereNotIn('name',[
             'admin.translateJob.index',
             'admin.translateWorkbench.index',
+            'admin.imageWorkbench.index',
             'admin.setting.clearCache'
         ])->pluck('id')->toArray();
         return $permission_ids;

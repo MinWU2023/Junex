@@ -2073,6 +2073,8 @@
         @json($frontI18n['messages'])
     );
     </script>
+    {{-- HTML5 校验气泡跟随站点语言，而非浏览器 UI 语言 --}}
+    <script type="text/javascript" src="/front/js/form-validation-i18n.js?v=20261015a"></script>
     <script type="text/javascript" src="/front/js/jquery.min.js"></script>
     <script type="text/javascript" src="/front/js/inquiry-cart.js?v=20261010g"></script>
     <script type="text/javascript" src="/front/js/main.js?v=20261010g"></script>

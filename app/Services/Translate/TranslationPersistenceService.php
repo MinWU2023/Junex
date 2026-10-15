@@ -50,11 +50,26 @@ class TranslationPersistenceService
         if ($locale === 'en') {
             throw new \InvalidArgumentException('Target locale cannot be English.');
         }
+        $this->saveLocaleFields($model, $locale, $fieldValues, $fieldTypes);
+    }
+
+    /**
+     * 写入任意语言翻译字段（含 en），供图片工作台等跨语言修复场景使用。
+     *
+     * @param  array<string, mixed>  $fieldValues
+     * @param  array<string, string>  $fieldTypes
+     */
+    public function saveLocaleFields(Model $model, string $locale, array $fieldValues, array $fieldTypes = []): void
+    {
+        $locale = trim($locale);
+        if ($locale === '') {
+            throw new \InvalidArgumentException('Locale is required.');
+        }
         foreach ($fieldValues as $field => $value) {
             if (!in_array($field, $model->translatedAttributes ?? [], true)) {
                 continue;
             }
-            $type = strtolower((string)($fieldTypes[$field] ?? ''));
+            $type = strtolower((string) ($fieldTypes[$field] ?? ''));
             $model->translateOrNew($locale)->{$field} = $this->decodeFieldValue($value, $type, $field);
         }
         $model->save();

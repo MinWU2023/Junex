@@ -39,6 +39,13 @@ return [
 
     // Forms / inquiry
     'Please fill in required fields.',
+    'Please fill out this field.',
+    'Please enter a valid email address.',
+    'Please enter a valid URL.',
+    'Please match the requested format.',
+    'Please enter a number.',
+    'Please select an item in the list.',
+    'Please enter a valid value.',
     'Message successfully!',
     'Submit failed',
     'Please add products to your inquiry list first.',
