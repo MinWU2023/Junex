@@ -82,11 +82,12 @@
     </div>
 </section>
 
-@if(!empty(trim(strip_tags((string)($category->content ?? '')))))
+@php $categoryContentHtml = translated_attr($category, 'content'); @endphp
+@if($categoryContentHtml !== '' && trim(strip_tags($categoryContentHtml)) !== '')
 <section class="w-full bg-themeBg-a category-description sec-bg-white js-cat-desc-section" data-max-lines="6">
     <div class="sec-pad mx-auto w-[calc(100%-30px)] max-w-[1200px] pb-16 font-poppins-regular text-f16 text-themeText-g leading-7 [&_img]:max-w-full [&_a]:text-themeText-h">
         <div class="js-cat-desc-body cat-desc-body is-pending">
-            {!! front_html_prefer_webp($category->content) !!}
+            {!! front_html_prefer_webp($categoryContentHtml) !!}
         </div>
         <div class="js-cat-desc-actions mt-4 flex justify-start gap-3 hidden">
             <button type="button" class="js-cat-desc-more inline-flex items-center justify-center bg-themeBg-d px-5 py-2 text-f12 font-poppins-medium uppercase tracking-wide text-white transition hover:opacity-90">{{ __('Read More') }}</button>
@@ -120,11 +121,12 @@
     ])
 @endif
 
-@if(!empty(trim(strip_tags((string)($category->content2 ?? '')))))
+@php $categoryContent2Html = translated_attr($category, 'content2'); @endphp
+@if($categoryContent2Html !== '' && trim(strip_tags($categoryContent2Html)) !== '')
 <section class="w-full bg-white category-description-2 sec-bg-white js-cat-desc-section" data-max-lines="10">
     <div class="sec-pad mx-auto w-[calc(100%-30px)] max-w-[1200px] pb-16 font-poppins-regular text-f16 text-themeText-g leading-7 [&_img]:max-w-full [&_a]:text-themeText-h">
         <div class="js-cat-desc-body cat-desc-body is-pending">
-            {!! front_html_prefer_webp($category->content2) !!}
+            {!! front_html_prefer_webp($categoryContent2Html) !!}
         </div>
         <div class="js-cat-desc-actions mt-4 flex justify-start gap-3 hidden">
             <button type="button" class="js-cat-desc-more inline-flex items-center justify-center bg-themeBg-d px-5 py-2 text-f12 font-poppins-medium uppercase tracking-wide text-white transition hover:opacity-90">{{ __('Read More') }}</button>

@@ -38,8 +38,8 @@ class ReviewController extends Controller
                 'username' => $username,
                 'initial' => $initial,
                 'score' => (int)($r->score ?? 0),
-                'subject' => (string)($r->subject ?? ''),
-                'content' => (string)($r->content ?? ''),
+                'subject' => translated_attr($r, 'subject'),
+                'content' => translated_attr($r, 'content'),
                 'imgs' => $imgs,
             ];
         })->values()->toArray();

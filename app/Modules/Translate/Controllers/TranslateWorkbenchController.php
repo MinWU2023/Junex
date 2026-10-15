@@ -196,7 +196,7 @@ class TranslateWorkbenchController extends BaseController
     {
         $text = (string) $request->get('text', '');
         $target = (string) $request->get('locale', '');
-        $type = (string) $request->get('type', 'text');
+        $type = strtolower((string) $request->get('type', 'text'));
         $isRich = filter_var($request->get('is_rich', false), FILTER_VALIDATE_BOOLEAN);
         if ($target === '' || $target === 'en') {
             return $this->badRequest('Invalid locale');
@@ -204,6 +204,29 @@ class TranslateWorkbenchController extends BaseController
 
         $segmentCount = 0;
         $translatedCount = 0;
+
+        // list/features：按条目翻译 text，保留 [{text:"..."}] 结构，避免整段 JSON 被翻坏
+        if ($type === 'list' || $this->looksLikeFeatureListJson($text)) {
+            try {
+                $listResult = $this->translateFeatureList($text, $target);
+            } catch (\Throwable $e) {
+                return response()->json([
+                    'code' => 500,
+                    'message' => $e->getMessage(),
+                ], 500);
+            }
+
+            return $this->data([
+                'text' => $listResult['text'],
+                'is_rich' => false,
+                'is_list' => true,
+                'target' => $target,
+                'same_as_source' => $listResult['same_as_source'],
+                'segment_count' => $listResult['segment_count'],
+                'translated_count' => $listResult['translated_count'],
+            ]);
+        }
+
         // 强制：只要原文带任何 HTML 标签，一律走富文本提取翻译
         $isRichContent = $this->richText->isRich($type, $text) || $isRich;
 
@@ -284,19 +307,23 @@ class TranslateWorkbenchController extends BaseController
             return $this->badRequest('Record not found');
         }
 
-        $allowed = collect($this->registry->fields($module))->pluck('name')->all();
+        $fieldMeta = collect($this->registry->fields($module))->keyBy('name');
+        $allowed = $fieldMeta->keys()->all();
         $filtered = [];
+        $fieldTypes = [];
         foreach ($fields as $field => $value) {
-            if (in_array($field, $allowed, true)) {
-                $filtered[$field] = is_scalar($value) ? (string) $value : json_encode($value, JSON_UNESCAPED_UNICODE);
+            if (!in_array($field, $allowed, true)) {
+                continue;
             }
+            $filtered[$field] = is_scalar($value) ? (string) $value : json_encode($value, JSON_UNESCAPED_UNICODE);
+            $fieldTypes[$field] = (string)($fieldMeta->get($field)['type'] ?? 'text');
         }
         if (empty($filtered)) {
             return $this->badRequest('No valid fields');
         }
 
         try {
-            $this->persistence->saveTranslation($model, $locale, $filtered);
+            $this->persistence->saveTranslation($model, $locale, $filtered, $fieldTypes);
         } catch (\Throwable $e) {
             return response()->json([
                 'code' => 500,
@@ -309,6 +336,71 @@ class TranslateWorkbenchController extends BaseController
             'locale' => $locale,
             'fields' => array_keys($filtered),
         ]);
+    }
+
+    protected function looksLikeFeatureListJson(string $text): bool
+    {
+        $trim = ltrim($text);
+        if ($trim === '' || $trim[0] !== '[') {
+            return false;
+        }
+        $decoded = json_decode($trim, true);
+        if (!is_array($decoded) || $decoded === []) {
+            return false;
+        }
+        $first = $decoded[0] ?? null;
+        if (is_string($first)) {
+            return true;
+        }
+        if (is_array($first) && (array_key_exists('text', $first) || array_key_exists('title', $first) || array_key_exists('label', $first))) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return array{text:string,segment_count:int,translated_count:int,same_as_source:bool}
+     */
+    protected function translateFeatureList(string $text, string $target): array
+    {
+        $items = $this->persistence->normalizeFeatureList($text);
+        $segmentCount = count($items);
+        $translatedCount = 0;
+        $out = [];
+
+        foreach ($items as $i => $item) {
+            $source = trim((string)($item['text'] ?? ''));
+            if ($source === '') {
+                continue;
+            }
+            try {
+                if ($i > 0) {
+                    usleep(400000);
+                }
+                $one = $this->translator->translate($source, $target);
+                $one = trim((string)$one);
+                if ($one === '') {
+                    $one = $source;
+                }
+                if (mb_strtolower($one) !== mb_strtolower($source)) {
+                    $translatedCount++;
+                }
+                $out[] = ['text' => $one];
+            } catch (\Throwable $e) {
+                $out[] = ['text' => $source];
+            }
+        }
+
+        $encoded = (string)json_encode($out, JSON_UNESCAPED_UNICODE);
+        $sameAsSource = $segmentCount > 0 && $translatedCount === 0;
+
+        return [
+            'text' => $encoded,
+            'segment_count' => $segmentCount,
+            'translated_count' => $translatedCount,
+            'same_as_source' => $sameAsSource,
+        ];
     }
 
 }

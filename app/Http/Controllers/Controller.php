@@ -18,6 +18,14 @@ class Controller extends BaseController
         return app(SettingService::class)->getAllBanner($area);
     }
 
+    /**
+     * 前台渲染：当前语言翻译字段优先，空则英语兜底（勿用于后台编辑表单）。
+     */
+    protected function translated($model, string $attribute, ?string $locale = null): string
+    {
+        return translated_attr($model, $attribute, $locale);
+    }
+
     protected function buildBreadcrumbs(array $items): array
     {
         return array_values(array_filter(array_map(function ($item) {
@@ -45,15 +53,15 @@ class Controller extends BaseController
         $description = $tdk['description'] ?? null;
 
         return [
-            'title' => $title !== null && $title !== '' ? $title : ($setting->title ?? ''),
-            'keywords' => $keywords !== null && $keywords !== '' ? $keywords : ($setting->keywords ?? ''),
-            'description' => $description !== null && $description !== '' ? $description : ($setting->description ?? ''),
+            'title' => $title !== null && $title !== '' ? $title : translated_attr($setting, 'title'),
+            'keywords' => $keywords !== null && $keywords !== '' ? $keywords : translated_attr($setting, 'keywords'),
+            'description' => $description !== null && $description !== '' ? $description : translated_attr($setting, 'description'),
         ];
     }
 
     protected function buildStaticPageTdk(string $pageName, $setting): array
     {
-        $siteName = $setting->name ?? '';
+        $siteName = translated_attr($setting, 'name');
         return [
             'title' => $pageName . ' - ' . $siteName,
             'keywords' => $pageName . ', ' . $siteName,

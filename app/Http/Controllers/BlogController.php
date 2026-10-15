@@ -34,7 +34,7 @@ class BlogController extends Controller
     {
         $dateValue = !empty($blog->customer_at) ? $blog->customer_at : ($blog->updated_at ?? null);
 
-        $rawContent = (string)($blog->content ?? '');
+        $rawContent = translated_attr($blog, 'content');
         $excerpt = trim(preg_replace('/\s+/', ' ', strip_tags($rawContent)));
         if (mb_strlen($excerpt) > 160) {
             $excerpt = mb_substr($excerpt, 0, 160) . '...';
@@ -51,7 +51,7 @@ class BlogController extends Controller
         return [
             'id' => $blog->id,
             'date' => self::formatBlogDate($dateValue),
-            'title' => (string)($blog->name ?? ''),
+            'title' => translated_attr($blog, 'name'),
             'excerpt' => $excerpt,
             'image' => $img,
             'url' => $url,
@@ -100,7 +100,7 @@ class BlogController extends Controller
             $img = front_video_cover_url($v->path ?? '', $videoUrl, '/front/imgs/video-item.png');
             return [
                 'id' => $v->id,
-                'title' => (string)($v->name ?? ''),
+                'title' => translated_attr($v, 'name'),
                 'image' => $img,
                 'video_url' => $videoUrl,
             ];
@@ -147,7 +147,7 @@ class BlogController extends Controller
         $breadcrumbs = $this->buildBreadcrumbs([
             ['label' => __('Home'), 'url' => '/'],
             ['label' => __('Blogs'), 'url' => '/blogs'],
-            ['label' => $blog->name, 'url' => null],
+            ['label' => translated_attr($blog, 'name'), 'url' => null],
         ]);
 
         $prevBlog = Blog::query()
@@ -205,15 +205,15 @@ class BlogController extends Controller
             return [
                 'id' => $b->id,
                 'date' => $getBlogDate($b),
-                'title' => (string)($b->name ?? ''),
+                'title' => translated_attr($b, 'name'),
                 'image' => $img,
                 'url' => $url,
             ];
         };
 
         $blogDate = $getBlogDate($blog);
-        $blogTitle = (string)($blog->name ?? '');
-        $blogContent = front_html_prefer_webp((string)($blog->content ?? ''));
+        $blogTitle = translated_attr($blog, 'name');
+        $blogContent = front_html_prefer_webp(translated_attr($blog, 'content'));
         $blogCover = $blog->path
             ? front_webp_url($blog->path)
             : front_webp_url($fallbackCover);
@@ -232,7 +232,7 @@ class BlogController extends Controller
             $url = $t->url ? ('/' . ltrim($t->url->url, '/')) : null;
             return [
                 'id' => $t->id,
-                'name' => (string)($t->name ?? ''),
+                'name' => translated_attr($t, 'name'),
                 'url' => $url,
             ];
         })->filter(function ($t) {
@@ -243,7 +243,7 @@ class BlogController extends Controller
             $url = $t->url ? ('/' . ltrim($t->url->url, '/')) : null;
             return [
                 'id' => $t->id,
-                'name' => (string)($t->name ?? ''),
+                'name' => translated_attr($t, 'name'),
                 'url' => $url,
             ];
         })->filter(function ($t) {
@@ -299,7 +299,7 @@ class BlogController extends Controller
         $breadcrumbs = $this->buildBreadcrumbs([
             ['label' => __('Home'), 'url' => '/'],
             ['label' => __('Blogs'), 'url' => '/blogs'],
-            ['label' => $category->name, 'url' => null],
+            ['label' => translated_attr($category, 'name'), 'url' => null],
         ]);
 
         $blogs = Blog::query()
@@ -333,7 +333,7 @@ class BlogController extends Controller
             $img = front_video_cover_url($v->path ?? '', $videoUrl, '/front/imgs/video-item.png');
             return [
                 'id' => $v->id,
-                'title' => (string)($v->name ?? ''),
+                'title' => translated_attr($v, 'name'),
                 'image' => $img,
                 'video_url' => $videoUrl,
             ];
@@ -384,7 +384,7 @@ class BlogController extends Controller
         $breadcrumbs = $this->buildBreadcrumbs([
             ['label' => __('Home'), 'url' => '/'],
             ['label' => __('Blogs'), 'url' => '/blogs'],
-            ['label' => $tag->name, 'url' => null],
+            ['label' => translated_attr($tag, 'name'), 'url' => null],
         ]);
 
         $blogs = $tag->blogs()
@@ -416,7 +416,7 @@ class BlogController extends Controller
             $img = front_video_cover_url($v->path ?? '', $videoUrl, '/front/imgs/video-item.png');
             return [
                 'id' => $v->id,
-                'title' => (string)($v->name ?? ''),
+                'title' => translated_attr($v, 'name'),
                 'image' => $img,
                 'video_url' => $videoUrl,
             ];

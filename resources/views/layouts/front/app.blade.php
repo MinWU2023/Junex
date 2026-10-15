@@ -1539,7 +1539,7 @@
                     <ul class="space-y-2.5 text-[11px] text-white/75">
                       @foreach($data['hotTags'] ?? [] as $tag)
                         @php
-                          $hotTagLabel = trim((string)($tag->name ?? ''));
+                          $hotTagLabel = translated_attr($tag, 'name');
                           $hotTagUrl = ($tag->url && !empty($tag->url->url))
                             ? ('/' . ltrim((string)$tag->url->url, '/'))
                             : '';

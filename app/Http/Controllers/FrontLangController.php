@@ -92,6 +92,42 @@ class FrontLangController extends Controller
             $hint = 'JSON missing/invalid — upload resources/lang/' . $locale . '.json';
         }
 
+        // DB 翻译：当前语言优先，空则英语兜底（与前台渲染一致）
+        $dbSample = null;
+        try {
+            config(['translatable.locale' => $locale]);
+            $product = \App\Modules\Product\Models\Product::query()
+                ->with(['translations'])
+                ->active()
+                ->orderByDesc('id')
+                ->first();
+            if ($product) {
+                $rawLocale = '';
+                $rawEn = '';
+                $trLocale = $product->translate($locale, false);
+                $trEn = $product->translate('en', false);
+                if ($trLocale) {
+                    $rawLocale = trim((string)($trLocale->name ?? ''));
+                }
+                if ($trEn) {
+                    $rawEn = trim((string)($trEn->name ?? ''));
+                }
+                $resolved = function_exists('translated_attr')
+                    ? translated_attr($product, 'name', $locale)
+                    : (string)($product->name ?? '');
+                $dbSample = [
+                    'product_id' => (int)$product->id,
+                    'locale' => $locale,
+                    'name_locale_raw' => $rawLocale !== '' ? mb_substr($rawLocale, 0, 80) : '',
+                    'name_en_raw' => $rawEn !== '' ? mb_substr($rawEn, 0, 80) : '',
+                    'name_resolved' => mb_substr($resolved, 0, 80),
+                    'fallback_used' => $rawLocale === '' && $resolved !== '' && $rawEn !== '',
+                ];
+            }
+        } catch (\Throwable $e) {
+            $dbSample = ['error' => $e->getMessage()];
+        }
+
         return response()->json([
             'request_host' => $request->getHost(),
             'app_locale' => app()->getLocale(),
@@ -112,6 +148,7 @@ class FrontLangController extends Controller
             'inject' => $inject,
             'before_inject' => $before,
             'after_inject' => $after,
+            'db_translation_sample' => $dbSample,
             'hint' => $hint,
         ], 200, [], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
     }

@@ -131,7 +131,9 @@ class ProductCategory extends Model implements TranslatableContract
      */
     public function resolvePageBlockHtml(): string
     {
-        $own = (string)($this->page_block ?? '');
+        $own = function_exists('translated_attr')
+            ? translated_attr($this, 'page_block')
+            : (string)($this->page_block ?? '');
         if (self::hasRichHtml($own)) {
             return front_html_prefer_webp($own);
         }
@@ -145,7 +147,9 @@ class ProductCategory extends Model implements TranslatableContract
             $root->load('translations');
         }
 
-        $inherited = (string)($root->page_block ?? '');
+        $inherited = function_exists('translated_attr')
+            ? translated_attr($root, 'page_block')
+            : (string)($root->page_block ?? '');
         return self::hasRichHtml($inherited) ? front_html_prefer_webp($inherited) : '';
     }
 

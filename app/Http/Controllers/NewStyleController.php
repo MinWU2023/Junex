@@ -50,11 +50,12 @@ class NewStyleController extends Controller
                 }
             }
 
+            $name = translated_attr($p, 'name');
             return [
                 'id' => $p->id,
-                'name' => (string)($p->name ?? ''),
+                'name' => $name,
                 'image' => $img,
-                'alt' => resolve_product_image_alt($imageAlt, (string)($p->img_alt ?? ''), (string)($p->name ?? '')),
+                'alt' => resolve_product_image_alt($imageAlt, (string)($p->img_alt ?? ''), $name),
                 'url' => $p->url ? ('/' . $p->url->url) : 'javascript:void(0);',
                 'publish_at' => $publishAt,
             ];

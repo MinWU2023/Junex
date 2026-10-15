@@ -41,7 +41,6 @@ class ProductService
             'product_id' => $product->id
         ])->orderByDesc('sort')->orderBy('id')->get();
 
-        $locale = app()->getLocale();
         $res = [];
         foreach ($productAttributes as $productAttribute) {
             $values = [];
@@ -49,17 +48,18 @@ class ProductService
                 if ((int)$productAttributeValue->product_attribute_id !== (int)$productAttribute->id) {
                     continue;
                 }
-                $name = $productAttributeValue->translate($locale)->name
-                    ?? $productAttributeValue->name
-                    ?? '';
-                $name = trim((string)$name);
+                $name = translated_attr($productAttributeValue, 'name');
                 if ($name !== '' && !in_array($name, $values, true)) {
                     $values[] = $name;
                 }
             }
             if (!empty($values)) {
-                // 同一属性名下多个属性值用逗号连接
-                $res[$productAttribute->name] = implode(', ', $values);
+                // 同一属性名下多个属性值用逗号连接（属性名本身也走当前语言→英语兜底）
+                $attrLabel = translated_attr($productAttribute, 'name');
+                if ($attrLabel === '') {
+                    continue;
+                }
+                $res[$attrLabel] = implode(', ', $values);
             }
         }
         return $res;
@@ -68,7 +68,7 @@ class ProductService
     public function getRelatedProducts(Product $product, $limit = 6)
     {
         return Product::with([
-            'translation',
+            'translations',
             'productImages' => function ($query) {
                 $query->where('is_main', 1);
             }
@@ -139,14 +139,18 @@ class ProductService
         $ProductAttributes = ProductAttribute::with(['translations'])->orderBy('sort', 'desc')->get();
         $result = [];
         foreach ($ProductAttributes as $key => $value) {
-            $attributes = json_decode($product->attribute, true) ?: json_decode($product->translate('en')->attribute,
-                true);
+            $raw = translated_attr($product, 'attribute');
+            $attributes = $raw !== '' ? json_decode($raw, true) : null;
+            $label = translated_attr($value, 'name');
+            if ($label === '') {
+                continue;
+            }
             if (!$attributes) {
-                $result[$value->name] = '';
+                $result[$label] = '';
             } else {
                 foreach ($attributes as $k => $attribute) {
                     if ($value->mark === $k) {
-                        $result[$value->name] = $attribute;
+                        $result[$label] = $attribute;
                     }
                 }
             }

@@ -69,7 +69,9 @@ class ExcitingUpdate extends Model implements TranslatableContract
         $locale = (string)(config('translatable.locale') ?: config('app.locale') ?: 'en');
         $blogName = '';
         try {
-            $blogName = (string)($blog->translate($locale)->name ?? $blog->name ?? '');
+            $blogName = function_exists('translated_attr')
+                ? translated_attr($blog, 'name', $locale)
+                : (string)($blog->name ?? '');
         } catch (\Throwable $e) {
             $blogName = (string)($blog->name ?? '');
         }

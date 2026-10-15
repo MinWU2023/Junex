@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Modules\Product\Models\Product;
+use App\Support\FrontTranslation;
 use App\Services\WhyChooseService;
 // use App\Modules\User\Models\SearchKeyword;
 use Illuminate\Http\Request;
@@ -43,7 +44,7 @@ class SearchController extends Controller
             //     ]);
             // }
 
-            // 模糊搜索：多词 AND，每词对 name / brief / url_key 做 LIKE %term%
+            // 模糊搜索：多词 AND；翻译字段优先匹配当前语言，同时匹配英语兜底
             $terms = preg_split('/\s+/u', $keyword, -1, PREG_SPLIT_NO_EMPTY) ?: [$keyword];
             $products = Product::query()
                 ->with(['translations', 'productMainImage', 'url'])
@@ -52,11 +53,13 @@ class SearchController extends Controller
                     foreach ($terms as $term) {
                         $like = '%' . addcslashes($term, '%_\\') . '%';
                         $query->where(function ($q) use ($like) {
-                            $q->whereTranslationLike('name', $like)
-                                ->orWhereTranslationLike('brief_content', $like)
-                                ->orWhereTranslationLike('title', $like)
-                                ->orWhereTranslationLike('keywords', $like)
-                                ->orWhere('url_key', 'like', $like);
+                            FrontTranslation::whereLikeAnyLocale($q, [
+                                'name',
+                                'brief_content',
+                                'title',
+                                'keywords',
+                            ], $like);
+                            $q->orWhere('url_key', 'like', $like);
                         });
                     }
                 })
@@ -79,7 +82,7 @@ class SearchController extends Controller
             $img = $img !== '' ? front_webp_url($img) : '';
             return [
                 'id' => $p->id,
-                'name' => (string)($p->name ?? ''),
+                'name' => translated_attr($p, 'name'),
                 'image' => $img,
                 'url' => $p->url ? ('/' . ltrim($p->url->url, '/')) : 'javascript:void(0);',
                 'model' => (string)($p->url_key ?? ''),

@@ -23,7 +23,7 @@ class FaqController extends Controller
             ->get();
 
         $faqGroupsData = $groups->map(function (FaqGroup $g) {
-            $name = (string)($g->name ?? '');
+            $name = translated_attr($g, 'name');
             $first = '';
             $rest = '';
             if ($name !== '') {
@@ -38,8 +38,8 @@ class FaqController extends Controller
                     ->map(function (Faq $faq) {
                         return [
                             'id' => (int)$faq->id,
-                            'subject' => (string)($faq->subject ?? ''),
-                            'content' => (string)($faq->content ?? ''),
+                            'subject' => translated_attr($faq, 'subject'),
+                            'content' => translated_attr($faq, 'content'),
                             'sort' => (int)($faq->sort ?? 0),
                         ];
                     })->values()->toArray()
@@ -50,7 +50,7 @@ class FaqController extends Controller
                 'name' => $name,
                 'name_first' => $first,
                 'name_rest' => $rest,
-                'content' => (string)($g->content ?? ''),
+                'content' => translated_attr($g, 'content'),
                 'faqs' => $faqs,
             ];
         })->values()->toArray();

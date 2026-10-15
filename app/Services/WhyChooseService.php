@@ -52,14 +52,17 @@ class WhyChooseService
                     $whyChoose['center']['logo'] = (string)$setting->logo;
                     $whyChoose['center']['logo_url'] = front_image_url($setting->logo);
                 }
-                if (trim((string)($setting->title ?? '')) !== '') {
-                    $whyChoose['center']['title'] = (string)$setting->title;
+                $centerTitle = translated_attr($setting, 'title');
+                $centerSubtitle = translated_attr($setting, 'subtitle');
+                $centerDesc = translated_attr($setting, 'description_desktop');
+                if ($centerTitle !== '') {
+                    $whyChoose['center']['title'] = $centerTitle;
                 }
-                if (trim((string)($setting->subtitle ?? '')) !== '') {
-                    $whyChoose['center']['subtitle'] = (string)$setting->subtitle;
+                if ($centerSubtitle !== '') {
+                    $whyChoose['center']['subtitle'] = $centerSubtitle;
                 }
-                if (trim((string)($setting->description_desktop ?? '')) !== '') {
-                    $whyChoose['center']['description_desktop'] = (string)$setting->description_desktop;
+                if ($centerDesc !== '') {
+                    $whyChoose['center']['description_desktop'] = $centerDesc;
                 }
             }
         } catch (\Throwable $e) {
@@ -82,10 +85,10 @@ class WhyChooseService
                     }
 
                     return [
-                        'label' => (string)($card->label ?? ''),
-                        'value' => (string)($card->value ?? ''),
-                        'value_suffix' => (string)($card->value_suffix ?? ''),
-                        'description' => (string)($card->description ?? ''),
+                        'label' => translated_attr($card, 'label'),
+                        'value' => translated_attr($card, 'value'),
+                        'value_suffix' => translated_attr($card, 'value_suffix'),
+                        'description' => translated_attr($card, 'description'),
                         'image_mobile' => ltrim($mobile, '/'),
                         'image_mobile_url' => $mobile,
                         'background_desktop' => ltrim($desktop, '/'),

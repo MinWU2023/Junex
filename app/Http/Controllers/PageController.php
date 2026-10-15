@@ -29,7 +29,7 @@ class PageController extends Controller
 
         $pageBanner = $this->getBannersByArea('Common');
 
-        $pageName = (string)($page->name ?? '');
+        $pageName = translated_attr($page, 'name');
         $createdLabel = '';
         if ($page->created_at) {
             $createdLabel = date('F Y', strtotime($page->created_at));
@@ -40,7 +40,7 @@ class PageController extends Controller
             ['label' => $pageName, 'url' => null],
         ]);
 
-        $pageContent = front_html_prefer_webp((string)($page->content ?? ''));
+        $pageContent = front_html_prefer_webp(translated_attr($page, 'content'));
 
         $setting = app('settings')['setting'];
         $tdk = $this->fillDefaultTdk((new SeoTemplateService())->getPage($page), $setting);

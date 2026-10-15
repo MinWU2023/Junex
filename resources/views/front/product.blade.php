@@ -146,7 +146,7 @@
         </div>
 
         <div class="pdp-info">
-            <h1 class="pdp-title">{{ $product->name ?? '' }}</h1>
+            <h1 class="pdp-title">{{ translated_attr($product, 'name') }}</h1>
 
             <div class="pdp-share">
                 @include('front.partials.product-share-bar')
@@ -183,7 +183,7 @@
                 <button type="button"
                         class="js-inquiry-pdp-toggle pdp-btn-fav"
                         data-product-id="{{ $product->id ?? 0 }}"
-                        data-product-name="{{ $product->name ?? '' }}"
+                        data-product-name="{{ translated_attr($product, 'name') }}"
                         data-product-image="{{ $pdpInquiryImage }}"
                         data-product-url="{{ $pdpInquiryUrl }}"
                         data-product-model="{{ $pdpInquiryModel }}"

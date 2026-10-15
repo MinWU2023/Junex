@@ -60,11 +60,13 @@ class ProductListSidebarService
         $imageAlt = $p->productMainImage ? (string)($p->productMainImage->alt ?? '') : '';
         $seoImgAlt = (string)($p->img_alt ?? '');
 
+        $name = translated_attr($p, 'name');
+
         return [
             'id' => $p->id,
-            'name' => (string)($p->name ?? ''),
+            'name' => $name,
             'image' => $img,
-            'alt' => resolve_product_image_alt($imageAlt, $seoImgAlt, (string)($p->name ?? '')),
+            'alt' => resolve_product_image_alt($imageAlt, $seoImgAlt, $name),
             'url' => $p->url ? ('/' . ltrim($p->url->url, '/')) : 'javascript:void(0);',
             'model' => (string)($p->url_key ?? ''),
             'item_no' => (string)($p->url_key ?? ''),
@@ -177,7 +179,7 @@ class ProductListSidebarService
 
             $sections[] = [
                 'id' => (int)$cat->id,
-                'name' => (string)($cat->name ?? ''),
+                'name' => translated_attr($cat, 'name'),
                 'url' => $cat->url ? ('/' . ltrim($cat->url->url, '/')) : 'javascript:void(0);',
                 'products' => $this->mapProducts($products, $favoritedIds),
             ];
@@ -207,7 +209,7 @@ class ProductListSidebarService
 
         return [
             'id' => (int)$cat->id,
-            'name' => (string)($cat->name ?? ''),
+            'name' => translated_attr($cat, 'name'),
             'url' => $url,
             'active' => $isActive,
             'open' => $isActive || $hasActiveChild,

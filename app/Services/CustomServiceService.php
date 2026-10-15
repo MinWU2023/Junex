@@ -28,7 +28,7 @@ class CustomServiceService
             $items = [];
             foreach ($column->activeItems as $item) {
                 $items[] = [
-                    'title' => (string)($item->title ?? ''),
+                    'title' => translated_attr($item, 'title'),
                     'url' => (string)($item->url ?: '#'),
                     'image_url' => front_image_url($item->path),
                 ];
@@ -38,9 +38,9 @@ class CustomServiceService
                 'code' => (string)$column->code,
                 'layout' => (string)($column->layout ?: 'grid'),
                 'bg_image_url' => front_image_url($column->bg_image),
-                'title_prefix' => (string)($column->title_prefix ?? ''),
-                'title_suffix' => (string)($column->title_suffix ?? ''),
-                'subtitle' => (string)($column->subtitle ?? ''),
+                'title_prefix' => translated_attr($column, 'title_prefix'),
+                'title_suffix' => translated_attr($column, 'title_suffix'),
+                'subtitle' => translated_attr($column, 'subtitle'),
                 'items' => $items,
             ];
         }

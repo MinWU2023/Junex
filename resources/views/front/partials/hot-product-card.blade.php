@@ -14,7 +14,7 @@
         if ($image === '') {
             $image = front_webp_url('/front/imgs/index_rc_01.png');
         }
-        $name = $product->name ?? '';
+        $name = translated_attr($product, 'name');
         $url = '/' . ltrim($product->url->url ?? '', '/');
         if ($url === '/') {
             $url = '#';
@@ -22,7 +22,7 @@
         $favorite = (int)($product->is_favorite ?? 0);
         $productId = (int)($product->id ?? 0);
         $model = (string)($product->url_key ?? '');
-        $brief = (string)($product->brief_content ?? '');
+        $brief = translated_attr($product, 'brief_content');
     }
 @endphp
 

@@ -331,7 +331,9 @@
             d.resolve('');
             return d.promise();
         }
-        var forceRich = !!(field.is_rich || looksLikeHtml(field.value));
+        var fieldType = String(field.type || 'text').toLowerCase();
+        var isListField = fieldType === 'list' || /^\s*\[/.test(String(field.value || ''));
+        var forceRich = !isListField && !!(field.is_rich || looksLikeHtml(field.value));
         $.ajax({
             url: apiPrefix + 'translateWorkbench/translate',
             type: 'POST',
@@ -340,7 +342,7 @@
                 _token: csrfToken,
                 text: field.value,
                 locale: locale,
-                type: forceRich ? (field.type || 'html') : (field.type || 'text'),
+                type: isListField ? 'list' : (forceRich ? (field.type || 'html') : (field.type || 'text')),
                 is_rich: forceRich ? 1 : 0
             }
         }).done(function (res) {
@@ -351,6 +353,15 @@
             var text = (res.data && res.data.text) || '';
             var seg = (res.data && res.data.segment_count) || 0;
             var done = (res.data && res.data.translated_count) || 0;
+            if (res.data && res.data.is_list) {
+                twBootLog('列表字段提取 ' + seg + ' 条，成功翻译 ' + done + ' 条', done > 0 ? false : true);
+                if (res.data.same_as_source && done === 0) {
+                    d.reject('列表字段未翻译成功（items=' + seg + '）');
+                    return;
+                }
+                d.resolve(text);
+                return;
+            }
             if (forceRich || (res.data && res.data.is_rich)) {
                 twBootLog('富文本提取 ' + seg + ' 段，成功翻译 ' + done + ' 段', done > 0 ? false : true);
                 if (res.data.same_as_source && done === 0) {

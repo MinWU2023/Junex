@@ -26,7 +26,7 @@ class VideoController extends Controller
 
     private static function mapVideoListItem(ProductVideo $video, string $fallbackImage): array
     {
-        $rawContent = (string)($video->content ?? '');
+        $rawContent = translated_attr($video, 'content');
         $excerpt = trim(preg_replace('/\s+/', ' ', strip_tags($rawContent)));
         if (mb_strlen($excerpt) > 160) {
             $excerpt = mb_substr($excerpt, 0, 160) . '...';
@@ -50,7 +50,7 @@ class VideoController extends Controller
         return [
             'id' => $video->id,
             'date' => self::formatVideoDate($video->updated_at ?? null),
-            'title' => (string)($video->name ?? ''),
+            'title' => translated_attr($video, 'name'),
             'excerpt' => $excerpt,
             'image' => $img,
             'url' => $url,
@@ -145,10 +145,11 @@ class VideoController extends Controller
             ? ('/' . ltrim($video->url->url, '/'))
             : ('/video/' . ltrim((string)($video->url_key ?: $video->id), '/'));
 
+        $videoTitle = translated_attr($video, 'name');
         $breadcrumbs = $this->buildBreadcrumbs([
             ['label' => __('Home'), 'url' => '/'],
             ['label' => __('Videos'), 'url' => '/videos'],
-            ['label' => (string)($video->name ?? ''), 'url' => null],
+            ['label' => $videoTitle, 'url' => null],
         ]);
 
         $prevVideo = ProductVideo::query()
@@ -192,7 +193,7 @@ class VideoController extends Controller
             }
             return [
                 'id' => $p->id,
-                'name' => (string)($p->name ?? ''),
+                'name' => translated_attr($p, 'name'),
                 'image' => $img,
                 'url' => $p->url ? ('/' . ltrim($p->url->url, '/')) : 'javascript:void(0);',
             ];
@@ -207,12 +208,12 @@ class VideoController extends Controller
 
         $data = [
             'video' => $video,
-            'videoTitle' => (string)($video->name ?? ''),
+            'videoTitle' => $videoTitle,
             'videoDate' => self::formatVideoDate($video->updated_at ?? null),
             'videoCover' => $videoCover,
             'videoUrl' => $videoUrl,
-            'videoIntroHtml' => (string)($video->content ?? ''),
-            'videoDetailHtml' => (string)($video->content2 ?? ''),
+            'videoIntroHtml' => front_html_prefer_webp(translated_attr($video, 'content')),
+            'videoDetailHtml' => front_html_prefer_webp(translated_attr($video, 'content2')),
             'videoDetailUrl' => $detailUrl,
             'prevVideoData' => $formatVideoLink($prevVideo, $fallbackThumb),
             'nextVideoData' => $formatVideoLink($nextVideo, $fallbackThumb),
@@ -252,7 +253,7 @@ class VideoController extends Controller
         $breadcrumbs = $this->buildBreadcrumbs([
             ['label' => __('Home'), 'url' => '/'],
             ['label' => __('Videos'), 'url' => '/videos'],
-            ['label' => (string)($category->name ?? ''), 'url' => null],
+            ['label' => translated_attr($category, 'name'), 'url' => null],
         ]);
 
         $videos = ProductVideo::query()

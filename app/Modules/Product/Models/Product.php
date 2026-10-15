@@ -52,17 +52,21 @@ class Product extends Model implements TranslatableContract
         return $this->belongsTo(User::class,'admin_user_id','id');
     }
 
-    public function getCategoryNameAttribute(){
-      $res=  DB::table('product_product_category')->where('product_id',$this->getKey())->first();
-      if ($res){
-//          DB::table('product_category_translations')->where([
-//              'locale'
-//          ])
+    public function getCategoryNameAttribute()
+    {
+        $res = DB::table('product_product_category')->where('product_id', $this->getKey())->first();
+        if (!$res) {
+            return '';
+        }
 
-         $cate =  ProductCategory::query()->with(['translations'])->find($res->product_category_id);
-        return $cate->name;
-      }
-      return  "";
+        $cate = ProductCategory::query()->with(['translations'])->find($res->product_category_id);
+        if (!$cate) {
+            return '';
+        }
+
+        return function_exists('translated_attr')
+            ? translated_attr($cate, 'name')
+            : (string)($cate->name ?? '');
     }
 
     public function productImages()

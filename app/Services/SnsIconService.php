@@ -7,11 +7,8 @@ use Illuminate\Support\Facades\Schema;
 
 class SnsIconService
 {
-    /** @var array<string, array|null> */
-    protected static $cache = [
-        'link' => null,
-        'share' => null,
-    ];
+    /** @var array<string, array|null> scene|locale => list */
+    protected static $cache = [];
 
     /**
      * @param string $scene link|share
@@ -20,16 +17,18 @@ class SnsIconService
     public function getIcons(string $scene = 'link'): array
     {
         $scene = $scene === 'share' ? 'share' : 'link';
+        $locale = function_exists('front_locale_code') ? front_locale_code() : (string)app()->getLocale();
+        $cacheKey = $scene . '|' . $locale;
 
-        if (self::$cache[$scene] !== null) {
-            return self::$cache[$scene];
+        if (isset(self::$cache[$cacheKey]) && self::$cache[$cacheKey] !== null) {
+            return self::$cache[$cacheKey];
         }
 
-        self::$cache[$scene] = [];
+        self::$cache[$cacheKey] = [];
 
         try {
             if (!Schema::hasTable('sns_icons')) {
-                return self::$cache[$scene];
+                return self::$cache[$cacheKey];
             }
 
             $query = SnsIcon::query()->with(['translations']);
@@ -49,11 +48,13 @@ class SnsIconService
                 if ($sign === '') {
                     continue;
                 }
-                $alt = trim((string)($item->alt ?? ''));
+                $alt = function_exists('translated_attr')
+                    ? translated_attr($item, 'alt')
+                    : trim((string)($item->alt ?? ''));
                 if ($alt === '') {
                     $alt = ucfirst($sign);
                 }
-                self::$cache[$scene][] = [
+                self::$cache[$cacheKey][] = [
                     'id' => (int)$item->id,
                     'sign' => $sign,
                     'path' => (string)($item->path ?? ''),
@@ -66,10 +67,10 @@ class SnsIconService
                 ];
             }
         } catch (\Throwable $e) {
-            self::$cache[$scene] = [];
+            self::$cache[$cacheKey] = [];
         }
 
-        return self::$cache[$scene];
+        return self::$cache[$cacheKey];
     }
 
     /** @deprecated use getIcons('link') */
@@ -90,9 +91,6 @@ class SnsIconService
 
     public function clearCache(): void
     {
-        self::$cache = [
-            'link' => null,
-            'share' => null,
-        ];
+        self::$cache = [];
     }
 }

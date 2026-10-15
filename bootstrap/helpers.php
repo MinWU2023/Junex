@@ -511,15 +511,18 @@ if (!function_exists('page_by_url_path')) {
         static $cache = [];
 
         $path = normalize_front_url_path($path);
-        if (array_key_exists($path, $cache)) {
-            return $cache[$path];
+        $locale = function_exists('front_locale_code') ? front_locale_code() : (string)(app()->getLocale() ?: 'en');
+        $cacheKey = $locale . '|' . $path;
+        if (array_key_exists($cacheKey, $cache)) {
+            return $cache[$cacheKey];
         }
 
         try {
             if (!class_exists(\App\Modules\Page\Models\Page::class)) {
-                return $cache[$path] = null;
+                return $cache[$cacheKey] = null;
             }
             $page = \App\Modules\Page\Models\Page::query()
+                ->with(['translations'])
                 ->active()
                 ->where(function ($q) use ($path) {
                     $q->where('url_key', $path)
@@ -530,7 +533,7 @@ if (!function_exists('page_by_url_path')) {
             $page = null;
         }
 
-        return $cache[$path] = $page;
+        return $cache[$cacheKey] = $page;
     }
 }
 
@@ -1011,5 +1014,40 @@ if (!function_exists('fill_empty_img_alts_in_html')) {
             },
             $html
         );
+    }
+}
+
+if (!function_exists('front_locale_code')) {
+    function front_locale_code(): string
+    {
+        return \App\Support\FrontTranslation::locale();
+    }
+}
+
+if (!function_exists('front_fallback_locale_code')) {
+    function front_fallback_locale_code(): string
+    {
+        return \App\Support\FrontTranslation::fallbackLocale();
+    }
+}
+
+if (!function_exists('translated_attr')) {
+    /**
+     * ǰ̨�ã���ǰ���Է����ֶ����ȣ�����Ӣ�ﶵ�ס������ں�̨�༭������
+     */
+    function translated_attr($model, string $attribute, ?string $locale = null): string
+    {
+        return \App\Support\FrontTranslation::attr($model, $attribute, $locale);
+    }
+}
+
+if (!function_exists('translated_attrs')) {
+    /**
+     * @param  array<int, string>  $attributes
+     * @return array<string, string>
+     */
+    function translated_attrs($model, array $attributes, ?string $locale = null): array
+    {
+        return \App\Support\FrontTranslation::attrs($model, $attributes, $locale);
     }
 }

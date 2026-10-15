@@ -54,8 +54,8 @@ class SectionTitleService
         ],
     ];
 
-    /** @var array<string, array{title:string,subtitle:string,name:string,sign:string}>|null */
-    private ?array $cache = null;
+    /** @var array<string, array<string, array{title:string,subtitle:string,name:string,sign:string}>> locale => map */
+    private array $cacheByLocale = [];
 
     /**
      * @return array{title:string,subtitle:string,name:string,sign:string}
@@ -89,8 +89,9 @@ class SectionTitleService
      */
     public function all(): array
     {
-        if ($this->cache !== null) {
-            return $this->cache;
+        $locale = function_exists('front_locale_code') ? front_locale_code() : (string)(app()->getLocale() ?: 'en');
+        if (isset($this->cacheByLocale[$locale])) {
+            return $this->cacheByLocale[$locale];
         }
 
         $result = [];
@@ -112,8 +113,8 @@ class SectionTitleService
                 ->keyBy('sign');
 
             foreach ($rows as $sign => $row) {
-                $title = trim((string)($row->title ?? ''));
-                $subtitle = trim((string)($row->subtitle ?? ''));
+                $title = translated_attr($row, 'title');
+                $subtitle = translated_attr($row, 'subtitle');
                 $result[$sign] = [
                     'sign' => $sign,
                     'name' => (string)($row->name ?: ($result[$sign]['name'] ?? $sign)),
@@ -125,9 +126,9 @@ class SectionTitleService
             // keep defaults
         }
 
-        $this->cache = $result;
+        $this->cacheByLocale[$locale] = $result;
 
-        return $this->cache;
+        return $this->cacheByLocale[$locale];
     }
 
     /**
@@ -174,6 +175,6 @@ class SectionTitleService
             }
         }
 
-        $this->cache = null;
+        $this->cacheByLocale = [];
     }
 }

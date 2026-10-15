@@ -89,7 +89,7 @@
     $hasBlogList = count($blogListItems) > 0;
     $isBlogEmpty = !$hasFeaturedBlog && !$hasBlogList;
     $onlyFeaturedBlog = $hasFeaturedBlog && !$hasBlogList;
-    $tagName = (string)(($tag->name ?? null) ?: ($breadcrumbs[count($breadcrumbs ?? []) - 1]['label'] ?? ''));
+    $tagName = translated_attr($tag, 'name') ?: (string)($breadcrumbs[count($breadcrumbs ?? []) - 1]['label'] ?? '');
 @endphp
 
 @if($isBlogEmpty)

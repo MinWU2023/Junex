@@ -80,6 +80,7 @@ class FrontPageCatalogService
 
         $rows = [];
         $pages = Page::query()
+            ->with(['translations'])
             ->where('is_temp', 0)
             ->orderByDesc('sort')
             ->orderByDesc('id')
@@ -90,7 +91,10 @@ class FrontPageCatalogService
             if ($path === '') {
                 continue;
             }
-            $name = trim((string)($page->name ?? ''));
+            // 后台目录列表：当前语言优先，空则英语
+            $name = function_exists('translated_attr')
+                ? translated_attr($page, 'name')
+                : trim((string)($page->name ?? ''));
             if ($name === '') {
                 $name = $path !== '' ? $path : ('页面#' . $page->id);
             }

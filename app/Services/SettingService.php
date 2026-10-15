@@ -71,9 +71,11 @@ class SettingService
     {
         $slogan = Slogan::with(['translations'])->where('type', $type)->first();
         if ($slogan) {
-            return $slogan->title;
-        } else {
-            return '';
+            return function_exists('translated_attr')
+                ? translated_attr($slogan, 'title')
+                : (string)($slogan->title ?? '');
         }
+
+        return '';
     }
 }

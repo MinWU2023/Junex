@@ -7,13 +7,13 @@
         $tdk = [
             'title' => ($cmsPageTdk['title'] ?? '') !== ''
                 ? $cmsPageTdk['title']
-                : (($tdk['title'] ?? '') !== '' ? $tdk['title'] : ($setting->title ?? '')),
+                : (($tdk['title'] ?? '') !== '' ? $tdk['title'] : translated_attr($setting, 'title')),
             'keywords' => ($cmsPageTdk['keywords'] ?? '') !== ''
                 ? $cmsPageTdk['keywords']
-                : (($tdk['keywords'] ?? '') !== '' ? $tdk['keywords'] : ($setting->keywords ?? '')),
+                : (($tdk['keywords'] ?? '') !== '' ? $tdk['keywords'] : translated_attr($setting, 'keywords')),
             'description' => ($cmsPageTdk['description'] ?? '') !== ''
                 ? $cmsPageTdk['description']
-                : (($tdk['description'] ?? '') !== '' ? $tdk['description'] : ($setting->description ?? '')),
+                : (($tdk['description'] ?? '') !== '' ? $tdk['description'] : translated_attr($setting, 'description')),
         ];
     }
 

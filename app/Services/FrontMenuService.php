@@ -90,7 +90,7 @@ class FrontMenuService
 
         $item = [
             'key' => 'nav-' . $nav->id,
-            'label' => (string)($nav->name ?? ''),
+            'label' => translated_attr($nav, 'name'),
             'url' => $url !== '' ? $url : '#',
             'match' => $url !== '' && $url !== '#' ? [$this->urlToPath($url)] : [],
             'children' => $children,
@@ -181,7 +181,7 @@ class FrontMenuService
 
             $item = [
                 'key' => 'product-category-' . $cat->id,
-                'label' => (string)$cat->name,
+                'label' => translated_attr($cat, 'name'),
                 'url' => $url,
                 'match' => [$this->urlToPath($url)],
                 'children' => $children,
@@ -332,7 +332,7 @@ class FrontMenuService
                 $childUrl = $child->getUrl() ?: url('/' . ltrim($child->url_key, '/'));
                 $children[] = [
                     'key' => 'product-category-' . $child->id,
-                    'label' => $child->name,
+                    'label' => translated_attr($child, 'name'),
                     'url' => $childUrl,
                     'match' => [$this->urlToPath($childUrl)],
                     'children' => [],
@@ -355,7 +355,7 @@ class FrontMenuService
 
             $result[] = [
                 'key' => 'product-category-' . $category->id,
-                'label' => $category->name,
+                'label' => translated_attr($category, 'name'),
                 'url' => $categoryUrl,
                 'match' => [$categoryPath],
                 'children' => $children,

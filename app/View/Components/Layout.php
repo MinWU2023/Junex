@@ -288,7 +288,7 @@ class Layout extends Component
                     continue;
                 }
                 $children[] = [
-                    'label' => $child->name,
+                    'label' => translated_attr($child, 'name'),
                     'url' => $child->url ?: '#',
                     'target' => (int)($child->is_new ?? 0) === 1 ? '_blank' : null,
                     'rel' => ((int)($child->is_nofollow ?? 0) === 1)
@@ -298,7 +298,7 @@ class Layout extends Component
             }
 
             $result[] = [
-                'label' => $group->name,
+                'label' => translated_attr($group, 'name'),
                 'url' => $group->url ?: '#',
                 'target' => (int)($group->is_new ?? 0) === 1 ? '_blank' : null,
                 'rel' => ((int)($group->is_nofollow ?? 0) === 1)
@@ -313,15 +313,10 @@ class Layout extends Component
 
     private function buildSearchData($setting): array
     {
-        // 只用当前语言自己的 Setting 翻译，禁止回退到英文（否则标题会一直显示英文）
-        $locale = app()->getLocale();
-        $row = null;
-        if (is_object($setting) && method_exists($setting, 'translate')) {
-            $row = $setting->translate($locale, false);
-        }
-        $title = trim((string)($row->search_title ?? ''));
-        $placeholder = trim((string)($row->search_placeholder ?? ''));
-        $hotKeywords = trim((string)($row->search_hot_keywords ?? ''));
+        // 当前语言 Setting 字段优先，空则英语兜底，再回退 JSON 文案
+        $title = translated_attr($setting, 'search_title');
+        $placeholder = translated_attr($setting, 'search_placeholder');
+        $hotKeywords = translated_attr($setting, 'search_hot_keywords');
         $hotItems = [];
         if ($hotKeywords !== '') {
             foreach (explode(',', $hotKeywords) as $keyword) {

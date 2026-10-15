@@ -87,8 +87,8 @@ class ProductController extends Controller
         $breadcrumbs = $this->buildBreadcrumbs([
             ['label' => __('Home'), 'url' => '/'],
             ['label' => __('Products'), 'url' => '/products'],
-            $category->parent ? ['label' => $category->parent->name, 'url' => $category->parent->url ? ('/' . $category->parent->url->url) : null] : null,
-            ['label' => $category->name, 'url' => null],
+            $category->parent ? ['label' => translated_attr($category->parent, 'name'), 'url' => $category->parent->url ? ('/' . $category->parent->url->url) : null] : null,
+            ['label' => translated_attr($category, 'name'), 'url' => null],
         ]);
 
         $displayMode = $category->display_mode ?: ProductCategory::DISPLAY_PRODUCT_LIST;
@@ -173,7 +173,7 @@ class ProductController extends Controller
         $breadcrumbs = $this->buildBreadcrumbs([
             ['label' => __('Home'), 'url' => '/'],
             ['label' => __('Products'), 'url' => '/products'],
-            ['label' => $tag->name, 'url' => null],
+            ['label' => translated_attr($tag, 'name'), 'url' => null],
         ]);
 
         $products = Product::query()
@@ -199,11 +199,12 @@ class ProductController extends Controller
             $img = $p->productMainImage ? (string)($p->productMainImage->path ?? '') : '';
             $img = $img !== '' ? front_webp_url($img) : '';
             $imageAlt = $p->productMainImage ? (string)($p->productMainImage->alt ?? '') : '';
+            $name = translated_attr($p, 'name');
             return [
                 'id' => $p->id,
-                'name' => (string)($p->name ?? ''),
+                'name' => $name,
                 'image' => $img,
-                'alt' => resolve_product_image_alt($imageAlt, (string)($p->img_alt ?? ''), (string)($p->name ?? '')),
+                'alt' => resolve_product_image_alt($imageAlt, (string)($p->img_alt ?? ''), $name),
                 'url' => $p->url ? ('/' . ltrim($p->url->url, '/')) : 'javascript:void(0);',
                 'model' => (string)($p->url_key ?? ''),
                 'item_no' => (string)($p->url_key ?? ''),
@@ -260,11 +261,12 @@ class ProductController extends Controller
         $category = $product->productCategory->first();
         $parentCategory = $category ? $category->parent : null;
         
+        $productName = translated_attr($product, 'name');
         $breadcrumbs = $this->buildBreadcrumbs([
             ['label' => __('Home'), 'url' => '/'],
             ['label' => __('Products'), 'url' => '/products'],
-            $category ? ['label' => $category->name, 'url' => $category->url ? ('/' . $category->url->url) : null] : null,
-            ['label' => $product->name, 'url' => null],
+            $category ? ['label' => translated_attr($category, 'name'), 'url' => $category->url ? ('/' . $category->url->url) : null] : null,
+            ['label' => $productName, 'url' => null],
         ]);
 
         $noImage = "https://placehold.co/640x640?text=No+Image";
@@ -277,7 +279,7 @@ class ProductController extends Controller
                 return sprintf('%d-%010d', (int)($img->is_main ?? 0), (int)($img->sort ?? 0));
             })
             ->values()
-            ->map(function ($img) use ($noImage, $seoImgAlt, $product) {
+            ->map(function ($img) use ($noImage, $seoImgAlt, $productName) {
                 $path = (string)($img->path ?? '');
                 $url = $path !== '' ? front_webp_url($path) : $noImage;
                 if ($url === '') {
@@ -288,7 +290,7 @@ class ProductController extends Controller
                     'alt' => resolve_product_image_alt(
                         (string)($img->alt ?? ''),
                         $seoImgAlt,
-                        (string)($product->name ?? 'Product')
+                        $productName !== '' ? $productName : 'Product'
                     ),
                 ];
             })
@@ -297,7 +299,7 @@ class ProductController extends Controller
         if (empty($productImagesData)) {
             $productImagesData = [[
                 'url' => $noImage,
-                'alt' => resolve_product_image_alt('', $seoImgAlt, (string)($product->name ?? 'Product')),
+                'alt' => resolve_product_image_alt('', $seoImgAlt, $productName !== '' ? $productName : 'Product'),
             ]];
         }
 
@@ -307,7 +309,9 @@ class ProductController extends Controller
         $categoryLabel = '';
         $categoryUrl = null;
         if ($category) {
-            $categoryLabel = $parentCategory ? ($parentCategory->name . ' / ' . $category->name) : (string)$category->name;
+            $catName = translated_attr($category, 'name');
+            $parentName = $parentCategory ? translated_attr($parentCategory, 'name') : '';
+            $categoryLabel = $parentName !== '' ? ($parentName . ' / ' . $catName) : $catName;
             $categoryUrl = $category->url ? ('/' . $category->url->url) : null;
         }
 
@@ -366,11 +370,11 @@ class ProductController extends Controller
             $relatedLimit
         );
 
-        $productIntroHtml = (string)($product->content ?? '');
-        if (trim($productIntroHtml) === '') {
-            $productIntroHtml = (string)($product->brief_content ?? '');
+        $productIntroHtml = translated_attr($product, 'content');
+        if ($productIntroHtml === '') {
+            $productIntroHtml = translated_attr($product, 'brief_content');
         }
-        $productDetailsHtml = (string)($product->product_details ?? '');
+        $productDetailsHtml = translated_attr($product, 'product_details');
         // 富文本图片无 alt 时，默认使用 SEO「产品图片标签」
         if ($seoImgAlt !== '') {
             $productIntroHtml = fill_empty_img_alts_in_html($productIntroHtml, $seoImgAlt);
@@ -380,9 +384,11 @@ class ProductController extends Controller
         $productDetailsHtml = front_html_prefer_webp($productDetailsHtml);
 
         $productTagsData = $product->productTags
-            ->filter(static fn ($tag) => trim((string)($tag->name ?? '')) !== '')
             ->map(static function ($tag) {
-                $name = trim((string)($tag->name ?? ''));
+                $name = translated_attr($tag, 'name');
+                if ($name === '') {
+                    return null;
+                }
                 $name = \Illuminate\Support\Str::title(mb_strtolower($name, 'UTF-8'));
                 return [
                     'id' => $tag->id,
@@ -390,6 +396,7 @@ class ProductController extends Controller
                     'url' => $tag->url ? ('/' . ltrim((string)$tag->url->url, '/')) : 'javascript:void(0);',
                 ];
             })
+            ->filter()
             ->values()
             ->toArray();
 
@@ -444,16 +451,25 @@ class ProductController extends Controller
         $productFaqsData = $faqByProduct
             ->concat($faqByCategory)
             ->unique('id')
-            ->filter(static fn ($faq) => trim((string)($faq->subject ?? '')) !== '')
-            ->sortByDesc(static fn ($faq) => sprintf('%010d-%010d', (int)$faq->sort, (int)$faq->id))
-            ->values()
             ->map(static function ($faq) {
+                $subject = translated_attr($faq, 'subject');
+                if ($subject === '') {
+                    return null;
+                }
                 return [
                     'id' => $faq->id,
-                    'subject' => (string)$faq->subject,
-                    'content' => (string)($faq->content ?? ''),
+                    'subject' => $subject,
+                    'content' => translated_attr($faq, 'content'),
+                    'sort' => (int)$faq->sort,
                 ];
             })
+            ->filter()
+            ->sortByDesc(static fn ($faq) => sprintf('%010d-%010d', (int)$faq['sort'], (int)$faq['id']))
+            ->map(static function ($faq) {
+                unset($faq['sort']);
+                return $faq;
+            })
+            ->values()
             ->toArray();
 
         $setting = app('settings')['setting'];

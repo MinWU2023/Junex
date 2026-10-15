@@ -99,25 +99,10 @@ class StaticBlockService
             $block = $query->with(['translations'])->first();
 
             if ($block) {
-                $locale = (string)app()->getLocale();
-                $fallback = (string)(config('translatable.fallback_locale') ?: config('app.fallback_locale', 'en'));
-
-                $content = null;
-                $translation = $block->translate($locale, false);
-                if ($translation && trim((string)($translation->content ?? '')) !== '') {
-                    $content = (string)$translation->content;
-                }
-
-                if ($content === null && $fallback !== '' && $fallback !== $locale) {
-                    $fallbackTranslation = $block->translate($fallback, false);
-                    if ($fallbackTranslation && trim((string)($fallbackTranslation->content ?? '')) !== '') {
-                        $content = (string)$fallbackTranslation->content;
-                    }
-                }
-
-                if ($content === null) {
-                    $content = (string)($block->content ?? '');
-                }
+                // 当前语言 content 优先，空则英语兜底
+                $content = function_exists('translated_attr')
+                    ? translated_attr($block, 'content')
+                    : (string)($block->content ?? '');
 
                 $html = $this->processPlaceholders($content, $sign);
                 if ($sign === 'contact_us' && ContactUsBlockService::isCopyMissing($html)) {

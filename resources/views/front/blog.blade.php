@@ -182,7 +182,7 @@
             <div class="text-f18 font-poppins-medium uppercase tracking-wide">{{ __('Share') }}</div>
             <div class="mt-4 flex flex-wrap items-center gap-3">
                 @php
-                    $blogShareTitle = (string)($blogTitle ?? ($blog->name ?? ''));
+                    $blogShareTitle = (string)($blogTitle ?? translated_attr($blog, 'name'));
                     $blogShareImage = (string)($blogCover ?? '');
                     if ($blogShareImage !== '' && !preg_match('#^https?://#i', $blogShareImage)) {
                         $blogShareImage = url($blogShareImage);

@@ -51,14 +51,16 @@ class HomeController extends Controller
         $banner = $this->getBannersByArea('Home');
 
         $heroBanners = $banner->map(function ($item) {
+            $title = translated_attr($item, 'name');
+            $buttonText = translated_attr($item, 'button_text');
             return [
                 'path' => front_image_url($item->path ?? ''),
                 'path_mobile' => front_image_url($item->path_mobile ?? ''),
-                'alt' => $item->alt ?? ($item->name ?? 'Banner'),
+                'alt' => translated_attr($item, 'alt') ?: ($title !== '' ? $title : 'Banner'),
                 'url' => !empty($item->url) ? $item->url : null,
-                'title' => $item->name ?? '',
-                'description' => $item->description ?? '',
-                'button_text' => $item->button_text !== null && $item->button_text !== '' ? $item->button_text : 'Get More',
+                'title' => $title,
+                'description' => translated_attr($item, 'description'),
+                'button_text' => $buttonText !== '' ? $buttonText : 'Get More',
             ];
         });
         $tdk = $this->resolveCmsPageTdkByPath($setting, 'home', (new SeoTemplateService())->getHome());
@@ -142,7 +144,7 @@ class HomeController extends Controller
 
                 return [
                     'key' => (string)($tab->tab_key ?: ('tab_' . $tab->id)),
-                    'label' => (string)($tab->label ?: ''),
+                    'label' => translated_attr($tab, 'label'),
                     'products' => $products,
                 ];
             })
@@ -187,14 +189,15 @@ class HomeController extends Controller
                 }
             }
 
+            $title = translated_attr($blog, 'name');
             return [
                 'id' => $id ?? $blog->id,
                 'date' => $dateText,
-                'title' => (string)($blog->name ?? ''),
+                'title' => $title,
                 'image' => $img,
                 'url' => $url,
                 'button_text' => 'Learn More',
-                'alt' => (string)($blog->name ?? 'Blog cover'),
+                'alt' => $title !== '' ? $title : 'Blog cover',
             ];
         };
 
@@ -310,13 +313,25 @@ class HomeController extends Controller
             return front_image_url($src);
         };
 
-        $mapFeatures = static function ($features) use ($normalizeImageUrl): array {
-            $out = [];
-            if (!is_array($features)) {
-                return $out;
+        $normalizeFeaturePayload = static function ($features): array {
+            // 兼容：数组 / JSON 字符串 / 双重编码 JSON
+            if (is_string($features)) {
+                $decoded = json_decode(trim($features), true);
+                if (is_string($decoded)) {
+                    $decoded = json_decode($decoded, true);
+                }
+                $features = is_array($decoded) ? $decoded : [];
             }
-            foreach ($features as $i => $row) {
-                $text = is_array($row) ? (string)($row['text'] ?? '') : (string)$row;
+            if (!is_array($features)) {
+                return [];
+            }
+            return $features;
+        };
+
+        $mapFeatures = static function ($features) use ($normalizeImageUrl, $normalizeFeaturePayload): array {
+            $out = [];
+            foreach ($normalizeFeaturePayload($features) as $i => $row) {
+                $text = is_array($row) ? (string)($row['text'] ?? $row['title'] ?? $row['label'] ?? '') : (string)$row;
                 $text = trim($text);
                 if ($text === '') {
                     continue;
@@ -344,14 +359,23 @@ class HomeController extends Controller
             ->orderByDesc('id')
             ->get()
             ->map(function ($slide) use ($normalizeImageUrl, $mapFeatures) {
-                $features = $mapFeatures($slide->features);
+                // features：当前语言优先；空/非法 JSON 则英语兜底（对勾三行）
+                $locale = function_exists('front_locale_code') ? front_locale_code() : (string)app()->getLocale();
+                $fallback = function_exists('front_fallback_locale_code') ? front_fallback_locale_code() : 'en';
+                $localeRow = method_exists($slide, 'translate') ? $slide->translate($locale, false) : null;
+                $features = $mapFeatures($localeRow ? ($localeRow->features ?? null) : ($slide->features ?? null));
+                if ($features === [] && $fallback !== '' && $fallback !== $locale) {
+                    $enRow = $slide->translate($fallback, false);
+                    $features = $mapFeatures($enRow ? ($enRow->features ?? null) : null);
+                }
+                $buttonText = translated_attr($slide, 'button_text');
                 return [
                     'media_image_url' => $normalizeImageUrl($slide->path),
-                    'title' => (string)($slide->title ?? ''),
-                    'description' => (string)($slide->description ?? ''),
+                    'title' => translated_attr($slide, 'title'),
+                    'description' => translated_attr($slide, 'description'),
                     'features' => $features,
                     'button' => [
-                        'text' => (string)($slide->button_text ?? 'Learn More'),
+                        'text' => $buttonText !== '' ? $buttonText : 'Learn More',
                         'url' => (string)($slide->button_url ?: '#'),
                     ],
                 ];
@@ -370,13 +394,14 @@ class HomeController extends Controller
             ->orderByDesc('id')
             ->get()
             ->map(function ($item) use ($normalizeImageUrl) {
+                $buttonText = translated_attr($item, 'button_text');
                 return [
                     'image' => $normalizeImageUrl($item->path),
-                    'alt' => (string)($item->alt ?? ''),
-                    'title_html' => (string)($item->title ?? ''),
-                    'description' => (string)($item->description ?? ''),
+                    'alt' => translated_attr($item, 'alt'),
+                    'title_html' => translated_attr($item, 'title'),
+                    'description' => translated_attr($item, 'description'),
                     'url' => (string)($item->button_url ?: '#'),
-                    'button_text' => (string)($item->button_text ?: 'Learn More'),
+                    'button_text' => $buttonText !== '' ? $buttonText : 'Learn More',
                 ];
             })
             ->filter(function ($card) {
@@ -578,11 +603,11 @@ class HomeController extends Controller
 
         if ($page) {
             $page->loadMissing(['translations']);
-            $name = trim((string)($page->name ?? ''));
+            $name = translated_attr($page, 'name');
             if ($name !== '') {
                 $pageName = $name;
             }
-            $pageContent = front_html_prefer_webp((string)($page->content ?? ''));
+            $pageContent = front_html_prefer_webp(translated_attr($page, 'content'));
             if ($page->created_at) {
                 $createdLabel = date('F Y', strtotime($page->created_at));
             }

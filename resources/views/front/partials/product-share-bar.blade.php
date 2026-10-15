@@ -1,6 +1,6 @@
 @php
     $snsShareUrl = url()->current();
-    $snsShareTitle = (string)($product->name ?? '');
+    $snsShareTitle = translated_attr($product, 'name');
     $snsShareImage = (string)(($productImagesData[0]['url'] ?? '') ?: '');
     if ($snsShareImage !== '' && !preg_match('#^https?://#i', $snsShareImage)) {
         $snsShareImage = url($snsShareImage);
