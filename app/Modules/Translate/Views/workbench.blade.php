@@ -278,7 +278,14 @@
 
         <div class="tw-tip">
             <strong>{{ __('使用说明') }}：</strong>
-            {{ __('原文固定为英语(en)；目标语言来自多语言设置。纯文本直接翻译；富文本会提取 alt/title/placeholder 及标签文案后翻译并还原。同语言同记录同字段存在则更新，不存在则创建。') }}
+            {{ __('原文固定为英语(en)；目标语言来自多语言设置。纯文本直接翻译；富文本会提取 alt/title/placeholder 及标签文案后翻译并还原。同语言同记录同字段存在则更新，不存在则插入。') }}
+            <br>
+            <strong>{{ __('翻译通道') }}：</strong>
+            @if(trim((string)config('services.translate.deepl_key', '')) !== '')
+                <span style="color:#16a291;">DeepL Free 已启用（推荐，不易 429）</span>
+            @else
+                <span style="color:#ff5722;">未配置 DeepL Key，正在使用公共免费接口（易 429）。请在 .env 设置 TRANSLATE_DEEPL_KEY（DeepL 官网申请 Free API，每月约 50 万字符免费）。</span>
+            @endif
         </div>
 
         <div class="layui-row layui-col-space16">

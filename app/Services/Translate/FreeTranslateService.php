@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Log;
 class FreeTranslateService
 {
     protected static int $lastCallAt = 0;
-    protected static int $minGapUs = 1500000; // 1.5s between API calls
-    protected static int $cooldownUntil = 0; // unix timestamp when global cooldown ends
+    protected static int $minGapUs = 800000; // 有 DeepL 时约 0.8s；无 Key 时会抬高
+    protected static int $cooldownUntil = 0;
 
     /** @var array<string, string> */
     protected array $localeMap = [
@@ -32,6 +32,13 @@ class FreeTranslateService
         'pt_br' => 'pt',
     ];
 
+    /** DeepL target codes that differ from short locale */
+    protected array $deeplTargetMap = [
+        'en' => 'EN-US',
+        'pt' => 'PT-BR',
+        'zh' => 'ZH',
+    ];
+
     public function translate(string $text, string $targetLocale, string $sourceLocale = 'en'): string
     {
         $text = trim($text);
@@ -51,14 +58,24 @@ class FreeTranslateService
             return $cached;
         }
 
+        if (!$this->hasDeeplKey()) {
+            // 纯公共免费通道更容易 429，拉大间隔
+            self::$minGapUs = max(self::$minGapUs, 2200000);
+        }
+
         $errors = [];
-        // Libre 放前：Google/MyMemory 免费通道易 429；Lingva 易 5xx/Cloudflare
-        $providers = [
-            'libre' => fn () => $this->viaLibre($text, $source, $target),
-            'mymemory' => fn () => $this->viaMyMemory($text, $source, $target),
-            'google' => fn () => $this->viaGoogle($text, $source, $target),
-            'lingva' => fn () => $this->viaLingva($text, $source, $target),
-        ];
+        // DeepL Free / 自建 Libre 优先；公共镜像仅作兜底（易 429/空响应）
+        $providers = [];
+        if ($this->hasDeeplKey()) {
+            $providers['deepl'] = fn () => $this->viaDeepl($text, $source, $target);
+        }
+        if ($this->libreSelfHostUrl() !== '') {
+            $providers['libre_self'] = fn () => $this->viaLibreHost($this->libreSelfHostUrl(), $text, $source, $target);
+        }
+        $providers['google'] = fn () => $this->viaGoogle($text, $source, $target);
+        $providers['mymemory'] = fn () => $this->viaMyMemory($text, $source, $target);
+        $providers['libre'] = fn () => $this->viaLibre($text, $source, $target);
+        $providers['lingva'] = fn () => $this->viaLingva($text, $source, $target);
 
         foreach ($providers as $name => $provider) {
             for ($attempt = 1; $attempt <= 3; $attempt++) {
@@ -72,22 +89,20 @@ class FreeTranslateService
                     if ($translated !== '') {
                         $errors[] = $name . ' same/invalid text';
                     }
-                    break; // no point retrying invalid content
+                    break;
                 } catch (\Throwable $e) {
                     $msg = $e->getMessage();
                     $errors[] = $msg;
                     $retryable = $this->isRateLimited($msg) || $this->isServerError($msg);
                     if ($retryable && $attempt < 3) {
-                        // 429 / 5xx：指数退避后重试同一通道
                         $wait = (int) pow(2, $attempt); // 2s, 4s
                         self::$cooldownUntil = time() + $wait;
                         usleep($wait * 1000000);
                         continue;
                     }
                     if ($this->isRateLimited($msg)) {
-                        // 本通道放弃，冷却后再试下一通道
-                        self::$cooldownUntil = time() + 4;
-                        self::$minGapUs = min(3500000, self::$minGapUs + 500000);
+                        self::$cooldownUntil = time() + 5;
+                        self::$minGapUs = min(4500000, self::$minGapUs + 600000);
                     }
                     break;
                 }
@@ -99,9 +114,20 @@ class FreeTranslateService
             'target' => $target,
             'errors' => $errors,
             'sample' => mb_substr($text, 0, 80),
+            'has_deepl' => $this->hasDeeplKey(),
         ]);
 
         throw new \RuntimeException('翻译服务不可用或结果仍为原文：' . implode(' | ', array_slice($errors, 0, 4)));
+    }
+
+    public function hasDeeplKey(): bool
+    {
+        return trim((string) config('services.translate.deepl_key', '')) !== '';
+    }
+
+    protected function libreSelfHostUrl(): string
+    {
+        return rtrim(trim((string) config('services.translate.libre_url', '')), '/');
     }
 
     protected function isRateLimited(string $message): bool
@@ -144,6 +170,53 @@ class FreeTranslateService
         }
 
         return true;
+    }
+
+    protected function viaDeepl(string $text, string $source, string $target): string
+    {
+        $key = trim((string) config('services.translate.deepl_key', ''));
+        if ($key === '') {
+            throw new \RuntimeException('DeepL key missing');
+        }
+
+        $api = rtrim((string) config('services.translate.deepl_api', 'https://api-free.deepl.com'), '/');
+        $sourceLang = strtoupper($source === 'zh' ? 'ZH' : $source);
+        $targetLang = $this->deeplTargetMap[$target] ?? strtoupper($target);
+
+        // DeepL 单次建议控制长度；过长按句切
+        if (mb_strlen($text) > 4000) {
+            return $this->chunkTranslate($text, function (string $chunk) use ($source, $target) {
+                return $this->viaDeepl($chunk, $source, $target);
+            }, 3800);
+        }
+
+        $response = Http::timeout(45)
+            ->withHeaders([
+                'Authorization' => 'DeepL-Auth-Key ' . $key,
+            ])
+            ->asForm()
+            ->post($api . '/v2/translate', [
+                'text' => $text,
+                'source_lang' => $sourceLang,
+                'target_lang' => $targetLang,
+            ]);
+
+        if ($response->status() === 429) {
+            throw new \RuntimeException('DeepL HTTP 429');
+        }
+        if ($response->status() === 403 || $response->status() === 401) {
+            throw new \RuntimeException('DeepL auth failed HTTP ' . $response->status());
+        }
+        if (!$response->ok()) {
+            throw new \RuntimeException('DeepL HTTP ' . $response->status());
+        }
+
+        $translated = trim((string) ($response->json('translations.0.text') ?? ''));
+        if ($translated === '') {
+            throw new \RuntimeException('DeepL empty');
+        }
+
+        return $translated;
     }
 
     protected function viaGoogle(string $text, string $source, string $target): string
@@ -201,8 +274,7 @@ class FreeTranslateService
             'q' => $text,
             'langpair' => $source . '|' . $target,
         ];
-        // 带邮箱可大幅提高 MyMemory 日限额（无需注册）
-        $email = (string) config('services.translate.mymemory_email', env('TRANSLATE_MYMEMORY_EMAIL', ''));
+        $email = (string) config('services.translate.mymemory_email', '');
         if ($email !== '') {
             $params['de'] = $email;
         }
@@ -239,24 +311,7 @@ class FreeTranslateService
         $last = 'LibreTranslate unavailable';
         foreach ($hosts as $host) {
             try {
-                $this->throttle();
-                $response = Http::timeout(30)
-                    ->asJson()
-                    ->post(rtrim($host, '/') . '/translate', [
-                        'q' => $text,
-                        'source' => $source,
-                        'target' => $target,
-                        'format' => 'text',
-                    ]);
-                if ($response->status() === 429) {
-                    $last = 'Libre HTTP 429';
-                    continue;
-                }
-                if (!$response->ok()) {
-                    $last = 'Libre HTTP ' . $response->status();
-                    continue;
-                }
-                $translated = trim((string) ($response->json('translatedText') ?? ''));
+                $translated = $this->viaLibreHost($host, $text, $source, $target);
                 if ($translated !== '') {
                     return $translated;
                 }
@@ -267,6 +322,31 @@ class FreeTranslateService
         }
 
         throw new \RuntimeException($last);
+    }
+
+    protected function viaLibreHost(string $host, string $text, string $source, string $target): string
+    {
+        $this->throttle();
+        $response = Http::timeout(30)
+            ->asJson()
+            ->post(rtrim($host, '/') . '/translate', [
+                'q' => $text,
+                'source' => $source,
+                'target' => $target,
+                'format' => 'text',
+            ]);
+        if ($response->status() === 429) {
+            throw new \RuntimeException('Libre HTTP 429');
+        }
+        if (!$response->ok()) {
+            throw new \RuntimeException('Libre HTTP ' . $response->status());
+        }
+        $translated = trim((string) ($response->json('translatedText') ?? ''));
+        if ($translated === '') {
+            throw new \RuntimeException('Libre empty');
+        }
+
+        return $translated;
     }
 
     protected function viaLingva(string $text, string $source, string $target): string
@@ -313,7 +393,7 @@ class FreeTranslateService
     /**
      * @param callable(string):string $translator
      */
-    protected function chunkTranslate(string $text, callable $translator): string
+    protected function chunkTranslate(string $text, callable $translator, int $maxLen = 420): string
     {
         $chunks = preg_split('/(?<=[.!?。！？\n])\s+/u', $text) ?: [$text];
         $out = [];
@@ -323,14 +403,14 @@ class FreeTranslateService
             if ($chunk === '') {
                 continue;
             }
-            if (mb_strlen($buffer) + mb_strlen($chunk) > 420) {
+            if (mb_strlen($buffer) + mb_strlen($chunk) > $maxLen) {
                 if ($buffer !== '') {
                     $this->throttle();
                     $out[] = $translator($buffer);
                     $buffer = '';
                 }
-                if (mb_strlen($chunk) > 420) {
-                    foreach (mb_str_split($chunk, 420) as $piece) {
+                if (mb_strlen($chunk) > $maxLen) {
+                    foreach (mb_str_split($chunk, $maxLen) as $piece) {
                         $this->throttle();
                         $out[] = $translator($piece);
                     }
