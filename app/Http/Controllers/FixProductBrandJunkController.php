@@ -72,7 +72,11 @@ class FixProductBrandJunkController extends Controller
                 $outer->{$method}(function ($w) use ($field) {
                     $w->where($field, 'like', '%JUNIO%')
                         ->orWhere($field, 'like', '%junio%')
-                        ->orWhere($field, 'like', '%about-us%');
+                        ->orWhere($field, 'like', '%about-us%')
+                        // 上次替换后可能残留「JUNEX JUNEX」
+                        ->orWhere($field, 'like', '%JUNEX JUNEX%')
+                        ->orWhere($field, 'like', '%JUNEX&nbsp;JUNEX%')
+                        ->orWhere($field, 'like', '%Junex Junex%');
                 });
             }
         });
@@ -130,7 +134,7 @@ class FixProductBrandJunkController extends Controller
 
     protected function looksDirty(string $html): bool
     {
-        return (bool)preg_match('/JUNIO|junio|about-us/i', $html);
+        return (bool)preg_match('/JUNIO|junio|about-us|JUNEX(?:\s|&nbsp;)+JUNEX/i', $html);
     }
 
     protected function cleanHtml(string $html): string
@@ -148,13 +152,27 @@ class FixProductBrandJunkController extends Controller
 
         $out = $html;
         foreach ($patterns as $pattern) {
-            // 去掉错误标签后保留正确品牌明文 JUNEX，避免句子变成 “ is a ...”
+            // 在结尾修饰符前插入 lookahead：后面已有 JUNEX 明文则只删标签
+            $patternDrop = preg_replace('#/([imsxuADSUXJ]*)$#', '(?=\s*(?:&nbsp;|\x{00A0})?\s*(?:JUNEX|Junex)\b)/$1', $pattern) ?: $pattern;
+            $out = preg_replace($patternDrop, '', $out) ?? $out;
+            // 否则保留一个明文品牌名
             $out = preg_replace($pattern, 'JUNEX', $out) ?? $out;
         }
 
         // 残留误译品牌词（非品牌名上下文尽量只替换独立词）
         $out = preg_replace('/\bJUNIO\b/u', 'JUNEX', $out) ?? $out;
         $out = preg_replace('/\bJunio\b/u', 'JUNEX', $out) ?? $out;
+
+        // 合并连续重复品牌：JUNEX JUNEX / JUNEX&nbsp;JUNEX / Junex Junex → JUNEX
+        $out = preg_replace('/\bJUNEX(?:\s|&nbsp;|\x{00A0})+(?:JUNEX\b)/iu', 'JUNEX', $out) ?? $out;
+        // 多轮叠词（JUNEX JUNEX JUNEX）
+        for ($i = 0; $i < 3; $i++) {
+            $next = preg_replace('/\bJUNEX(?:\s|&nbsp;|\x{00A0})+(?:JUNEX\b)/iu', 'JUNEX', $out) ?? $out;
+            if ($next === $out) {
+                break;
+            }
+            $out = $next;
+        }
 
         // 清理可能出现的连续空格（不碰标签内）
         $out = preg_replace('/[ \t]{2,}/', ' ', $out) ?? $out;
@@ -194,7 +212,7 @@ class FixProductBrandJunkController extends Controller
         $lines[] = '<h1>清理产品详情误译品牌标签（JUNIO / about-us 蓝链）</h1>';
         $lines[] = '<div class="box"><strong>模式：</strong><span class="' . ($apply ? 'err' : 'warn') . '">' . htmlspecialchars($mode) . '</span><br>';
         $lines[] = '扫描命中行：' . (int)$scanned . '　将修改行：' . (int)$changedRows . '　字段变更：' . (int)$changedFields . '<br>';
-        $lines[] = '规则：去掉 <code>&lt;span style="font-size:18px"&gt;…JUNIO/JUNEX…&lt;/span&gt;</code> 这类 about-us 蓝链 HTML，替换为明文 <code>JUNEX</code>；并纠正残留单词 JUNIO→JUNEX。';
+        $lines[] = '规则：去掉 about-us 蓝链 HTML → 明文 <code>JUNEX</code>；JUNIO→JUNEX；连续 <code>JUNEX JUNEX</code>（含 &amp;nbsp;）合并为单个 <code>JUNEX</code>。';
         $lines[] = '</div>';
 
         if (!$apply) {
