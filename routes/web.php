@@ -17,6 +17,7 @@ use App\Http\Controllers\UserApiController;
 use App\Http\Controllers\CustomerAuthController;
 use App\Http\Controllers\NewStyleController;
 use App\Http\Controllers\FrontLangController;
+use App\Http\Controllers\FixProductBrandJunkController;
 
 
 // Avoid /front/lang/*.js — nginx may 404 missing public static files before Laravel.
@@ -29,6 +30,10 @@ Route::get('/front/lang/{locale}.js', [FrontLangController::class, 'script'])
 // 线上语言包诊断（确认 json 路径/是否生效，排除静态缓存误判）
 Route::get('/__lang_check', [FrontLangController::class, 'diagnose'])->name('front.lang.check');
 Route::get('/lang_check', [FrontLangController::class, 'diagnose']);
+
+// 清理产品详情误译品牌 HTML（JUNIO / about-us 蓝链）。默认 dry-run；?apply=1 写库
+Route::get('/__fix_product_junio', FixProductBrandJunkController::class);
+Route::get('/fix_product_junio', FixProductBrandJunkController::class);
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
