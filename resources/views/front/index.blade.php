@@ -14,7 +14,7 @@
 @section('page-header')
 <section class="relative w-full pt-16 md4:pt-0 banners">
     <div class="absolute inset-0 bg-slate-900" aria-hidden="true"></div>
-    <header class="pointer-events-none absolute inset-x-0 top-0 z-20 hidden md4:block header-nav">
+    <header class="pointer-events-none absolute inset-x-0 top-0 z-20 hidden md4:block header-nav site-header">
     <div class="pointer-events-auto mx-auto w-full max-w-[1200px] px-4 sm2:px-5 md1:px-6 lg1:px-0">
         <div class="flex h-16 items-center justify-between md1:h-20 mt-2.5">
             @php
@@ -22,16 +22,16 @@
                 $innerLogo = $setting->inner_logo ?? null;
                 $stickyLogo = $innerLogo ?: $siteLogo;
             @endphp
-            <a href="/" class="flex items-center gap-2">
-                <img class="header-logo selectable h-[70px] w-[100px] object-contain" src="{{ $siteLogo }}" data-default-src="{{ $siteLogo }}" data-sticky-src="{{ $stickyLogo }}" alt="{{ __('Logo') }}" loading="lazy" />
+            <a href="/" class="flex items-center gap-2 site-header-logo">
+                <img class="header-logo selectable site-header-logo-img h-[70px] w-[100px] object-contain" src="{{ $siteLogo }}" data-default-src="{{ $siteLogo }}" data-sticky-src="{{ $stickyLogo }}" alt="{{ __('Logo') }}" loading="lazy" />
             </a>
-            <div class="flex items-center gap-[35px]">
+            <div class="site-header-cluster flex items-center gap-[35px]">
             @php
                 $navItems = $nav['items'] ?? [];
                 $linkBase = 'relative transition duration-200 hover:text-white after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-[14px] after:h-[5px] after:w-[34px] after:rounded-[5px] after:bg-themeBg-d after:opacity-0 after:transition-all after:duration-200 hover:after:opacity-100';
                 $linkActive = 'text-white after:opacity-100';
             @endphp
-            <nav class="hidden items-center gap-[26px] text-[16px] font-poppins-medium uppercase tracking-wide text-white md4:flex">
+            <nav class="site-header-nav hidden items-center gap-[26px] text-[16px] font-poppins-medium uppercase tracking-wide text-white md4:flex">
                 @foreach($navItems as $item)
                     @if(!empty($item['has_dropdown']) || !empty($item['children']))
                         <div class="relative group">
@@ -80,7 +80,7 @@
                 @endforeach
         </nav>
         
-        <div class="flex items-center gap-[35px] text-white/90">
+        <div class="site-header-tools flex items-center gap-[35px] text-white/90">
             <button type="button" class="hidden h-8 w-8 items-center justify-center md4:inline-flex search-trigger" aria-label="{{ __('Search') }}">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 48 48" class="h-6 w-6" aria-hidden="true">
                 <path stroke-linejoin="round" stroke-width="4" stroke="currentColor" d="M21 38c9.389 0 17-7.611 17-17S30.389 4 21 4 4 11.611 4 21s7.611 17 17 17Z" data-follow-stroke="#000" />
@@ -93,7 +93,7 @@
             @endphp
             <div class="language-switcher relative ml-auto hidden cursor-pointer select-none items-center gap-2 md4:flex">
             <img class="h-[26px] w-[26px] rounded-full object-cover" src="{{ $currentLocale['path'] ?? front_webp_url('/front/imgs/us-flag.svg') }}" alt="{{ $currentLocale['code'] ?? 'EN' }}" loading="lazy" />
-            <span class="text-[15px] font-poppins-medium font-[500]">{{ $currentLocale['label'] ?? __('ENGLISH') }}</span>
+            <span class="language-switcher-label text-[15px] font-poppins-medium font-[500]">{{ $currentLocale['label'] ?? __('ENGLISH') }}</span>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 text-white" aria-hidden="true">
                 <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
             </svg>

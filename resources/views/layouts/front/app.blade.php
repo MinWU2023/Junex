@@ -1,5 +1,15 @@
 <!Doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-locale="{{ app()->getLocale() }}">
+@php
+  $frontLocaleCode = function_exists('front_locale_code') ? front_locale_code() : strtolower((string) app()->getLocale());
+  $frontLocaleCode = strtolower(str_replace('_', '-', trim((string) $frontLocaleCode)));
+  $frontLocaleCode = preg_replace('/[^a-z0-9\-]/', '', $frontLocaleCode) ?: 'en';
+  $frontLocaleShort = explode('-', $frontLocaleCode)[0] ?: 'en';
+@endphp
+<html
+  lang="{{ str_replace('_', '-', $frontLocaleCode) }}"
+  data-locale="{{ $frontLocaleShort }}"
+  class="lang-{{ $frontLocaleShort }}"
+>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -860,6 +870,119 @@
       }
       /* .sec-pad 不再强制 padding-top: 2rem */
     </style>
+    {{-- 按语言适配桌面头部导航（西语等长文案防换行） --}}
+    <style id="locale-header-nav-css">
+      /* 通用：导航项单行，避免高低不齐 */
+      .site-header-nav > a,
+      .site-header-nav > .group > a {
+        line-height: 1.2;
+      }
+
+      /* 长文案语言：收紧间距/字号/字距，强制不换行 */
+      html.lang-es .site-header-nav,
+      html.lang-de .site-header-nav,
+      html.lang-pt .site-header-nav,
+      html.lang-it .site-header-nav,
+      html.lang-ru .site-header-nav {
+        gap: 12px;
+        font-size: 13px;
+        letter-spacing: 0.02em;
+      }
+      html.lang-es .site-header-nav > a,
+      html.lang-es .site-header-nav > .group > a,
+      html.lang-de .site-header-nav > a,
+      html.lang-de .site-header-nav > .group > a,
+      html.lang-pt .site-header-nav > a,
+      html.lang-pt .site-header-nav > .group > a,
+      html.lang-it .site-header-nav > a,
+      html.lang-it .site-header-nav > .group > a,
+      html.lang-ru .site-header-nav > a,
+      html.lang-ru .site-header-nav > .group > a {
+        white-space: nowrap;
+      }
+      html.lang-es .site-header-cluster,
+      html.lang-de .site-header-cluster,
+      html.lang-pt .site-header-cluster,
+      html.lang-it .site-header-cluster,
+      html.lang-ru .site-header-cluster {
+        gap: 18px;
+      }
+      html.lang-es .site-header-tools,
+      html.lang-de .site-header-tools,
+      html.lang-pt .site-header-tools,
+      html.lang-it .site-header-tools,
+      html.lang-ru .site-header-tools {
+        gap: 16px;
+      }
+
+      /* 西班牙语最长，再收一档 */
+      html.lang-es .site-header-nav {
+        gap: 9px;
+        font-size: 12px;
+        letter-spacing: 0.01em;
+      }
+      html.lang-es .site-header-cluster { gap: 14px; }
+      html.lang-es .site-header-tools { gap: 12px; }
+      html.lang-es .site-header-logo-img {
+        max-width: 120px;
+        height: 60px;
+      }
+
+      /* md4 ~ lg1：桌面窄屏再压缩；语言名只留国旗 */
+      @media (min-width: 992px) and (max-width: 1199px) {
+        html.lang-es .site-header-nav,
+        html.lang-de .site-header-nav,
+        html.lang-pt .site-header-nav,
+        html.lang-it .site-header-nav,
+        html.lang-ru .site-header-nav {
+          gap: 7px;
+          font-size: 11px;
+        }
+        html.lang-es .site-header-cluster,
+        html.lang-de .site-header-cluster,
+        html.lang-pt .site-header-cluster,
+        html.lang-it .site-header-cluster,
+        html.lang-ru .site-header-cluster {
+          gap: 10px;
+        }
+        html.lang-es .site-header-tools,
+        html.lang-de .site-header-tools,
+        html.lang-pt .site-header-tools,
+        html.lang-it .site-header-tools,
+        html.lang-ru .site-header-tools {
+          gap: 8px;
+        }
+        html.lang-es .language-switcher-label,
+        html.lang-de .language-switcher-label,
+        html.lang-pt .language-switcher-label,
+        html.lang-it .language-switcher-label,
+        html.lang-ru .language-switcher-label {
+          display: none;
+        }
+        html.lang-es .site-header-logo-img {
+          max-width: 100px;
+          height: 52px;
+        }
+      }
+
+      /* 移动端抽屉：长文案可换行，但不挤成一团 */
+      @media (max-width: 991px) {
+        html.lang-es #mobileMenu nav a,
+        html.lang-es #mobileMenu nav button,
+        html.lang-de #mobileMenu nav a,
+        html.lang-de #mobileMenu nav button,
+        html.lang-pt #mobileMenu nav a,
+        html.lang-pt #mobileMenu nav button,
+        html.lang-it #mobileMenu nav a,
+        html.lang-it #mobileMenu nav button,
+        html.lang-ru #mobileMenu nav a,
+        html.lang-ru #mobileMenu nav button {
+          white-space: normal;
+          line-height: 1.35;
+          word-break: normal;
+        }
+      }
+    </style>
     @yield('page-css-header')
     {{-- After product-highlights.css: force CMS tables to stay within column --}}
     <style type="text/css">
@@ -1147,7 +1270,7 @@
     </style>
     @yield('page-js-header')
 </head>
-<body class="min-h-full bg-white font-sans text-slate-900 antialiased sec-space-on">
+<body class="min-h-full bg-white font-sans text-slate-900 antialiased sec-space-on lang-{{ $frontLocaleShort }}">
     <input type="hidden" id="customer_id" value="{{ $data['customer_id'] }}" /> 
     <svg xmlns="http://www.w3.org/2000/svg" class="hidden">
       <symbol id="icon-uncollect" viewBox="0 0 15 14" fill="none">
@@ -1292,20 +1415,20 @@
             <div class="absolute inset-0 bg-[url('{{ front_webp_url('/front/imgs/pagebanner.png') }}')] bg-center bg-no-repeat bg-cover" aria-hidden="true"></div>
           @endif
           <!-- Desktop Header：固定在顶部，侧栏 sticky 预留其高度 -->
-          <header class="pointer-events-none fixed inset-x-0 top-0 z-20 bg-[#FFF] py-[6px] hidden md4:block">
+          <header class="pointer-events-none fixed inset-x-0 top-0 z-20 bg-[#FFF] py-[6px] hidden md4:block site-header">
             <div class="pointer-events-auto mx-auto w-full max-w-[1200px] px-4 sm2:px-5 md1:px-6 lg1:px-0">
               <div class="flex h-16 items-center justify-between md1:h-20">
-                <a href="/" class="flex items-center gap-2">
-                  <img class="h-[70px] w-auto max-w-[140px] object-contain" src="{{ $logoForInner }}" alt="{{ __('Logo') }}" loading="lazy" />
+                <a href="/" class="flex items-center gap-2 site-header-logo">
+                  <img class="site-header-logo-img h-[70px] w-auto max-w-[140px] object-contain" src="{{ $logoForInner }}" alt="{{ __('Logo') }}" loading="lazy" />
                 </a>
 
-                <div class="flex items-center gap-[35px]">
+                <div class="site-header-cluster flex items-center gap-[35px]">
                   @php
                     $navItems = $data['nav']['items'] ?? [];
                     $linkBase = 'relative transition duration-200 hover:text-black/70 after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-[14px] after:h-[5px] after:w-[34px] after:rounded-[5px] after:bg-themeBg-d after:opacity-0 after:transition-all after:duration-200 hover:after:opacity-100';
                     $linkActive = 'text-black/70 after:opacity-100';
                   @endphp
-                  <nav class="hidden items-center gap-[26px] text-[16px] font-poppins-medium uppercase tracking-wide text-black md4:flex">
+                  <nav class="site-header-nav hidden items-center gap-[26px] text-[16px] font-poppins-medium uppercase tracking-wide text-black md4:flex">
                     @foreach($navItems as $item)
                       @if(!empty($item['has_dropdown']) || !empty($item['children']))
                         <div class="relative group">
@@ -1354,7 +1477,7 @@
                     @endforeach
                   </nav>
 
-                  <div class="flex items-center gap-[35px] text-white/90">
+                  <div class="site-header-tools flex items-center gap-[35px] text-white/90">
                     <button type="button" class="hidden h-8 w-8 items-center justify-center md4:inline-flex search-trigger" aria-label="{{ __('Search') }}">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 48 48" class="h-6 w-6 text-black" aria-hidden="true">
                         <path stroke-linejoin="round" stroke-width="4" stroke="currentColor" d="M21 38c9.389 0 17-7.611 17-17S30.389 4 21 4 4 11.611 4 21s7.611 17 17 17 Z" data-follow-stroke="#000"></path>
@@ -1363,7 +1486,7 @@
                     </button>
                     <div class="language-switcher relative ml-auto hidden cursor-pointer select-none items-center gap-2 md4:flex">
                       <img class="h-[26px] w-[26px] rounded-full object-cover" src="{{ $currentLocale['path'] ?? front_webp_url('/front/imgs/us-flag.svg') }}" alt="{{ $currentLocale['code'] ?? 'EN' }}" loading="lazy" />
-                      <span class="text-[15px] font-poppins-regular text-black  font-[500]">{{ $currentLocale['label'] ?? __('ENGLISH') }}</span>
+                      <span class="language-switcher-label text-[15px] font-poppins-regular text-black  font-[500]">{{ $currentLocale['label'] ?? __('ENGLISH') }}</span>
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 text-black" aria-hidden="true">
                         <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.25a.75.75 0 01-1.06 0L5.21 8.27a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
                       </svg>
