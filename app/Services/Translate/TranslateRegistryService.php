@@ -66,15 +66,21 @@ class TranslateRegistryService
             return [];
         }
         $value = $config['value'] ?? [];
+        $existingColumns = $this->translationColumns($moduleKey);
         $fields = [];
         foreach (['translateField', 'seoTranslateField'] as $group) {
             foreach ((array) ($value[$group] ?? []) as $field) {
                 if (empty($field['name'])) {
                     continue;
                 }
-                $fields[$field['name']] = [
-                    'name' => $field['name'],
-                    'label' => $field['label'] ?? $field['name'],
+                $name = (string) $field['name'];
+                // 配置里声明但翻译表无此列的字段直接跳过，避免工作台写入报错
+                if ($existingColumns !== null && !in_array($name, $existingColumns, true)) {
+                    continue;
+                }
+                $fields[$name] = [
+                    'name' => $name,
+                    'label' => $field['label'] ?? $name,
                     'type' => $field['type'] ?? 'text',
                     'group' => $group === 'seoTranslateField' ? 'seo' : 'content',
                 ];
@@ -82,6 +88,31 @@ class TranslateRegistryService
         }
 
         return array_values($fields);
+    }
+
+    /**
+     * @return array<int, string>|null  null = 无法检测时不拦截
+     */
+    public function translationColumns(string $moduleKey): ?array
+    {
+        $modelClass = $this->modelClass($moduleKey);
+        if (!$modelClass) {
+            return null;
+        }
+        try {
+            $model = new $modelClass();
+            if (!method_exists($model, 'translations')) {
+                return null;
+            }
+            $table = $model->translations()->getRelated()->getTable();
+            if (!Schema::hasTable($table)) {
+                return null;
+            }
+
+            return Schema::getColumnListing($table);
+        } catch (\Throwable $e) {
+            return null;
+        }
     }
 
     public function modelClass(string $moduleKey): ?string

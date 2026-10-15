@@ -3,6 +3,7 @@
 namespace App\Services\Translate;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Schema;
 
 class TranslationPersistenceService
 {
@@ -65,8 +66,24 @@ class TranslationPersistenceService
         if ($locale === '') {
             throw new \InvalidArgumentException('Locale is required.');
         }
+
+        $writableColumns = null;
+        try {
+            if (method_exists($model, 'translations')) {
+                $table = $model->translations()->getRelated()->getTable();
+                if (Schema::hasTable($table)) {
+                    $writableColumns = Schema::getColumnListing($table);
+                }
+            }
+        } catch (\Throwable $e) {
+            $writableColumns = null;
+        }
+
         foreach ($fieldValues as $field => $value) {
             if (!in_array($field, $model->translatedAttributes ?? [], true)) {
+                continue;
+            }
+            if (is_array($writableColumns) && !in_array($field, $writableColumns, true)) {
                 continue;
             }
             $type = strtolower((string) ($fieldTypes[$field] ?? ''));

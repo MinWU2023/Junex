@@ -9,7 +9,7 @@ class ProductAttributeValueTranslation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'value'];
+    protected $fillable = ['name'];
 
     public $timestamps = false;
 }

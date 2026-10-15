@@ -520,12 +520,6 @@ return [
                     'type' => 'text',
                     'require' => true
                 ],
-                [
-                    'name' => 'value',
-                    'label' => '属性值补充',
-                    'type' => 'text',
-                    'require' => false
-                ],
             ]
         ],
         'model' => \App\Modules\Product\Models\ProductAttributeValue::class

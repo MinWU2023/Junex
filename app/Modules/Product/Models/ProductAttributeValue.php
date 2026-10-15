@@ -14,7 +14,7 @@ class ProductAttributeValue extends Model implements TranslatableContract
 
     const MODEL_TYPE = 'product_attribute_value';
 
-    public $translatedAttributes = ['name', 'value'];
+    public $translatedAttributes = ['name'];
 
     protected $fillable = ['product_id','product_attribute_id','is_translate','sort'];
 
