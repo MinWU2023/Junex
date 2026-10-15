@@ -70,6 +70,10 @@ class NewStyleController extends Controller
             'products' => $products,
             'productsData' => $productsData,
             'pageBanner' => $pageBanner,
+            'breadcrumbs' => $this->buildBreadcrumbs([
+                ['label' => __('Home'), 'url' => '/'],
+                ['label' => __('New Style'), 'url' => null],
+            ]),
             'tdk' => $tdk,
         ];
 

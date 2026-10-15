@@ -21,6 +21,10 @@ class MyInquiryController extends Controller
             'productsData' => [],
             'tdk' => $tdk,
             'pageBanner' => $pageBanner,
+            'breadcrumbs' => $this->buildBreadcrumbs([
+                ['label' => __('Home'), 'url' => '/'],
+                ['label' => __('Inquiry List'), 'url' => null],
+            ]),
             'injectToView' => $injectToView,
         ];
 

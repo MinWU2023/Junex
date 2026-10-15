@@ -36,6 +36,8 @@ class Controller extends BaseController
             if ($label === '') {
                 return null;
             }
+            // 静态页面名走 resources/lang/*.json；CMS 动态标题无 key 时保持原文
+            $label = (string)__($label);
             $url = $item['url'] ?? null;
             $url = $url !== null && $url !== '' ? (string)$url : null;
 

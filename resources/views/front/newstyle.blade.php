@@ -19,6 +19,40 @@
     <div class="mx-auto w-full max-w-[1200px] px-4 py-4 sm2:px-5 md1:px-6 lg1:px-0">
         <nav aria-label="{{ __('Breadcrumb') }}">
         <ol class="flex flex-wrap items-center gap-x-3 gap-y-1">
+            @if(isset($breadcrumbs) && count($breadcrumbs))
+                @foreach($breadcrumbs as $index => $crumb)
+                    @if($index === 0)
+                        <li class="inline-flex items-center">
+                            @if(!empty($crumb['url']))
+                                <a href="{{ $crumb['url'] }}" class="inline-flex items-center gap-2 transition hover:text-themeText-h">
+                                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
+                                    <span class="font-poppins-regular text-f14 text-themeText-p">{{ $crumb['label'] }}</span>
+                                </a>
+                            @else
+                                <span class="inline-flex items-center gap-2">
+                                    <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
+                                    <span class="font-poppins-regular text-f14 text-themeText-p">{{ $crumb['label'] }}</span>
+                                </span>
+                            @endif
+                        </li>
+                    @else
+                        <li class="inline-flex items-center text-themeText-h" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 18l6-6-6-6" />
+                            </svg>
+                        </li>
+                        <li class="inline-flex items-center">
+                            @if(!empty($crumb['url']))
+                                <a href="{{ $crumb['url'] }}" class="inline-flex items-center gap-2 transition hover:text-themeText-h">
+                                    <span class="font-poppins-regular text-f14 text-themeText-p">{{ $crumb['label'] }}</span>
+                                </a>
+                            @else
+                                <span class="font-poppins-regular text-f14 text-themeText-g" aria-current="page">{{ $crumb['label'] }}</span>
+                            @endif
+                        </li>
+                    @endif
+                @endforeach
+            @else
             <li class="inline-flex items-center">
                 <a href="/" class="inline-flex items-center gap-2 transition hover:text-themeText-h">
                     <img src="{{ front_webp_url('/front/imgs/breadcrumbs-home.png') }}" alt="{{ __('Home') }}" class="w-[14px] h-[14px]" />
@@ -33,6 +67,7 @@
             <li class="inline-flex items-center">
                 <span class="font-poppins-regular text-f14 text-themeText-g" aria-current="page">{{ __('New Style') }}</span>
             </li>
+            @endif
         </ol>
         </nav>
     </div>

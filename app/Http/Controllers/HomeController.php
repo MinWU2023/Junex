@@ -643,7 +643,7 @@ class HomeController extends Controller
         $tdk = $this->resolveCmsPageTdkByPath($setting, 'privacy-policy');
 
         $page = page_by_url_path('privacy-policy');
-        $pageName = 'Privacy Policy';
+        $pageName = __('Privacy Policy');
         $pageContent = '';
         $createdLabel = '';
 

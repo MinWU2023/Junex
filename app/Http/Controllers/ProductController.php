@@ -51,6 +51,10 @@ class ProductController extends Controller
             'sidebarRecommendProducts' => $sidebarService->buildRecommendProducts($favoritedProductIds),
             'activeCategoryId' => null,
             'pageBanner' => $pageBanner,
+            'breadcrumbs' => $this->buildBreadcrumbs([
+                ['label' => __('Home'), 'url' => '/'],
+                ['label' => __('Products'), 'url' => null],
+            ]),
             'injectToView' => $injectToView,
             'tdk' => $tdk,
             'customerId' => 0,
