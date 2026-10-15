@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 /**
  * 前台多语言：当前 locale 优先，字段为空时回退英语。
  * 仅用于前台渲染/查询；后台编辑勿用（需看到空字段以便填写）。
- */
+ */ 
 class FrontTranslation
 {
     public static function locale(): string
