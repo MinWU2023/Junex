@@ -222,6 +222,56 @@
             }
             .tw-workbench .tw-status-dot.loading { background: #faad14; animation: tw-pulse 1s infinite; }
             @keyframes tw-pulse { 50% { opacity: .4; } }
+            .tw-workbench .tw-save-progress {
+                display: none;
+                margin-top: 14px;
+                padding: 12px 14px;
+                border: 1px solid #e6e6e6;
+                border-radius: 6px;
+                background: #fafafa;
+            }
+            .tw-workbench .tw-save-progress.is-active { display: block; }
+            .tw-workbench .tw-save-progress-title {
+                font-size: 13px;
+                font-weight: 600;
+                color: #333;
+                margin-bottom: 8px;
+            }
+            .tw-workbench .tw-save-progress-meta {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px 16px;
+                font-size: 12px;
+                color: #666;
+                margin-bottom: 10px;
+            }
+            .tw-workbench .tw-save-progress-meta strong { color: #16a291; }
+            .tw-workbench .tw-save-progress-meta .tw-ok { color: #52c41a; }
+            .tw-workbench .tw-save-progress-meta .tw-fail { color: #ff4d4f; }
+            .tw-workbench .tw-progress-track {
+                height: 10px;
+                background: #ececec;
+                border-radius: 999px;
+                overflow: hidden;
+            }
+            .tw-workbench .tw-progress-bar {
+                height: 100%;
+                width: 0;
+                background: linear-gradient(90deg, #16a291, #1bb3a0);
+                border-radius: 999px;
+                transition: width .25s ease;
+            }
+            .tw-workbench .tw-progress-bar.is-fail {
+                background: linear-gradient(90deg, #fa8c16, #ff4d4f);
+            }
+            .tw-workbench .tw-progress-bar.is-done {
+                background: linear-gradient(90deg, #52c41a, #73d13d);
+            }
+            .tw-workbench .tw-save-progress-result {
+                margin-top: 8px;
+                font-size: 12px;
+                color: #555;
+            }
         </style>
 
         <input type="hidden" id="tw-token" value="{{ csrf_token() }}">
@@ -325,6 +375,19 @@
                             <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" id="tw-clear-log" style="margin-left:auto;">
                                 <i class="layui-icon layui-icon-delete"></i> {{ __('清空日志') }}
                             </button>
+                        </div>
+                        <div class="tw-save-progress" id="tw-save-progress" aria-live="polite">
+                            <div class="tw-save-progress-title" id="tw-save-progress-title">{{ __('写入数据库进度') }}</div>
+                            <div class="tw-save-progress-meta">
+                                <span>{{ __('共') }} <strong id="tw-save-total">0</strong> {{ __('条') }}</span>
+                                <span>{{ __('已处理') }} <strong id="tw-save-done">0</strong> {{ __('条') }}</span>
+                                <span class="tw-ok">{{ __('成功') }} <strong id="tw-save-ok">0</strong></span>
+                                <span class="tw-fail">{{ __('失败') }} <strong id="tw-save-fail">0</strong></span>
+                            </div>
+                            <div class="tw-progress-track">
+                                <div class="tw-progress-bar" id="tw-save-progress-bar"></div>
+                            </div>
+                            <div class="tw-save-progress-result" id="tw-save-progress-result"></div>
                         </div>
                     </div>
                 </div>

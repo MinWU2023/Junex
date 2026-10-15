@@ -21,19 +21,83 @@
         batchLocale: '',
         batchFields: [],
         batchPreviews: {}, // id -> { id, label, fields: { name: meta+translated } }
-        previewId: ''
+        previewId: '',
+        saveRunning: false
     };
+
+    function setSaveButtonBusy(busy) {
+        state.saveRunning = !!busy;
+        var $btn = $('#tw-save-one');
+        if (busy) {
+            $btn.prop('disabled', true).addClass('layui-btn-disabled');
+            return;
+        }
+        updateSaveButtonState();
+    }
+
+    function showSaveProgress(total, title) {
+        var $box = $('#tw-save-progress');
+        if (!$box.length) return;
+        $box.addClass('is-active');
+        $('#tw-save-progress-title').text(title || '写入数据库进度');
+        $('#tw-save-total').text(total || 0);
+        $('#tw-save-done').text(0);
+        $('#tw-save-ok').text(0);
+        $('#tw-save-fail').text(0);
+        $('#tw-save-progress-result').text('准备写入...');
+        $('#tw-save-progress-bar').removeClass('is-fail is-done').css('width', '0%');
+    }
+
+    function updateSaveProgress(done, total, ok, fail, currentLabel) {
+        var pct = total > 0 ? Math.min(100, Math.round((done / total) * 100)) : 0;
+        $('#tw-save-total').text(total || 0);
+        $('#tw-save-done').text(done || 0);
+        $('#tw-save-ok').text(ok || 0);
+        $('#tw-save-fail').text(fail || 0);
+        $('#tw-save-progress-bar').css('width', pct + '%');
+        var tip = '进度 ' + done + '/' + total + '（' + pct + '%）';
+        if (currentLabel) tip += ' · ' + currentLabel;
+        $('#tw-save-progress-result').text(tip);
+        setStatus('入库 ' + done + '/' + total + '（成功 ' + ok + ' / 失败 ' + fail + '）', done < total);
+        $('#tw-status-count').text('入库 ' + done + '/' + total);
+    }
+
+    function finishSaveProgress(ok, fail, total) {
+        var done = (ok || 0) + (fail || 0);
+        updateSaveProgress(done, total, ok, fail, '');
+        var $bar = $('#tw-save-progress-bar');
+        $bar.removeClass('is-fail is-done');
+        if (fail > 0 && ok === 0) $bar.addClass('is-fail');
+        else if (fail > 0) $bar.addClass('is-fail');
+        else $bar.addClass('is-done');
+        var result = '写入完成：共 ' + total + ' 条，成功 ' + ok + '，失败 ' + fail;
+        $('#tw-save-progress-result').html(
+            fail
+                ? '<span style="color:#ff4d4f;">' + result + '</span>'
+                : '<span style="color:#52c41a;">' + result + '</span>'
+        );
+        setStatus(fail ? ('入库完成（失败 ' + fail + '）') : '入库完成', false);
+        $('#tw-status-count').text('成功 ' + ok + ' / 失败 ' + fail);
+        if (window.layui && layui.layer) {
+            layui.layer.msg(result, { icon: fail ? 0 : 1, time: 2500 });
+        }
+    }
 
     function twBootLog(msg, isError) {
         var $log = $('#tw-log');
         if (!$log.length) return;
         $log.find('.tw-log-empty').remove();
         state.logCount++;
-        $('#tw-status-count').text('共 ' + state.logCount + ' 条');
+        // 入库进行中时右侧计数留给进度文案，避免被日志条数冲掉
+        if (!state.saveRunning) {
+            $('#tw-status-count').text('共 ' + state.logCount + ' 条');
+        }
         var color = '#d4d4d4';
         if (isError === true) color = '#ff6b6b';
         else if (isError === false) color = '#6ee7b7';
         $log.prepend('<div class="tw-log-item" style="color:' + color + '"><div class="tw-log-time">' + new Date().toLocaleTimeString() + '</div>' + msg + '</div>');
+        // 入库日志出现时自动滚到顶部，方便看到最新进度
+        if ($log.length) $log.scrollTop(0);
     }
 
     function setStatus(text, loading) {
@@ -642,40 +706,61 @@
             uiMsg('没有可入库的预览数据');
             return;
         }
+        if (state.saveRunning) {
+            uiMsg('正在写入数据库，请稍候');
+            return;
+        }
         uiConfirm('确认将 <strong>' + ids.length + '</strong> 条预览结果写入数据库？此操作会覆盖目标语言对应字段。', function () {
-            setStatus('批量入库中...', true);
-            var chain = $.Deferred().resolve();
+            var total = ids.length;
             var ok = 0;
             var fail = 0;
-            ids.forEach(function (id) {
-                chain = chain.then(function () {
-                    var item = state.batchPreviews[id];
-                    var fields = {};
-                    Object.keys(item.fields || {}).forEach(function (name) {
-                        fields[name] = item.fields[name].translated || '';
-                    });
-                    return saveOne(state.batchModule, id, state.batchLocale, fields).then(function (res) {
-                        if (res.code === 0) {
-                            ok++;
-                            twBootLog('✓ #' + id + ' 已入库', false);
-                        } else {
-                            fail++;
-                            twBootLog('✗ #' + id + ' 入库失败：' + (res.message || ''), true);
-                        }
-                    }, function (xhr) {
-                        fail++;
-                        twBootLog('✗ #' + id + ' 入库失败（' + xhr.status + '）', true);
-                    });
+            var index = 0;
+            setSaveButtonBusy(true);
+            showSaveProgress(total, '批量写入数据库进度');
+            twBootLog('<strong>开始批量入库，共 ' + total + ' 条</strong>', false);
+            updateSaveProgress(0, total, 0, 0, '开始写入...');
+
+            function next() {
+                if (index >= total) {
+                    finishSaveProgress(ok, fail, total);
+                    twBootLog('<strong>批量入库完成：共 ' + total + ' 条，成功 ' + ok + '，失败 ' + fail + '</strong>', fail ? true : false);
+                    setSaveButtonBusy(false);
+                    return;
+                }
+                var id = ids[index];
+                var item = state.batchPreviews[id] || {};
+                var fields = {};
+                Object.keys(item.fields || {}).forEach(function (name) {
+                    fields[name] = item.fields[name].translated || '';
                 });
-            });
-            chain.always(function () {
-                setStatus('就绪', false);
-                twBootLog('<strong>批量入库完成：成功 ' + ok + '，失败 ' + fail + '</strong>', fail ? true : false);
-            });
+                updateSaveProgress(index, total, ok, fail, '正在写入 #' + id + '...');
+                saveOne(state.batchModule, id, state.batchLocale, fields).done(function (res) {
+                    if (res && res.code === 0) {
+                        ok++;
+                        twBootLog('✓ [' + (index + 1) + '/' + total + '] #' + id + ' 已入库', false);
+                    } else {
+                        fail++;
+                        twBootLog('✗ [' + (index + 1) + '/' + total + '] #' + id + ' 入库失败：' + ((res && res.message) || ''), true);
+                    }
+                }).fail(function (xhr) {
+                    fail++;
+                    twBootLog('✗ [' + (index + 1) + '/' + total + '] #' + id + ' 入库失败（' + xhr.status + '）', true);
+                }).always(function () {
+                    index++;
+                    updateSaveProgress(index, total, ok, fail, index < total ? ('下一条准备中...') : '');
+                    next();
+                });
+            }
+
+            next();
         });
     }
 
     window.twConfirmSave = function () {
+        if (state.saveRunning) {
+            uiMsg('正在写入数据库，请稍候');
+            return;
+        }
         if (state.mode === 'batch') {
             saveBatchAll();
             return;
@@ -690,14 +775,23 @@
         }
         var fields = Object.keys(state.translated).join('、');
         uiConfirm('确认将 #' + sel.id + ' 的 [' + fields + '] 写入数据库？', function () {
-            setStatus('保存中...', true);
+            setSaveButtonBusy(true);
+            showSaveProgress(1, '写入数据库进度');
+            updateSaveProgress(0, 1, 0, 0, '正在写入 #' + sel.id + '...');
+            twBootLog('<strong>开始入库 #' + sel.id + '</strong>（共 1 条）', false);
             saveOne(sel.module, sel.id, sel.locale, state.translated).done(function (res) {
-                setStatus('已入库', false);
-                if (res.code === 0) twBootLog('✓ 已写入数据库（#' + sel.id + '）', false);
-                else twBootLog('保存失败：' + (res.message || ''), true);
+                if (res && res.code === 0) {
+                    finishSaveProgress(1, 0, 1);
+                    twBootLog('✓ 已写入数据库（#' + sel.id + '）', false);
+                } else {
+                    finishSaveProgress(0, 1, 1);
+                    twBootLog('✗ 保存失败：' + ((res && res.message) || ''), true);
+                }
             }).fail(function (xhr) {
-                setStatus('失败', false);
-                twBootLog('保存失败（' + xhr.status + '）', true);
+                finishSaveProgress(0, 1, 1);
+                twBootLog('✗ 保存失败（' + xhr.status + '）', true);
+            }).always(function () {
+                setSaveButtonBusy(false);
             });
         });
     };
