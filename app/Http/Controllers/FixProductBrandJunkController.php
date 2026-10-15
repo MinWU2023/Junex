@@ -1,0 +1,235 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+
+/**
+ * 浏览器可访问：清理产品详情里被误译/加标签的品牌 HTML（JUNIO / about-us 蓝链）。
+ *
+ * 预览（默认只扫不写）：
+ *   /fix_product_junio 
+ *   /__fix_product_junio
+ *
+ * 确认写库：
+ *   /fix_product_junio?apply=1
+ *
+ * 可选口令（.env 设置 FIX_TOOL_TOKEN=xxx 后）：
+ *   /fix_product_junio?token=xxx&apply=1 
+ */
+class FixProductBrandJunkController extends Controller
+{
+    /** @var array<int, string> */
+    protected array $fields = [
+        'content',
+        'brief_content',
+        'm_content',
+        'product_details',
+        'description',
+        'content_1',
+        'content_2',
+        'content_3',
+        'content_4',
+        'content_5',
+        'content_6',
+        'content_7',
+        'content_8',
+        'content_9',
+        'content_10',
+        'name',
+        'title',
+        'keywords',
+    ];
+
+    public function __invoke(Request $request)
+    {
+        $expectedToken = trim((string)env('FIX_TOOL_TOKEN', ''));
+        if ($expectedToken !== '') {
+            $token = (string)$request->query('token', '');
+            if (!hash_equals($expectedToken, $token)) {
+                abort(403, 'Invalid token');
+            }
+        }
+
+        $apply = filter_var($request->query('apply', false), FILTER_VALIDATE_BOOLEAN);
+        $table = 'product_translations';
+        if (!Schema::hasTable($table)) {
+            return response('<pre>table missing: product_translations</pre>', 500)
+                ->header('Content-Type', 'text/html; charset=UTF-8');
+        }
+
+        $columns = Schema::getColumnListing($table);
+        $fields = array_values(array_filter($this->fields, static function ($f) use ($columns) {
+            return in_array($f, $columns, true);
+        }));
+
+        $query = DB::table($table)->orderBy('id');
+        $query->where(function ($outer) use ($fields) {
+            foreach ($fields as $i => $field) {
+                $method = $i === 0 ? 'where' : 'orWhere';
+                $outer->{$method}(function ($w) use ($field) {
+                    $w->where($field, 'like', '%JUNIO%')
+                        ->orWhere($field, 'like', '%junio%')
+                        ->orWhere($field, 'like', '%about-us%');
+                });
+            }
+        });
+
+        $rows = $query->get(array_merge(['id', 'product_id', 'locale'], $fields));
+        $report = [];
+        $changedRows = 0;
+        $changedFields = 0;
+
+        foreach ($rows as $row) {
+            $updates = [];
+            $samples = [];
+            foreach ($fields as $field) {
+                $original = (string)($row->{$field} ?? '');
+                if ($original === '') {
+                    continue;
+                }
+                if (!$this->looksDirty($original)) {
+                    continue;
+                }
+                $cleaned = $this->cleanHtml($original);
+                if ($cleaned === $original) {
+                    continue;
+                }
+                $updates[$field] = $cleaned;
+                $samples[$field] = [
+                    'before' => $this->excerpt($original),
+                    'after' => $this->excerpt($cleaned),
+                ];
+            }
+
+            if ($updates === []) {
+                continue;
+            }
+
+            $changedRows++;
+            $changedFields += count($updates);
+            $report[] = [
+                'id' => (int)$row->id,
+                'product_id' => (int)$row->product_id,
+                'locale' => (string)$row->locale,
+                'fields' => array_keys($updates),
+                'samples' => $samples,
+            ];
+
+            if ($apply) {
+                DB::table($table)->where('id', $row->id)->update($updates);
+            }
+        }
+
+        $html = $this->renderReport($apply, $rows->count(), $changedRows, $changedFields, $report);
+
+        return response($html, 200)->header('Content-Type', 'text/html; charset=UTF-8');
+    }
+
+    protected function looksDirty(string $html): bool
+    {
+        return (bool)preg_match('/JUNIO|junio|about-us/i', $html);
+    }
+
+    protected function cleanHtml(string $html): string
+    {
+        $patterns = [
+            // 用户报的结构：font-size 18px + strong + about-us 链接 + 蓝色 JUNIO/JUNEX
+            '/<span\s+style=["\'][^"\']*font-size:\s*18px;?[^"\']*["\']\s*>\s*<strong>\s*<a\s+[^>]*href=["\'][^"\']*about-us[^"\']*["\'][^>]*>\s*<span\s+style=["\'][^"\']*color:\s*#3598db;?[^"\']*["\']\s*>\s*(?:JUNIO|JUNEX|Junio|Junex)\s*<\/span>\s*<\/a>\s*<\/strong>\s*<\/span>/iu',
+            // 更宽松：任意外层 span/strong 包着 about-us 链 + JUNIO/JUNEX
+            '/<span[^>]*>\s*<strong>\s*<a\s+[^>]*href=["\'][^"\']*about-us[^"\']*["\'][^>]*>\s*<span[^>]*>\s*(?:JUNIO|JUNEX|Junio|Junex)\s*<\/span>\s*<\/a>\s*<\/strong>\s*<\/span>/iu',
+            // 仅 a>span 结构
+            '/<a\s+[^>]*href=["\'][^"\']*about-us[^"\']*["\'][^>]*>\s*<span[^>]*>\s*(?:JUNIO|JUNEX|Junio|Junex)\s*<\/span>\s*<\/a>/iu',
+            // 仅 about-us 链接文字为 JUNIO/JUNEX
+            '/<a\s+[^>]*href=["\'][^"\']*about-us[^"\']*["\'][^>]*>\s*(?:JUNIO|JUNEX|Junio|Junex)\s*<\/a>/iu',
+        ];
+
+        $out = $html;
+        foreach ($patterns as $pattern) {
+            // 去掉错误标签后保留正确品牌明文 JUNEX，避免句子变成 “ is a ...”
+            $out = preg_replace($pattern, 'JUNEX', $out) ?? $out;
+        }
+
+        // 残留误译品牌词（非品牌名上下文尽量只替换独立词）
+        $out = preg_replace('/\bJUNIO\b/u', 'JUNEX', $out) ?? $out;
+        $out = preg_replace('/\bJunio\b/u', 'JUNEX', $out) ?? $out;
+
+        // 清理可能出现的连续空格（不碰标签内）
+        $out = preg_replace('/[ \t]{2,}/', ' ', $out) ?? $out;
+
+        return $out;
+    }
+
+    protected function excerpt(string $text, int $max = 220): string
+    {
+        $text = preg_replace('/\s+/u', ' ', $text) ?? $text;
+        if (mb_strlen($text) <= $max) {
+            return $text;
+        }
+
+        return mb_substr($text, 0, $max) . '…';
+    }
+
+    /**
+     * @param  array<int, array<string, mixed>>  $report
+     */
+    protected function renderReport(bool $apply, int $scanned, int $changedRows, int $changedFields, array $report): string
+    {
+        $mode = $apply ? 'APPLY（已写库）' : 'DRY-RUN（仅预览，未写库）';
+        $applyUrl = url('/fix_product_junio') . '?apply=1';
+        $token = trim((string)env('FIX_TOOL_TOKEN', ''));
+        if ($token !== '') {
+            $applyUrl .= '&token=' . rawurlencode($token);
+        }
+
+        $lines = [];
+        $lines[] = '<!doctype html><html><head><meta charset="utf-8"><title>Fix JUNIO product content</title>';
+        $lines[] = '<style>body{font:14px/1.5 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif;padding:20px;max-width:1100px;margin:0 auto;background:#f7f7f7;color:#222}';
+        $lines[] = 'h1{font-size:20px} .box{background:#fff;border:1px solid #ddd;border-radius:8px;padding:14px 16px;margin:12px 0}';
+        $lines[] = '.ok{color:#0a7} .warn{color:#c60} .err{color:#c00} code,pre{background:#f0f0f0;padding:2px 4px;border-radius:4px;white-space:pre-wrap;word-break:break-word}';
+        $lines[] = 'a.btn{display:inline-block;background:#16a291;color:#fff;padding:8px 14px;border-radius:6px;text-decoration:none;margin-right:8px}';
+        $lines[] = 'table{width:100%;border-collapse:collapse} td,th{border:1px solid #e5e5e5;padding:8px;vertical-align:top;font-size:12px} th{background:#fafafa}</style></head><body>';
+        $lines[] = '<h1>清理产品详情误译品牌标签（JUNIO / about-us 蓝链）</h1>';
+        $lines[] = '<div class="box"><strong>模式：</strong><span class="' . ($apply ? 'err' : 'warn') . '">' . htmlspecialchars($mode) . '</span><br>';
+        $lines[] = '扫描命中行：' . (int)$scanned . '　将修改行：' . (int)$changedRows . '　字段变更：' . (int)$changedFields . '<br>';
+        $lines[] = '规则：去掉 <code>&lt;span style="font-size:18px"&gt;…JUNIO/JUNEX…&lt;/span&gt;</code> 这类 about-us 蓝链 HTML，替换为明文 <code>JUNEX</code>；并纠正残留单词 JUNIO→JUNEX。';
+        $lines[] = '</div>';
+
+        if (!$apply) {
+            $lines[] = '<div class="box">';
+            $lines[] = '<a class="btn" href="' . htmlspecialchars($applyUrl) . '">确认写库 apply=1</a>';
+            $lines[] = '<a class="btn" style="background:#666" href="' . htmlspecialchars(url('/fix_product_junio')) . '">重新预览</a>';
+            $lines[] = '</div>';
+        } else {
+            $lines[] = '<div class="box ok">已写回数据库。请刷新产品详情页检查。用完请删除本工具路由或设置 FIX_TOOL_TOKEN。</div>';
+        }
+
+        if ($report === []) {
+            $lines[] = '<div class="box ok">没有需要修改的记录。</div>';
+        } else {
+            $lines[] = '<div class="box"><table><thead><tr><th>translation_id</th><th>product_id</th><th>locale</th><th>fields</th><th>before → after</th></tr></thead><tbody>';
+            foreach ($report as $item) {
+                $sampleHtml = '';
+                foreach ($item['samples'] as $field => $pair) {
+                    $sampleHtml .= '<div><strong>' . htmlspecialchars((string)$field) . '</strong><br>';
+                    $sampleHtml .= '<span class="err">B:</span> ' . htmlspecialchars((string)$pair['before']) . '<br>';
+                    $sampleHtml .= '<span class="ok">A:</span> ' . htmlspecialchars((string)$pair['after']) . '</div><hr>';
+                }
+                $lines[] = '<tr>';
+                $lines[] = '<td>' . (int)$item['id'] . '</td>';
+                $lines[] = '<td>' . (int)$item['product_id'] . '</td>';
+                $lines[] = '<td>' . htmlspecialchars((string)$item['locale']) . '</td>';
+                $lines[] = '<td>' . htmlspecialchars(implode(', ', $item['fields'])) . '</td>';
+                $lines[] = '<td>' . $sampleHtml . '</td>';
+                $lines[] = '</tr>';
+            }
+            $lines[] = '</tbody></table></div>';
+        }
+
+        $lines[] = '</body></html>';
+
+        return implode("\n", $lines);
+    }
+}
