@@ -16,7 +16,7 @@
     <div class="absolute inset-0 bg-slate-900" aria-hidden="true"></div>
     <header class="pointer-events-none absolute inset-x-0 top-0 z-20 hidden md4:block header-nav site-header">
     <div class="site-header-container pointer-events-auto mx-auto w-full px-4 sm2:px-5 md1:px-6 lg1:px-0">
-        <div class="flex h-16 items-center justify-between md1:h-20 mt-2.5">
+        <div class="site-header-bar h-16 md1:h-20 mt-2.5">
             @php
                 $siteLogo = $setting->logo ?? front_webp_url('/front/imgs/logo2.svg');
                 $innerLogo = $setting->inner_logo ?? null;
@@ -25,7 +25,6 @@
             <a href="/" class="flex items-center gap-2 site-header-logo">
                 <img class="header-logo selectable site-header-logo-img h-[70px] w-[100px] object-contain" src="{{ $siteLogo }}" data-default-src="{{ $siteLogo }}" data-sticky-src="{{ $stickyLogo }}" alt="{{ __('Logo') }}" loading="lazy" />
             </a>
-            <div class="site-header-cluster flex items-center gap-[35px]">
             @php
                 $navItems = $nav['items'] ?? [];
                 $linkBase = 'relative transition duration-200 hover:text-white after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-[14px] after:h-[5px] after:w-[34px] after:rounded-[5px] after:bg-themeBg-d after:opacity-0 after:transition-all after:duration-200 hover:after:opacity-100';
@@ -117,7 +116,6 @@
             </svg>
             </button>
         </div>
-            </div>
         </div>
     </div>
     </header>

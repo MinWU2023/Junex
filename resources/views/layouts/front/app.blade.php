@@ -881,6 +881,30 @@
         transition: max-width .2s ease;
       }
 
+      /*
+       * 三栏：左 logo | 中导航绝对居中 | 右工具
+       * 两侧 1fr 等宽，保证导航相对 container 水平居中
+       */
+      .site-header-bar {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        align-items: center;
+        column-gap: 16px;
+      }
+      .site-header-logo {
+        justify-self: start;
+        grid-column: 1;
+      }
+      .site-header-nav {
+        justify-self: center;
+        grid-column: 2;
+        min-width: 0;
+      }
+      .site-header-tools {
+        justify-self: end;
+        grid-column: 3;
+      }
+
       /* 导航项单行，字号沿用原 16px，不缩小 */
       .site-header-nav > a,
       .site-header-nav > .group > a {
@@ -1380,12 +1404,11 @@
           <!-- Desktop Header：固定在顶部，侧栏 sticky 预留其高度 -->
           <header class="pointer-events-none fixed inset-x-0 top-0 z-20 bg-[#FFF] py-[6px] hidden md4:block site-header">
             <div class="site-header-container pointer-events-auto mx-auto w-full px-4 sm2:px-5 md1:px-6 lg1:px-0">
-              <div class="flex h-16 items-center justify-between md1:h-20">
+              <div class="site-header-bar h-16 md1:h-20">
                 <a href="/" class="flex items-center gap-2 site-header-logo">
                   <img class="site-header-logo-img h-[70px] w-auto max-w-[140px] object-contain" src="{{ $logoForInner }}" alt="{{ __('Logo') }}" loading="lazy" />
                 </a>
 
-                <div class="site-header-cluster flex items-center gap-[35px]">
                   @php
                     $navItems = $data['nav']['items'] ?? [];
                     $linkBase = 'relative transition duration-200 hover:text-black/70 after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-[14px] after:h-[5px] after:w-[34px] after:rounded-[5px] after:bg-themeBg-d after:opacity-0 after:transition-all after:duration-200 hover:after:opacity-100';
@@ -1468,7 +1491,6 @@
                       </div>
                     </div>
                   </div>
-                </div>
               </div>
             </div>
           </header>
