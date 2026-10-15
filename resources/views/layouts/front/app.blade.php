@@ -870,87 +870,54 @@
       }
       /* .sec-pad 不再强制 padding-top: 2rem */
     </style>
-    {{-- 按语言适配桌面头部导航（西语等长文案防换行） --}}
+    {{-- 按语言适配桌面头部：加宽导航容器，字号保持不变 --}}
     <style id="locale-header-nav-css">
-      /* 通用：导航项单行，避免高低不齐 */
+      /* 头部内容区默认 1200（与站内其它区块一致） */
+      .site-header-container {
+        width: 100%;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+        transition: max-width .2s ease;
+      }
+
+      /* 导航项单行，字号沿用原 16px，不缩小 */
       .site-header-nav > a,
       .site-header-nav > .group > a {
         line-height: 1.2;
-      }
-
-      /* 长文案语言：收紧间距/字号/字距，强制不换行 */
-      html.lang-es .site-header-nav,
-      html.lang-de .site-header-nav,
-      html.lang-pt .site-header-nav,
-      html.lang-it .site-header-nav,
-      html.lang-ru .site-header-nav {
-        gap: 12px;
-        font-size: 13px;
-        letter-spacing: 0.02em;
-      }
-      html.lang-es .site-header-nav > a,
-      html.lang-es .site-header-nav > .group > a,
-      html.lang-de .site-header-nav > a,
-      html.lang-de .site-header-nav > .group > a,
-      html.lang-pt .site-header-nav > a,
-      html.lang-pt .site-header-nav > .group > a,
-      html.lang-it .site-header-nav > a,
-      html.lang-it .site-header-nav > .group > a,
-      html.lang-ru .site-header-nav > a,
-      html.lang-ru .site-header-nav > .group > a {
         white-space: nowrap;
       }
-      html.lang-es .site-header-cluster,
-      html.lang-de .site-header-cluster,
-      html.lang-pt .site-header-cluster,
-      html.lang-it .site-header-cluster,
-      html.lang-ru .site-header-cluster {
-        gap: 18px;
-      }
-      html.lang-es .site-header-tools,
-      html.lang-de .site-header-tools,
-      html.lang-pt .site-header-tools,
-      html.lang-it .site-header-tools,
-      html.lang-ru .site-header-tools {
-        gap: 16px;
+
+      /*
+       * 长文案语言：只加宽头部 container。
+       * 正文 / 其它区块仍保持 max-w 1200。
+       */
+      @media (min-width: 992px) {
+        html.lang-de .site-header-container,
+        html.lang-pt .site-header-container,
+        html.lang-it .site-header-container,
+        html.lang-ru .site-header-container {
+          max-width: 1400px;
+        }
+        html.lang-es .site-header-container {
+          max-width: 1520px;
+        }
       }
 
-      /* 西班牙语最长，再收一档 */
-      html.lang-es .site-header-nav {
-        gap: 9px;
-        font-size: 12px;
-        letter-spacing: 0.01em;
-      }
-      html.lang-es .site-header-cluster { gap: 14px; }
-      html.lang-es .site-header-tools { gap: 12px; }
-      html.lang-es .site-header-logo-img {
-        max-width: 120px;
-        height: 60px;
+      @media (min-width: 1600px) {
+        html.lang-es .site-header-container {
+          max-width: 1680px;
+        }
       }
 
-      /* md4 ~ lg1：桌面窄屏再压缩；语言名只留国旗 */
+      /* 992–1199：接近视口全宽；可隐藏语言文字腾一点空间，字号不变 */
       @media (min-width: 992px) and (max-width: 1199px) {
-        html.lang-es .site-header-nav,
-        html.lang-de .site-header-nav,
-        html.lang-pt .site-header-nav,
-        html.lang-it .site-header-nav,
-        html.lang-ru .site-header-nav {
-          gap: 7px;
-          font-size: 11px;
-        }
-        html.lang-es .site-header-cluster,
-        html.lang-de .site-header-cluster,
-        html.lang-pt .site-header-cluster,
-        html.lang-it .site-header-cluster,
-        html.lang-ru .site-header-cluster {
-          gap: 10px;
-        }
-        html.lang-es .site-header-tools,
-        html.lang-de .site-header-tools,
-        html.lang-pt .site-header-tools,
-        html.lang-it .site-header-tools,
-        html.lang-ru .site-header-tools {
-          gap: 8px;
+        html.lang-es .site-header-container,
+        html.lang-de .site-header-container,
+        html.lang-pt .site-header-container,
+        html.lang-it .site-header-container,
+        html.lang-ru .site-header-container {
+          max-width: 100%;
         }
         html.lang-es .language-switcher-label,
         html.lang-de .language-switcher-label,
@@ -959,13 +926,9 @@
         html.lang-ru .language-switcher-label {
           display: none;
         }
-        html.lang-es .site-header-logo-img {
-          max-width: 100px;
-          height: 52px;
-        }
       }
 
-      /* 移动端抽屉：长文案可换行，但不挤成一团 */
+      /* 移动端抽屉：长文案允许换行 */
       @media (max-width: 991px) {
         html.lang-es #mobileMenu nav a,
         html.lang-es #mobileMenu nav button,
@@ -1416,7 +1379,7 @@
           @endif
           <!-- Desktop Header：固定在顶部，侧栏 sticky 预留其高度 -->
           <header class="pointer-events-none fixed inset-x-0 top-0 z-20 bg-[#FFF] py-[6px] hidden md4:block site-header">
-            <div class="pointer-events-auto mx-auto w-full max-w-[1200px] px-4 sm2:px-5 md1:px-6 lg1:px-0">
+            <div class="site-header-container pointer-events-auto mx-auto w-full px-4 sm2:px-5 md1:px-6 lg1:px-0">
               <div class="flex h-16 items-center justify-between md1:h-20">
                 <a href="/" class="flex items-center gap-2 site-header-logo">
                   <img class="site-header-logo-img h-[70px] w-auto max-w-[140px] object-contain" src="{{ $logoForInner }}" alt="{{ __('Logo') }}" loading="lazy" />

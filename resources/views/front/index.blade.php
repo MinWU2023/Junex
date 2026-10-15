@@ -15,7 +15,7 @@
 <section class="relative w-full pt-16 md4:pt-0 banners">
     <div class="absolute inset-0 bg-slate-900" aria-hidden="true"></div>
     <header class="pointer-events-none absolute inset-x-0 top-0 z-20 hidden md4:block header-nav site-header">
-    <div class="pointer-events-auto mx-auto w-full max-w-[1200px] px-4 sm2:px-5 md1:px-6 lg1:px-0">
+    <div class="site-header-container pointer-events-auto mx-auto w-full px-4 sm2:px-5 md1:px-6 lg1:px-0">
         <div class="flex h-16 items-center justify-between md1:h-20 mt-2.5">
             @php
                 $siteLogo = $setting->logo ?? front_webp_url('/front/imgs/logo2.svg');
