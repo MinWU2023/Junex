@@ -324,6 +324,7 @@ class TranslateWorkbenchController extends BaseController
 
         try {
             $this->persistence->saveTranslation($model, $locale, $filtered, $fieldTypes);
+            $this->forgetFrontCachesAfterSave();
         } catch (\Throwable $e) {
             return response()->json([
                 'code' => 500,
@@ -336,6 +337,30 @@ class TranslateWorkbenchController extends BaseController
             'locale' => $locale,
             'fields' => array_keys($filtered),
         ]);
+    }
+
+    /**
+     * 入库后清应用/整页缓存，避免前台继续吐旧 HTML。
+     */
+    protected function forgetFrontCachesAfterSave(): void
+    {
+        try {
+            \Illuminate\Support\Facades\Cache::flush();
+        } catch (\Throwable $e) {
+            // ignore
+        }
+        try {
+            if (class_exists(\App\Services\FrontPageCatalogService::class)) {
+                app(\App\Services\FrontPageCatalogService::class)->forgetPageCaches(['']);
+            }
+        } catch (\Throwable $e) {
+            // ignore
+        }
+        try {
+            \Illuminate\Support\Facades\Artisan::call('view:clear');
+        } catch (\Throwable $e) {
+            // ignore
+        }
     }
 
     protected function looksLikeFeatureListJson(string $text): bool

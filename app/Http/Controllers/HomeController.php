@@ -352,27 +352,73 @@ class HomeController extends Controller
             return $out;
         };
 
+        $isPollutedBrandCopy = static function ($text): bool {
+            $t = mb_strtolower(trim((string)$text));
+            if ($t === '') {
+                return false;
+            }
+            // 历史串台：多条 slide 被写成同一段英文 Active Wear / BLUESIGN 文案
+            return str_contains($t, 'ectionwear champions')
+                || str_contains($t, 'environmentally friendly fabrics')
+                || str_contains($t, 'reduce fast fashion')
+                || $t === 'junex active wear brands solutions';
+        };
+
+        $pickBrandText = static function ($slide, string $field) use ($isPollutedBrandCopy): string {
+            $locale = function_exists('front_locale_code') ? front_locale_code() : (string)app()->getLocale();
+            $fallback = function_exists('front_fallback_locale_code') ? front_fallback_locale_code() : 'en';
+            $localeRow = method_exists($slide, 'translate') ? $slide->translate($locale, false) : null;
+            $enRow = ($fallback !== '' && $fallback !== $locale && method_exists($slide, 'translate'))
+                ? $slide->translate($fallback, false)
+                : null;
+            $loc = trim((string)($localeRow->{$field} ?? ''));
+            $en = trim((string)($enRow->{$field} ?? ''));
+            if ($loc === '') {
+                return $en !== '' ? $en : translated_attr($slide, $field);
+            }
+            // 库中非空但是串台英文 → 英语兜底（避免西语站继续显示错误英文）
+            if ($isPollutedBrandCopy($loc) && !$isPollutedBrandCopy($en) && $en !== '') {
+                return $en;
+            }
+            if ($field === 'button_text'
+                && strcasecmp($loc, 'Learn More') === 0
+                && $en !== ''
+                && strcasecmp($loc, $en) !== 0
+            ) {
+                return $en;
+            }
+            return $loc;
+        };
+
         $brandSolutionSlides = BrandSolution::query()
             ->active()
             ->with(['translations'])
             ->orderByDesc('sort')
             ->orderByDesc('id')
             ->get()
-            ->map(function ($slide) use ($normalizeImageUrl, $mapFeatures) {
-                // features：当前语言优先；空/非法 JSON 则英语兜底（对勾三行）
+            ->map(function ($slide) use ($normalizeImageUrl, $mapFeatures, $isPollutedBrandCopy, $pickBrandText) {
+                // features：当前语言优先；空/非法/串台污染则英语兜底（对勾三行）
                 $locale = function_exists('front_locale_code') ? front_locale_code() : (string)app()->getLocale();
                 $fallback = function_exists('front_fallback_locale_code') ? front_fallback_locale_code() : 'en';
                 $localeRow = method_exists($slide, 'translate') ? $slide->translate($locale, false) : null;
+                $enRow = ($fallback !== '' && $fallback !== $locale && method_exists($slide, 'translate'))
+                    ? $slide->translate($fallback, false)
+                    : null;
                 $features = $mapFeatures($localeRow ? ($localeRow->features ?? null) : ($slide->features ?? null));
-                if ($features === [] && $fallback !== '' && $fallback !== $locale) {
-                    $enRow = $slide->translate($fallback, false);
-                    $features = $mapFeatures($enRow ? ($enRow->features ?? null) : null);
+                $featBlob = mb_strtolower(json_encode(array_column($features, 'text'), JSON_UNESCAPED_UNICODE) ?: '');
+                $featuresPolluted = $features !== [] && (
+                    str_contains($featBlob, 'environmentally friendly')
+                    || str_contains($featBlob, 'reduce fast fashion')
+                    || $isPollutedBrandCopy($featBlob)
+                );
+                if (($features === [] || $featuresPolluted) && $enRow) {
+                    $features = $mapFeatures($enRow->features ?? null);
                 }
-                $buttonText = translated_attr($slide, 'button_text');
+                $buttonText = $pickBrandText($slide, 'button_text');
                 return [
                     'media_image_url' => $normalizeImageUrl($slide->path),
-                    'title' => translated_attr($slide, 'title'),
-                    'description' => translated_attr($slide, 'description'),
+                    'title' => $pickBrandText($slide, 'title'),
+                    'description' => $pickBrandText($slide, 'description'),
                     'features' => $features,
                     'button' => [
                         'text' => $buttonText !== '' ? $buttonText : 'Learn More',
