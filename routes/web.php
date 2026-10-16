@@ -18,6 +18,7 @@ use App\Http\Controllers\CustomerAuthController;
 use App\Http\Controllers\NewStyleController;
 use App\Http\Controllers\FrontLangController;
 use App\Http\Controllers\FixProductBrandJunkController;
+use App\Http\Controllers\FixProductJunexAboutLinkController;
 
 
 // Avoid /front/lang/*.js — nginx may 404 missing public static files before Laravel.
@@ -34,6 +35,10 @@ Route::get('/lang_check', [FrontLangController::class, 'diagnose']);
 // 清理产品详情误译品牌 HTML（JUNIO / about-us 蓝链）。默认 dry-run；?apply=1 写库
 Route::get('/__fix_product_junio', FixProductBrandJunkController::class);
 Route::get('/fix_product_junio', FixProductBrandJunkController::class);
+
+// 为产品详情西班牙语段落开头 JUNEX 添加 about-us 深蓝链接。默认 dry-run；?apply=1 写库
+Route::get('/__fix_product_junex_link', FixProductJunexAboutLinkController::class);
+Route::get('/fix_product_junex_link', FixProductJunexAboutLinkController::class);
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
