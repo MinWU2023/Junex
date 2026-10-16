@@ -91,7 +91,7 @@
                         <img class="h-auto w-full object-cover transition-transform duration-300 group-hover:scale-110" src="{{ $p['image'] }}" alt="{{ $p['name'] }}" loading="lazy" />
                     </div>
                     <div class="py-3">
-                        <h4 class="text-f16 font-poppins-medium text-themeText-f leading-6">{{ $p['name'] }}</h4>
+                        <h4 class="line-clamp-3 text-f16 font-poppins-medium text-themeText-f leading-6">{{ $p['name'] }}</h4>
                     </div>
                 </a>
             @endforeach
