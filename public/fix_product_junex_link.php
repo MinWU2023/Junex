@@ -18,7 +18,7 @@ $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
 $linkColor = '#0284c7';
 $searchNeedle = 'JUNEX es un fabricante profesional';
-$candidateFields = ['content', 'brief_content', 'm_content'];
+$candidateFields = ['product_details'];
 $self = basename(__FILE__);
 
 $expectedToken = trim((string)env('FIX_TOOL_TOKEN', ''));

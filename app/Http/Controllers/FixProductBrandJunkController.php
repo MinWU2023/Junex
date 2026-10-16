@@ -244,7 +244,7 @@ class FixProductBrandJunkController extends Controller
     }
 
     /**
-     * 为 product_translations 西班牙语段落开头的 JUNEX 添加 about-us 链接。
+     * 为 product_translations.product_details（前台 Product Details）段落开头的 JUNEX 添加 about-us 链接。
      */
     public function linkJunexAbout(Request $request)
     {
@@ -253,7 +253,7 @@ class FixProductBrandJunkController extends Controller
         $apply = filter_var($request->query('apply', false), FILTER_VALIDATE_BOOLEAN);
         $linkColor = '#0284c7';
         $searchNeedle = 'JUNEX es un fabricante profesional';
-        $candidateFields = ['content', 'brief_content', 'm_content'];
+        $candidateFields = ['product_details'];
         $table = 'product_translations';
 
         if (!Schema::hasTable($table)) {
@@ -426,7 +426,7 @@ class FixProductBrandJunkController extends Controller
         }
 
         if ($report === []) {
-            $lines[] = '<div class="box ok">没有需要修改的记录（可能已全部加链、字段不在 content/brief_content/m_content，或 locale 不是 es）。可试 <code>?locale=*</code>。</div>';
+            $lines[] = '<div class="box ok">没有需要修改的记录（可能已全部加链、内容不在 product_details，或 locale 不是 es）。可试 <code>?locale=*</code>。</div>';
         } else {
             $lines[] = '<div class="box"><table><thead><tr><th>translation_id</th><th>product_id</th><th>locale</th><th>field</th><th>before → after</th></tr></thead><tbody>';
             foreach ($report as $item) {
