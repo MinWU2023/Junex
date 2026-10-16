@@ -4,7 +4,7 @@
  *
  * 预览：/fix_product_junex_link.php
  * 写库：/fix_product_junex_link.php?apply=1
- * 口令：/fix_product_junex_link.php?token=xxx&apply=1  （.env 设置 FIX_TOOL_TOKEN 时）
+ * 全语言：/fix_product_junex_link.php?locale=*
  */
 
 declare(strict_types=1);
@@ -16,9 +16,9 @@ require __DIR__ . '/../vendor/autoload.php';
 $app = require_once __DIR__ . '/../bootstrap/app.php';
 $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
-$field = 'content';
-$marker = 'JUNEX es un fabricante profesional de ropa deportiva especializado en yoga';
 $linkColor = '#0284c7';
+$searchNeedle = 'es un fabricante profesional de ropa deportiva';
+$candidateFields = ['content', 'brief_content', 'm_content'];
 $self = basename(__FILE__);
 
 $expectedToken = trim((string)env('FIX_TOOL_TOKEN', ''));
@@ -40,48 +40,36 @@ if (!Schema::hasTable('product_translations')) {
     exit('<pre>table missing: product_translations</pre>');
 }
 
-if (!in_array($field, Schema::getColumnListing('product_translations'), true)) {
-    http_response_code(500);
-    exit('<pre>column missing: ' . htmlspecialchars($field) . '</pre>');
-}
+$fields = array_values(array_filter($candidateFields, static function ($field) {
+    return in_array($field, Schema::getColumnListing('product_translations'), true);
+}));
 
-$needsLink = static function (string $html) use ($marker): bool {
-    if (mb_stripos($html, $marker) === false) {
+$paragraphPlainText = static function (string $html): string {
+    $plain = html_entity_decode(strip_tags($html), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $plain = str_replace("\xC2\xA0", ' ', $plain);
+    $plain = preg_replace('/\s+/u', ' ', $plain) ?? $plain;
+    return trim($plain);
+};
+
+$needsLink = static function (string $html) use ($paragraphPlainText): bool {
+    $plain = $paragraphPlainText($html);
+    if (!preg_match('/JUNEX\s+es un fabricante profesional de ropa deportiva/iu', $plain)) {
         return false;
     }
-    if (preg_match('/<a\s[^>]*href=["\'][^"\']*about-us[^"\']*["\'][^>]*>\s*<span[^>]*>\s*JUNEX\s*<\/span>\s*<\/a>\s+es un fabricante profesional/iu', $html)) {
-        return false;
-    }
-    if (preg_match('/<a\s[^>]*href=["\'][^"\']*about-us[^"\']*["\'][^>]*>\s*JUNEX\s*<\/a>\s+es un fabricante profesional/iu', $html)) {
+    if (preg_match('/<a\s[^>]*href=["\'][^"\']*about-us[^"\']*["\'][^>]*>[\s\S]{0,120}?JUNEX[\s\S]{0,80}?<\/a>\s*(?:&nbsp;|\s)*es un fabricante profesional/iu', $html)) {
         return false;
     }
     return true;
 };
 
-$junexAlreadyLinked = static function (string $prefix, string $suffix): bool {
-    $tail = mb_substr($prefix, -300);
-    if (preg_match('/<a\s[^>]*href=["\'][^"\']*about-us[^"\']*["\'][^>]*>\s*(?:<span[^>]*>\s*)?$/iu', $tail)) {
-        return true;
-    }
-    return (bool)preg_match('/^\s*<\/span>\s*<\/a>/iu', $suffix);
-};
-
-$linkifyLeadingJunex = static function (string $html) use ($marker, $linkColor, $junexAlreadyLinked): string {
-    $markerPos = mb_stripos($html, $marker);
-    if ($markerPos === false) {
+$linkifyLeadingJunex = static function (string $html) use ($linkColor, $needsLink): string {
+    if (!$needsLink($html)) {
         return $html;
     }
-
-    $prefix = mb_substr($html, 0, $markerPos);
-    $suffix = mb_substr($html, $markerPos + 5);
-
-    if ($junexAlreadyLinked($prefix, $suffix)) {
-        return $html;
-    }
-
     $link = '<a href="/about-us"><span style="color:' . $linkColor . ';">JUNEX</span></a>';
-
-    return $prefix . $link . $suffix;
+    $pattern = '/(?:<(?:strong|span|b|em)[^>]*>\s*)?JUNEX(?:\s*<\/(?:strong|span|b|em)>)?(?=\s*(?:&nbsp;|\x{00A0})?\s*es un fabricante profesional de ropa deportiva)/iu';
+    $replaced = preg_replace($pattern, $link, $html, 1);
+    return is_string($replaced) ? $replaced : $html;
 };
 
 $excerpt = static function (string $text, int $max = 260): string {
@@ -92,42 +80,50 @@ $excerpt = static function (string $text, int $max = 260): string {
     return mb_substr($text, 0, $max) . '…';
 };
 
-$query = DB::table('product_translations')
-    ->orderBy('id')
-    ->where($field, 'like', '%' . $marker . '%');
-
-if ($locale !== '') {
-    $query->where('locale', $locale);
+$query = DB::table('product_translations')->orderBy('id');
+if ($locale !== '' && $locale !== '*') {
+    $query->where(function ($q) use ($locale) {
+        $q->where('locale', $locale)
+            ->orWhere('locale', 'like', $locale . '_%')
+            ->orWhere('locale', 'like', $locale . '-%');
+    });
 }
+$query->where(function ($outer) use ($fields, $searchNeedle) {
+    foreach ($fields as $index => $field) {
+        $method = $index === 0 ? 'where' : 'orWhere';
+        $outer->{$method}(function ($inner) use ($field, $searchNeedle) {
+            $inner->where($field, 'like', '%JUNEX%')
+                ->where($field, 'like', '%' . $searchNeedle . '%');
+        });
+    }
+});
 
-$rows = $query->get(['id', 'product_id', 'locale', $field]);
+$rows = $query->get(array_merge(['id', 'product_id', 'locale'], $fields));
 $report = [];
 $changedRows = 0;
 
 foreach ($rows as $row) {
-    $original = (string)($row->{$field} ?? '');
-    if ($original === '' || !$needsLink($original)) {
-        continue;
-    }
-
-    $updated = $linkifyLeadingJunex($original);
-    if ($updated === $original) {
-        continue;
-    }
-
-    $changedRows++;
-    $report[] = [
-        'id' => (int)$row->id,
-        'product_id' => (int)$row->product_id,
-        'locale' => (string)$row->locale,
-        'before' => $excerpt($original),
-        'after' => $excerpt($updated),
-    ];
-
-    if ($apply) {
-        DB::table('product_translations')->where('id', $row->id)->update([
-            $field => $updated,
-        ]);
+    foreach ($fields as $field) {
+        $original = (string)($row->{$field} ?? '');
+        if ($original === '' || !$needsLink($original)) {
+            continue;
+        }
+        $updated = $linkifyLeadingJunex($original);
+        if ($updated === $original) {
+            continue;
+        }
+        $changedRows++;
+        $report[] = [
+            'id' => (int)$row->id,
+            'product_id' => (int)$row->product_id,
+            'locale' => (string)$row->locale,
+            'field' => $field,
+            'before' => $excerpt($original),
+            'after' => $excerpt($updated),
+        ];
+        if ($apply) {
+            DB::table('product_translations')->where('id', $row->id)->update([$field => $updated]);
+        }
     }
 }
 
@@ -150,7 +146,7 @@ echo 'a.btn{display:inline-block;background:#0284c7;color:#fff;padding:8px 14px;
 echo 'table{width:100%;border-collapse:collapse} td,th{border:1px solid #e5e5e5;padding:8px;vertical-align:top;font-size:12px} th{background:#fafafa}</style></head><body>';
 echo '<h1>产品详情西班牙语段落：为开头 JUNEX 添加 about-us 链接</h1>';
 echo '<div class="box"><strong>模式：</strong><span class="' . ($apply ? 'err' : 'warn') . '">' . htmlspecialchars($mode) . '</span><br>';
-echo '文件：<code>' . htmlspecialchars($self) . '</code>　字段：<code>' . htmlspecialchars($field) . '</code>　语言：<code>' . htmlspecialchars($locale) . '</code><br>';
+echo '字段：<code>' . htmlspecialchars(implode(', ', $fields)) . '</code>　语言：<code>' . htmlspecialchars($locale === '' ? '*' : $locale) . '</code><br>';
 echo '扫描命中行：' . (int)$rows->count() . '　将修改行：' . (int)$changedRows . '<br>';
 echo '替换规则：段落开头 <code>JUNEX</code> → ' . $linkPreview . ' es un fabricante profesional…';
 echo '</div>';
@@ -159,20 +155,22 @@ if (!$apply) {
     echo '<div class="box">';
     echo '<a class="btn" href="' . htmlspecialchars($applyUrl) . '">确认写库 apply=1</a>';
     echo '<a class="btn" style="background:#666" href="' . htmlspecialchars($previewUrl) . '">重新预览</a>';
+    echo '<span class="warn">若仍为 0，可试 <code>?locale=*</code></span>';
     echo '</div>';
 } else {
-    echo '<div class="box ok">已写回数据库。请刷新产品详情页检查。用完请删除 public/' . htmlspecialchars($self) . '。</div>';
+    echo '<div class="box ok">已写回数据库。用完请删除 public/' . htmlspecialchars($self) . '。</div>';
 }
 
 if ($report === []) {
-    echo '<div class="box ok">没有需要修改的记录（可能已全部加链，或暂无匹配段落）。</div>';
+    echo '<div class="box ok">没有需要修改的记录。可试 <code>?locale=*</code> 扫全部语言。</div>';
 } else {
-    echo '<div class="box"><table><thead><tr><th>translation_id</th><th>product_id</th><th>locale</th><th>before → after</th></tr></thead><tbody>';
+    echo '<div class="box"><table><thead><tr><th>translation_id</th><th>product_id</th><th>locale</th><th>field</th><th>before → after</th></tr></thead><tbody>';
     foreach ($report as $item) {
         echo '<tr>';
         echo '<td>' . (int)$item['id'] . '</td>';
         echo '<td>' . (int)$item['product_id'] . '</td>';
         echo '<td>' . htmlspecialchars((string)$item['locale']) . '</td>';
+        echo '<td>' . htmlspecialchars((string)$item['field']) . '</td>';
         echo '<td><span class="err">B:</span> ' . htmlspecialchars((string)$item['before']) . '<br><span class="ok">A:</span> ' . htmlspecialchars((string)$item['after']) . '</td>';
         echo '</tr>';
     }
