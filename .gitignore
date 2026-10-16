@@ -83,6 +83,7 @@ homestead
 !/public/index.php
 !/public/favicon.ico
 !/public/robots.txt
+!/public/fix_product_junex_link.php
 
 # Local SSH keys (never commit)
 wumin
