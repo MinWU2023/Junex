@@ -12,6 +12,9 @@
         $buttonText = $item['button_text'] ?? $buttonText;
         $alt = $item['alt'] ?? $alt;
     }
+    if ($buttonText === '' || strcasecmp(trim((string) $buttonText), 'Learn More') === 0) {
+        $buttonText = __('Learn More');
+    }
     if ($alt === '') {
         $alt = $title !== '' ? $title : 'Blog cover';
     }

@@ -164,7 +164,7 @@ class HomeController extends Controller
         }
 
         $fallbackBlogImage = front_webp_url('/front/imgs/index_rc_01.png');
-        $mapBlogCard = static function ($blog, $fallbackBlogImage, $id = null) {
+        $mapBlogCard = static function ($blog, $fallbackBlogImage, $id = null, $excitingUpdate = null) {
             if (!$blog) {
                 return null;
             }
@@ -190,13 +190,14 @@ class HomeController extends Controller
             }
 
             $title = translated_attr($blog, 'name');
+            $buttonText = $excitingUpdate ? translated_attr($excitingUpdate, 'button_text') : '';
             return [
                 'id' => $id ?? $blog->id,
                 'date' => $dateText,
                 'title' => $title,
                 'image' => $img,
                 'url' => $url,
-                'button_text' => 'Learn More',
+                'button_text' => $buttonText !== '' ? $buttonText : __('Learn More'),
                 'alt' => $title !== '' ? $title : 'Blog cover',
             ];
         };
@@ -205,7 +206,7 @@ class HomeController extends Controller
         try {
             $excitingUpdates = ExcitingUpdate::query()
                 ->active()
-                ->with(['blog.translations', 'blog.url'])
+                ->with(['translations', 'blog.translations', 'blog.url'])
                 ->whereNotNull('blog_id')
                 ->whereHas('blog', function ($q) {
                     $q->active();
@@ -215,7 +216,7 @@ class HomeController extends Controller
                 ->limit(12)
                 ->get()
                 ->map(function ($item) use ($mapBlogCard, $fallbackBlogImage) {
-                    return $mapBlogCard($item->blog, $fallbackBlogImage, $item->id);
+                    return $mapBlogCard($item->blog, $fallbackBlogImage, $item->id, $item);
                 })
                 ->filter()
                 ->values()
