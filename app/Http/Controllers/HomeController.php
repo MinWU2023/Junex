@@ -381,13 +381,6 @@ class HomeController extends Controller
             if ($isPollutedBrandCopy($loc) && !$isPollutedBrandCopy($en) && $en !== '') {
                 return $en;
             }
-            if ($field === 'button_text'
-                && strcasecmp($loc, 'Learn More') === 0
-                && $en !== ''
-                && strcasecmp($loc, $en) !== 0
-            ) {
-                return $en;
-            }
             return $loc;
         };
 
@@ -415,14 +408,14 @@ class HomeController extends Controller
                 if (($features === [] || $featuresPolluted) && $enRow) {
                     $features = $mapFeatures($enRow->features ?? null);
                 }
-                $buttonText = $pickBrandText($slide, 'button_text');
+                $buttonText = translated_attr($slide, 'button_text');
                 return [
                     'media_image_url' => $normalizeImageUrl($slide->path),
                     'title' => $pickBrandText($slide, 'title'),
                     'description' => $pickBrandText($slide, 'description'),
                     'features' => $features,
                     'button' => [
-                        'text' => $buttonText !== '' ? $buttonText : 'Learn More',
+                        'text' => $buttonText !== '' ? $buttonText : __('Learn More'),
                         'url' => (string)($slide->button_url ?: '#'),
                     ],
                 ];
