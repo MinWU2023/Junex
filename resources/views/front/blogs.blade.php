@@ -159,9 +159,9 @@
             <div class="swiper-wrapper">
                 @foreach(($productVideosData ?? []) as $v)
                 <article class="swiper-slide">
-                <div class="h-full bg-themeBg-g">
-                    <a href="{{ $v['video_url'] ?: '#' }}" data-video-url="{{ $v['video_url'] ?: '' }}" class="group block js-video-modal">
-                    <div class="relative">
+                <div class="blog-product-video-card flex h-full flex-col bg-themeBg-g">
+                    <a href="{{ $v['video_url'] ?: '#' }}" data-video-url="{{ $v['video_url'] ?: '' }}" class="group flex h-full flex-col js-video-modal">
+                    <div class="relative shrink-0">
                         <img class="h-[190px] w-full object-cover md1:h-[210px]" src="{{ $v['image'] }}" alt="{{ __('Product video cover') }}" loading="lazy" />
                         <div class="absolute inset-0 bg-black/10 transition group-hover:bg-black/15" aria-hidden="true"></div>
                         <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -172,8 +172,8 @@
                         </span>
                         </div>
                     </div>
-                    <div class="px-5 py-4">
-                        <div class="text-f18 font-poppins-medium leading-5 text-themeText-f">
+                    <div class="flex flex-1 flex-col px-5 py-4">
+                        <div class="line-clamp-3 min-h-[3.75rem] text-f18 font-poppins-medium leading-5 text-themeText-f">
                         {{ $v['title'] }}
                         </div>
                     </div>
@@ -210,6 +210,21 @@
     section.blogs-list-section + section.blogs-videos-section .sec-pad {
         padding-top: 1.5rem !important;
     }
+}
+
+/* Product Video 卡片：同行等高、标题最多 3 行 */
+.blogs-product-video-swiper .swiper-wrapper,
+.blog-category-product-video-swiper .swiper-wrapper {
+    align-items: stretch;
+}
+.blogs-product-video-swiper .swiper-slide,
+.blog-category-product-video-swiper .swiper-slide {
+    height: auto;
+    display: flex;
+}
+.blogs-product-video-swiper .blog-product-video-card,
+.blog-category-product-video-swiper .blog-product-video-card {
+    width: 100%;
 }
 
 /* /blogs 视频：悬停时圆形边框 + 三角为主题红 */
