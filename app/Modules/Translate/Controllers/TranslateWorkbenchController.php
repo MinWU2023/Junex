@@ -315,7 +315,13 @@ class TranslateWorkbenchController extends BaseController
             if (!in_array($field, $allowed, true)) {
                 continue;
             }
-            $filtered[$field] = is_scalar($value) ? (string) $value : json_encode($value, JSON_UNESCAPED_UNICODE);
+            // null（ConvertEmptyStringsToNull 会把空串转成 null）必须存为空串，
+            // 否则 json_encode(null) 会把字面量 "null" 写进翻译表，导致前台 TDK 显示 null。
+            if ($value === null) {
+                $filtered[$field] = '';
+            } else {
+                $filtered[$field] = is_scalar($value) ? (string) $value : json_encode($value, JSON_UNESCAPED_UNICODE);
+            }
             $fieldTypes[$field] = (string)($fieldMeta->get($field)['type'] ?? 'text');
         }
         if (empty($filtered)) {

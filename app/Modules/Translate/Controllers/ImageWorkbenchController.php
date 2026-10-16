@@ -264,7 +264,12 @@ class ImageWorkbenchController extends BaseController
                     if (!in_array($field, $allowed, true)) {
                         continue;
                     }
-                    $filtered[$field] = is_scalar($value) ? (string) $value : json_encode($value, JSON_UNESCAPED_UNICODE);
+                    // null 必须存为空串，避免 json_encode(null) 把字面量 "null" 写入翻译表
+                    if ($value === null) {
+                        $filtered[$field] = '';
+                    } else {
+                        $filtered[$field] = is_scalar($value) ? (string) $value : json_encode($value, JSON_UNESCAPED_UNICODE);
+                    }
                     $fieldTypes[$field] = (string) ($fieldMeta->get($field)['type'] ?? 'text');
                 }
                 if (empty($filtered)) {

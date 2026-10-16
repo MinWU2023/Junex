@@ -147,6 +147,14 @@ class FrontTranslation
             return '';
         }
 
-        return trim((string)$value);
+        $text = trim((string)$value);
+
+        // 兜底：翻译入库/导入时被写成字面量 "null"/"undefined" 的脏数据，一律当作空，
+        // 这样前台会继续走 SEO 模板或英语回退，而不是直接显示 null。
+        if (in_array(strtolower($text), ['null', 'undefined'], true)) {
+            return '';
+        }
+
+        return $text;
     }
 }
