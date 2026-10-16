@@ -17,7 +17,7 @@ $app = require_once __DIR__ . '/../bootstrap/app.php';
 $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
 $linkColor = '#0284c7';
-$searchNeedle = 'es un fabricante profesional de ropa deportiva';
+$searchNeedle = 'JUNEX es un fabricante profesional';
 $candidateFields = ['content', 'brief_content', 'm_content'];
 $self = basename(__FILE__);
 
@@ -53,7 +53,7 @@ $paragraphPlainText = static function (string $html): string {
 
 $needsLink = static function (string $html) use ($paragraphPlainText): bool {
     $plain = $paragraphPlainText($html);
-    if (!preg_match('/JUNEX\s+es un fabricante profesional de ropa deportiva/iu', $plain)) {
+    if (!preg_match('/JUNEX\s+es un fabricante profesional/iu', $plain)) {
         return false;
     }
     if (preg_match('/<a\s[^>]*href=["\'][^"\']*about-us[^"\']*["\'][^>]*>[\s\S]{0,120}?JUNEX[\s\S]{0,80}?<\/a>\s*(?:&nbsp;|\s)*es un fabricante profesional/iu', $html)) {
@@ -67,7 +67,7 @@ $linkifyLeadingJunex = static function (string $html) use ($linkColor, $needsLin
         return $html;
     }
     $link = '<a href="/about-us"><span style="color:' . $linkColor . ';">JUNEX</span></a>';
-    $pattern = '/(?:<(?:strong|span|b|em)[^>]*>\s*)?JUNEX(?:\s*<\/(?:strong|span|b|em)>)?(?=\s*(?:&nbsp;|\x{00A0})?\s*es un fabricante profesional de ropa deportiva)/iu';
+    $pattern = '/(?:<(?:strong|span|b|em)[^>]*>\s*)?JUNEX(?:\s*<\/(?:strong|span|b|em)>)?(?=\s*(?:&nbsp;|\x{00A0})?\s*es un fabricante profesional)/iu';
     $replaced = preg_replace($pattern, $link, $html, 1);
     return is_string($replaced) ? $replaced : $html;
 };
@@ -92,8 +92,7 @@ $query->where(function ($outer) use ($fields, $searchNeedle) {
     foreach ($fields as $index => $field) {
         $method = $index === 0 ? 'where' : 'orWhere';
         $outer->{$method}(function ($inner) use ($field, $searchNeedle) {
-            $inner->where($field, 'like', '%JUNEX%')
-                ->where($field, 'like', '%' . $searchNeedle . '%');
+            $inner->where($field, 'like', '%' . $searchNeedle . '%');
         });
     }
 });

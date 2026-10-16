@@ -252,7 +252,7 @@ class FixProductBrandJunkController extends Controller
 
         $apply = filter_var($request->query('apply', false), FILTER_VALIDATE_BOOLEAN);
         $linkColor = '#0284c7';
-        $searchNeedle = 'es un fabricante profesional de ropa deportiva';
+        $searchNeedle = 'JUNEX es un fabricante profesional';
         $candidateFields = ['content', 'brief_content', 'm_content'];
         $table = 'product_translations';
 
@@ -276,8 +276,7 @@ class FixProductBrandJunkController extends Controller
             foreach ($fields as $index => $field) {
                 $method = $index === 0 ? 'where' : 'orWhere';
                 $outer->{$method}(function ($inner) use ($field, $searchNeedle) {
-                    $inner->where($field, 'like', '%JUNEX%')
-                        ->where($field, 'like', '%' . $searchNeedle . '%');
+                    $inner->where($field, 'like', '%' . $searchNeedle . '%');
                 });
             }
         });
@@ -357,7 +356,7 @@ class FixProductBrandJunkController extends Controller
     protected function junexLinkNeedsApply(string $html): bool
     {
         $plain = $this->junexParagraphPlainText($html);
-        if (!preg_match('/JUNEX\s+es un fabricante profesional de ropa deportiva/iu', $plain)) {
+        if (!preg_match('/JUNEX\s+es un fabricante profesional/iu', $plain)) {
             return false;
         }
 
@@ -375,7 +374,7 @@ class FixProductBrandJunkController extends Controller
         }
 
         $link = '<a href="/about-us"><span style="color:' . $linkColor . ';">JUNEX</span></a>';
-        $pattern = '/(?:<(?:strong|span|b|em)[^>]*>\s*)?JUNEX(?:\s*<\/(?:strong|span|b|em)>)?(?=\s*(?:&nbsp;|\x{00A0})?\s*es un fabricante profesional de ropa deportiva)/iu';
+        $pattern = '/(?:<(?:strong|span|b|em)[^>]*>\s*)?JUNEX(?:\s*<\/(?:strong|span|b|em)>)?(?=\s*(?:&nbsp;|\x{00A0})?\s*es un fabricante profesional)/iu';
         $replaced = preg_replace($pattern, $link, $html, 1);
 
         return is_string($replaced) ? $replaced : $html;
@@ -411,7 +410,7 @@ class FixProductBrandJunkController extends Controller
         $lines[] = '<h1>产品详情西班牙语段落：为开头 JUNEX 添加 about-us 链接</h1>';
         $lines[] = '<div class="box"><strong>模式：</strong><span class="' . ($apply ? 'err' : 'warn') . '">' . htmlspecialchars($mode) . '</span><br>';
         $lines[] = '字段：<code>' . htmlspecialchars(implode(', ', $fields)) . '</code>　语言：<code>' . htmlspecialchars($locale === '' ? '*' : $locale) . '</code><br>';
-        $lines[] = '关键词：<code>JUNEX</code> + <code>' . htmlspecialchars($searchNeedle) . '</code><br>';
+        $lines[] = '关键词：<code>' . htmlspecialchars($searchNeedle) . '</code><br>';
         $lines[] = '扫描命中行：' . (int)$scanned . '　将修改行：' . (int)$changedRows . '<br>';
         $lines[] = '替换规则：段落开头 <code>JUNEX</code> → ' . $linkPreview . ' es un fabricante profesional…';
         $lines[] = '</div>';
