@@ -1715,7 +1715,8 @@
 
         <div class="relative mx-auto w-full max-w-[1200px] px-4 sm2:px-5 md1:px-6 lg1:px-0">
           <div class="flex flex-col items-center justify-between gap-3 py-3 text-center text-[14px] font-poppins-regular text-white md4:flex-row md4:text-left">
-            <div class="order-2 text-[15px] font-poppins-regular md4:order-1">{{ __('JUNZHUO SPORTS CO., LTD. &copy; 2025 ICP NO. ALL RIGHTS RESERVED.') }}</div>
+            {{-- 限宽对齐红色斜切背景的最窄处（顶边 50%-60px），保证文案不会溢出红底 --}}
+            <div class="order-2 text-[15px] font-poppins-regular md4:order-1 md4:max-w-[calc(50%_-_60px)]">{{ __('JUNZHUO SPORTS CO., LTD. &copy; 2025 ICP NO. ALL RIGHTS RESERVED.') }}</div>
 
             <div class="order-1 flex items-center justify-center gap-2 md4:order-2 md4:justify-end">
               <span class="inline-flex h-5 items-center justify-center bg-themeBg-n px-2 text-[14px] font-poppins-regular text-white ring-1 ring-white/15 transition duration-200 hover:bg-black/35">{{ __('IPV6') }}</span>
