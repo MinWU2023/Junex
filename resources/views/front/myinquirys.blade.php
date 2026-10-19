@@ -104,10 +104,10 @@
             <select name="quantity" class="h-[42px] sm6:h-[46px] md1:h-[51px] w-full appearance-none rounded border border-themeBg-h bg-white px-3 text-f14 font-poppins-regular text-themeText-a outline-none transition focus:border-themeBg-d">
                 <option value="">{{ __('Please select') }}</option>
                 <option value="0~100">0~100</option>
-                <option value="101~500">101~500</option>
-                <option value="501~1000">501~1000</option>
-                <option value="1001~5000">1001~5000</option>
-                <option value="5000+">5000+</option>
+                <option value="100">100</option>
+                <option value="300">300</option>
+                <option value="500">500</option>
+                <option value="1000">1000</option>
             </select>
             </div>
             <div class="flex flex-1 flex-col gap-2">
