@@ -2024,8 +2024,8 @@
         </div>
         <div class="wishlist_footer js-inquiry-float-footer hidden border-t border-slate-200 px-3 py-2">
           <div class="flex items-center gap-2">
-            <button type="button" class="wishlist_delete_btn js-inquiry-float-clear flex-1 rounded border border-slate-300 px-3 py-1 text-[12px] text-slate-600 transition hover:bg-slate-100">{{ __('Clear') }}</button>
-            <button type="button" class="wishlist_contact_btn js-inquiry-float-contact flex-1 rounded bg-themeBg-d px-3 py-1 text-[12px] text-white transition hover:bg-[#c22522]">{{ __('Contact Now') }}</button>
+            <button type="button" class="wishlist_delete_btn js-inquiry-float-clear flex-1 whitespace-nowrap rounded border border-slate-300 px-2 py-1 text-[12px] text-slate-600 transition hover:bg-slate-100">{{ __('Clear') }}</button>
+            <button type="button" class="wishlist_contact_btn js-inquiry-float-contact flex-1 whitespace-nowrap rounded bg-themeBg-d px-2 py-1 text-[12px] text-white transition hover:bg-[#c22522]">{{ __('Contact Now') }}</button>
           </div>
         </div>
       </div>
