@@ -1,4 +1,4 @@
-{{-- 产品列表页左侧栏：Categories + New Products（对齐 secondpagesport） --}}
+{{-- Product list page sidebar: Categories + New Products (aligned with secondpagesport) --}}
 @php
     $sidebarCategories = $sidebarCategories ?? [];
     $sidebarRecommendProducts = $sidebarRecommendProducts ?? [];

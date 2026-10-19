@@ -5,7 +5,7 @@
 
 @section('page-css-header')
 <link type="text/css" rel="stylesheet" href="/front/css/pages/home.css" />
-{{-- 与产品详情一致：后台 TinyMCE 模板样式（已作用域到 .product-details-content） --}}
+{{-- Same as product detail: CMS TinyMCE template styles (scoped to .product-details-content) --}}
 <link type="text/css" rel="stylesheet" href="/front/css/product-highlights.css" />
 <link type="text/css" rel="stylesheet" href="/tinymce/tpl/css/det_font-awesome.min.css" />
 @endsection
@@ -97,7 +97,7 @@
  
 
 <section class="w-full blog_main bg-white sec-bg-white">
-    {{-- 移动端标题与面包屑间距相对 py-16 减小 30px --}}
+    {{-- Mobile: title-to-breadcrumb spacing reduced by 30px from py-16 --}}
     <div class="sec-pad mx-auto w-full max-w-[1200px] px-4 pt-[34px] pb-16 sm2:px-5 md1:px-6 md1:py-16 lg1:px-0">
     <div class="flex flex-col gap-8 md4:flex-row md4:gap-[26px]">
         <main class="w-full md4:w-[860px]">
@@ -109,7 +109,7 @@
             </div>
 
             <div class="mt-6 md1:mt-8">
-            {{-- 封面：宽 100%、高自适应，完整展示不裁剪 --}}
+            {{-- Cover: 100% width, auto height, fully displayed without cropping --}}
             <img class="block h-auto w-full max-w-full object-contain" src="{{ $blogCover ?? '' }}" alt="{{ __('Blog cover') }}" loading="lazy" />
             </div>
 
@@ -120,7 +120,7 @@
             </p>
             </div> -->
 
-            {{-- 不加 text-/leading-/font- 等工具类，避免盖掉后台富文本原有样式 --}}
+            {{-- No text-/leading-/font- utility classes here, to avoid overriding the CMS rich text styles --}}
             <div class="blog-detail-content product-details-content mt-8">
                 {!! $blogContent ?? '' !!}
             </div>
@@ -212,7 +212,7 @@
             </div>
             </section>
 
-            {{-- 右侧 Hot Tags 暂时隐藏
+            {{-- Right-side Hot Tags temporarily hidden
             <section class="w-full">
             <div class="text-f18 font-poppins-medium uppercase tracking-wide">Hot Tags</div>
             <div class="mt-5 flex flex-wrap gap-3">

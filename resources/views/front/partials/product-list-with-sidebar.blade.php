@@ -1,4 +1,4 @@
-{{-- 侧栏 + 产品网格；分页放在产品列内，避免手机端被侧栏隔开 --}}
+{{-- Sidebar + product grid; pagination lives inside the product column so the sidebar does not separate it on mobile --}}
 @php
     $productsData = $productsData ?? [];
     $products = $products ?? null;

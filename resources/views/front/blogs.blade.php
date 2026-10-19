@@ -100,7 +100,7 @@
 ])
 @else
     <section class="w-full blogs blogs-list-section bg-white sec-bg-white">
-    {{-- 仅一篇时底部 padding 相对原 pb-6/pb-10 各减 30px --}}
+    {{-- Only one post: bottom padding reduced by 30px from the original pb-6/pb-10 --}}
     <div class="sec-pad mx-auto w-full max-w-[1200px] px-4 pt-14 sm2:px-5 md1:px-6 md1:pt-16 lg1:px-0 {{ $onlyFeaturedBlog ? 'pb-0 md1:pb-2.5' : 'pb-6 md1:pb-10' }}">
     @if($hasFeaturedBlog)
     <article class="w-full bg-themeBg-g">
@@ -132,7 +132,7 @@
         @endforeach
     </div>
     @elseif($onlyFeaturedBlog)
-    {{-- 无第二篇：相对原 mt-8/mt-10 共减 50px（先减30再减20） --}}
+    {{-- No second post: 50px in total removed from the original mt-8/mt-10 (30px first, then 20px) --}}
     <div class="mt-[-18px] md1:mt-[-10px]" aria-hidden="true"></div>
     @endif
 
@@ -190,7 +190,7 @@
 
 @section('page-css-footer')
 <style type="text/css">
-/* /blogs：列表与 PRODUCT VIDEO 之间再收紧 */
+/* /blogs: tighten the gap between the list and PRODUCT VIDEO */
 @media only screen and (max-width: 991px) {
     body.sec-space-on section.blogs-list-section.sec-bg-white:has(+ section.blogs-videos-section) .sec-pad,
     section.blogs-list-section.sec-bg-white:has(+ section.blogs-videos-section) .sec-pad {
@@ -212,7 +212,7 @@
     }
 }
 
-/* Product Video 卡片：同行等高、标题最多 3 行 */
+/* Product Video cards: equal height within a row, title up to 3 lines */
 .blogs-product-video-swiper .swiper-wrapper,
 .blog-category-product-video-swiper .swiper-wrapper {
     align-items: stretch;
@@ -227,7 +227,7 @@
     width: 100%;
 }
 
-/* /blogs 视频：悬停时圆形边框 + 三角为主题红 */
+/* /blogs videos: on hover the circular border and the triangle turn theme red */
 section.blogs-videos-section a.js-video-modal:hover .video-play-btn {
     color: #D92B28 !important;
     border-color: #D92B28 !important;

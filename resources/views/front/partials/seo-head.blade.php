@@ -1,6 +1,6 @@
 {{-- Front SEO head: title/description/keywords + Schema.org --}}
 @php
-    // 优先：去掉域名后的 path 匹配后台单页面 url_key，命中则用该页 SEO 覆盖 TDK
+    // Priority: match the domain-stripped path against the CMS single page url_key and, on a hit, override the TDK with that page's SEO
     $cmsPageTdk = page_tdk_by_path();
     if (is_array($cmsPageTdk)) {
         $setting = app('settings')['setting'] ?? null;
@@ -17,7 +17,7 @@
         ];
     }
 
-    // 优先：按当前 URL 匹配单页面 url_key 的 schema；否则用控制器传入的 schemaOrgHtml
+    // Priority: match the current URL against a single page url_key schema; otherwise use the schemaOrgHtml passed in by the controller
     $resolvedSchemaHtml = page_schema_org_html();
     if ($resolvedSchemaHtml === '') {
         $resolvedSchemaHtml = wrap_schema_org_html($schemaOrgHtml ?? '');

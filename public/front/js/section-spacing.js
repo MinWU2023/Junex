@@ -222,7 +222,7 @@
       var b = meta[i + 1];
       if (!a.white || !b.white) continue;
 
-      // /blogs 列表 → PRODUCT VIDEO：手机端更紧凑
+      // /blogs list → PRODUCT VIDEO: tighter spacing on mobile
       var tightBlogsVideo =
         a.el.classList.contains('blogs-list-section') &&
         b.el.classList.contains('blogs-videos-section');
@@ -230,7 +230,7 @@
         ? (window.innerWidth <= 991 ? '0.5rem' : '1.5rem')
         : PAD_HALF;
 
-      // 仅压缩上一区块底边距；不再给下一区块 .sec-pad 写 padding-top（保留页面自身间距）
+      // Only shrink the previous section's bottom margin; no longer set padding-top on the next .sec-pad (keep the page's own spacing)
       if (a.pad) {
         a.pad.style.setProperty('padding-bottom', edgePad, 'important');
         a.pad.dataset.secEdgeBottom = '1';

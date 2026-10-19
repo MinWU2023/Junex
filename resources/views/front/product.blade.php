@@ -483,7 +483,7 @@
             }
         });
 
-        // 非移动端：左侧栏顶到「固定头部下方」后固定，宽高不变；上滚逆向还原
+        // Non-mobile: pin the left sidebar once it reaches the bottom of the fixed header, keeping its width and height; restore in reverse when scrolling up
         (function initPdpSidebarSticky() {
             var section = document.querySelector('.pdp-content-with-sidebar');
             var sidebar = section && section.querySelector('.product-list-sidebar');
@@ -517,7 +517,7 @@
                         offset = Math.max(offset, Math.ceil(rect.bottom));
                     }
                 }
-                // 桌面端头部若尚未写成 fixed，仍按头部实际高度预留（避免被导航挡住）
+                // If the desktop header is not fixed yet, still reserve space by its actual height (so it is not covered by the nav)
                 if (offset <= 0 && mq.matches) {
                     var desktopHeader = document.querySelector('.pagebanner > header');
                     if (desktopHeader) {
@@ -601,13 +601,13 @@
                     ? sidebar.offsetHeight
                     : (parseFloat(ph.style.height) || sidebar.offsetHeight);
 
-                // 顶到固定头部下沿才悬停；上滚超过该线则还原
+                // Stick only once the bottom edge of the fixed header is reached; restore when scrolled back above that line
                 if (aRect.top > stickyTop) {
                     if (mode !== 'static') toStatic();
                     return;
                 }
 
-                // 内容区底部：为头部预留下方空间后贴底
+                // Content bottom: stick to the bottom after reserving space for the header
                 if (rowRect.bottom <= sideH + stickyTop) {
                     if (mode === 'static') toFixed(stickyTop);
                     if (mode !== 'absolute') toAbsolute();

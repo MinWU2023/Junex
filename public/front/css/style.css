@@ -1,4 +1,4 @@
-/* overflow-x:hidden 会让整页 sticky 失效；clip 可裁切横向溢出且不影响 sticky */
+/* overflow-x:hidden breaks page-level sticky; clip trims horizontal overflow without affecting sticky */
 body,html{width:100%;padding:0px;margin:0px;overflow-x:clip !important;}
 *{box-sizing: border-box;}
  .search_popup {
@@ -270,7 +270,7 @@ body,html{width:100%;padding:0px;margin:0px;overflow-x:clip !important;}
   flex-direction: column;
   height: 100%;
 }
-/* 暂时隐藏博客卡片日期（列表 / 分类 / 标签 / 首页轮播） */
+/* Temporarily hide the blog card date (list / category / tag / homepage carousel) */
 .blog-card__date {
   display: none !important;
 }
@@ -339,7 +339,7 @@ body,html{width:100%;padding:0px;margin:0px;overflow-x:clip !important;}
   width: 100%;
 }
 
-/* Exciting Updates: 手机端按钮浮在博客两侧竖直居中；桌面端两侧箭头 */
+/* Exciting Updates: on mobile the buttons float on both sides of the blog, vertically centered; on desktop they are side arrows */
 .exciting_updates .exciting-updates-layout {
   display: grid;
   grid-template-columns: 1fr;
@@ -500,7 +500,7 @@ body,html{width:100%;padding:0px;margin:0px;overflow-x:clip !important;}
   display: none !important;
 }
 
-/* Mobile: 2-col grid, no horizontal swipe；禁止高度塌陷叠到下一板块 */
+/* Mobile: 2-col grid, no horizontal swipe; prevent height collapse from overlapping the next section */
 @media (max-width: 991px) {
   .hot_styles {
     position: relative;
@@ -538,7 +538,7 @@ body,html{width:100%;padding:0px;margin:0px;overflow-x:clip !important;}
     height: auto !important;
   }
 
-  /* Custom Service 独立层叠，避免被上一板块内容盖住 */
+  /* Custom Service gets its own stacking context so the previous section cannot cover it */
   .custom_serrvices {
     z-index: 2;
   }
@@ -563,7 +563,7 @@ body,html{width:100%;padding:0px;margin:0px;overflow-x:clip !important;}
   }
 }
 
-/* Desktop: horizontal swiper（已去掉左右箭头） */
+/* Desktop: horizontal swiper (side arrows removed) */
 @media (min-width: 992px) {
   .hot_styles .hot-styles-tabs-wrap {
     margin-left: 0;
@@ -626,7 +626,7 @@ body,html{width:100%;padding:0px;margin:0px;overflow-x:clip !important;}
   cursor: default;
 }
 
-/* 新加的轮播左右按钮：浮在轮播内容左右，竖直居中，不挤压宽度 */
+/* New carousel side buttons: float on both sides of the carousel, vertically centered, without squeezing the width */
 .junex-swiper-shell {
   position: relative;
   display: block;
@@ -660,7 +660,7 @@ body,html{width:100%;padding:0px;margin:0px;overflow-x:clip !important;}
   background-color: rgba(248, 248, 248, 0.92);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
-/* 首页 Banner：不显示左右切换按钮（保留底部圆点） */
+/* Homepage banner: hide the side arrows (keep the bottom dots) */
 .banners .junex-swiper-controls,
 .banners .junex-swiper-controls[data-for="banners"],
 .banners .junex-swiper-shell > .junex-swiper-controls,
@@ -676,7 +676,7 @@ body,html{width:100%;padding:0px;margin:0px;overflow-x:clip !important;}
   position: relative;
 }
 
-/* Custom Service 移动端：只显示一张，溢出隐藏；分页圆点主题红并在图下方 */
+/* Custom Service mobile: show one item only with overflow hidden; pagination dots in theme red below the image */
 .custom_serrvices .odm-swiper,
 .custom_serrvices .oem-swiper,
 .custom_serrvices .junex-swiper-shell .odm-swiper,
@@ -705,7 +705,7 @@ body,html{width:100%;padding:0px;margin:0px;overflow-x:clip !important;}
   opacity: 1;
   background: #D92B28;
 }
-/* Custom Service：全端独立文档流，防止与相邻板块叠层 */
+/* Custom Service: independent document flow on all breakpoints to avoid stacking with adjacent sections */
 .custom_serrvices {
   position: relative;
   z-index: 1;
@@ -730,7 +730,7 @@ body,html{width:100%;padding:0px;margin:0px;overflow-x:clip !important;}
    position: relative;
  }
 
- /* Mobile: content only（已去掉左右箭头） */
+ /* Mobile: content only (side arrows removed) */
  .about-us .about-us-layout {
    display: grid;
    grid-template-columns: 1fr;
@@ -1248,7 +1248,7 @@ nav .group:hover > div {
   text-stroke: 1.5px #fff;
 }
 
-/* Why Choose 数据卡片：数值（如 45M+）与描边后缀（如 Products）各占一行 */
+/* Why Choose stat cards: value (e.g. 45M+) and outlined suffix (e.g. Products) on separate lines */
 .why_choose .text-stroke-white {
   display: block;
 }
@@ -1546,8 +1546,8 @@ nav .group:hover > div {
 .product-details-content tr { height: auto !important; }
 .product-details-content table p { margin: 0 !important; line-height: 1.5 !important; }
 
-/* 博客详情富文本：保留后台样式结构，叠加响应式字号/行高/下边距（H≥18px，其它≥15px）
-   使用双 class 提高优先级，避免被后加载的 product-highlights.css 盖掉 */
+/* Blog detail rich text: keep the CMS style structure and layer responsive font-size/line-height/bottom margin on top (H tags >= 18px, others >= 15px)
+   A double class is used for higher specificity so the later-loaded product-highlights.css cannot override it */
 .blog-detail-content.product-details-content {
   max-width: 100%;
   overflow-x: auto;
@@ -1606,7 +1606,7 @@ nav .group:hover > div {
 .blog-detail-content.product-details-content h6:first-child {
   margin-top: 0 !important;
 }
-/* H 标签：各端逐步缩放，最小不低于 18px */
+/* H tags: scale down progressively per breakpoint, never below 18px */
 .blog-detail-content.product-details-content h1 {
   font-size: clamp(18px, 1.6vw + 14px, 32px) !important;
   line-height: clamp(1.22, 0.08vw + 1.2, 1.3) !important;
@@ -1667,7 +1667,7 @@ nav .group:hover > div {
   line-height: revert-layer;
   font-size: inherit;
 }
-/* Tailwind preflight 会清掉 border 属性视觉效果：有 border 且非 0 时补回实线边框 */
+/* Tailwind preflight removes the visual effect of border: restore a solid border when border is set and non-zero */
 .blog-detail-content table[border]:not([border="0"]) td,
 .blog-detail-content table[border]:not([border="0"]) th {
   border-width: 1px;
@@ -1703,7 +1703,7 @@ nav .group:hover > div {
   .partners .partners-static {
     display: none !important;
   }
-  /* 手机端：合作方 logo 条上下内边距收紧 */
+  /* Mobile: tighten the vertical padding of the partner logo strip */
   .partners .sec-pad,
   section.partners > div > div {
     padding-top: 1.25rem !important;
@@ -1716,7 +1716,7 @@ nav .group:hover > div {
   .partners .partners-swiper img {
     max-height: 48px;
   }
-  /* 手机端：暂时隐藏合作伙伴左右切换按钮 */
+  /* Mobile: temporarily hide the partner side arrows */
   .partners .junex-swiper-controls,
   .partners .junex-swiper-controls[data-for="partners"],
   .partners .partners-prev,
@@ -1737,7 +1737,7 @@ nav .group:hover > div {
   }
 }
 
-/* 首页合作伙伴 / About Us：移动端红色分页圆点 */
+/* Homepage partners / About Us: red pagination dots on mobile */
 .partners .partners-pagination .swiper-pagination-bullet,
 .about-us .about-us-pagination .swiper-pagination-bullet {
   width: 8px;
@@ -1846,7 +1846,7 @@ nav .group:hover > div {
 .product-list-sidebar .pls-section-body[hidden] {
   display: none !important;
 }
-/* 桌面：始终展开，不折叠 */
+/* Desktop: always expanded, never collapsed */
 @media only screen and (min-width: 992px) {
   .product-list-sidebar .pls-title {
     pointer-events: none;
@@ -1856,7 +1856,7 @@ nav .group:hover > div {
     display: block !important;
   }
 }
-/* 手机：红色标题栏 + 右侧上下箭头，默认收起；标题文案恒为白色（避免红底叠红字） */
+/* Mobile: red title bar + up/down arrow on the right, collapsed by default; title text stays white (avoid red text on a red background) */
 @media only screen and (max-width: 991px) {
   .product-list-sidebar .pls-block + .pls-block {
     margin-top: 12px;
@@ -2096,7 +2096,7 @@ nav .group:hover > div {
   color: #666;
   font-size: 14px;
   line-height: 24px;
-  /* border-box 下 max-height 含 padding，需预留 padding-top */
+  /* With border-box, max-height includes padding, so padding-top must be reserved */
   max-height: calc(10px + 24px * 3);
   overflow: hidden;
   word-break: break-word;
@@ -2111,7 +2111,7 @@ nav .group:hover > div {
   color: var(--pls-accent);
 }
 
-/* 产品列表 / 推荐 / 首页热销卡片：产品名称统一 14px */
+/* Product list / recommendations / homepage hot-sale cards: product name is always 14px */
 .product-list-card h4,
 .product_list .product-list-card h4,
 .hot_styles .product-list-card h4,
@@ -2120,7 +2120,7 @@ nav .group:hover > div {
   line-height: 22px !important;
 }
 
-/* 面包屑：带链接项悬停为主题红（覆盖内部 span 固定色） */
+/* Breadcrumb: linked items hover to theme red (overrides the fixed color of inner spans) */
 .breadcrumb nav a,
 .breadcrumb nav a span {
   transition: color .2s ease;
@@ -2132,11 +2132,11 @@ nav .group:hover > div {
   color: #D92B28 !important;
 }
 
-/* 内页 PageBanner 统一隐藏（保留头部导航占位）；去掉 .pagebanner--off 即可恢复 */
+/* Inner pages: PageBanner is hidden globally (the header nav placeholder is kept); remove .pagebanner--off to restore it */
 .pagebanner.pagebanner--off {
   height: auto !important;
   min-height: 0 !important;
-  padding-top: 64px !important; /* 移动端 fixed 顶栏 */
+  padding-top: 64px !important; /* fixed top bar on mobile */
   padding-bottom: 0 !important;
   overflow: visible !important;
   background: #fff !important;
@@ -2146,11 +2146,11 @@ nav .group:hover > div {
 }
 @media only screen and (min-width: 992px) {
   .pagebanner.pagebanner--off {
-    padding-top: 92px !important; /* 桌面 fixed 顶栏高度 */
+    padding-top: 92px !important; /* fixed top bar height on desktop */
   }
 }
 
-/* Custom Services 证书轮播：手机端隐藏左右箭头，底部圆点切换 */
+/* Custom Services certificate carousel: hide the side arrows on mobile, switch with the bottom dots */
 .cs-cert .cs-cert-pagination {
   display: flex;
   align-items: center;
@@ -2195,7 +2195,7 @@ nav .group:hover > div {
   }
 }
 
-/* Banner：小于 768px 使用手机端图；>=768px 使用 PC 图 */
+/* Banner: use the mobile image below 768px and the desktop image at >=768px */
 .banners-viewport--pc {
   display: none;
 }
@@ -2211,7 +2211,7 @@ nav .group:hover > div {
   }
 }
 
-/* 首页 Banner：手机端 3:4 宽高比、收紧文案间距 */
+/* Homepage banner: 3:4 aspect ratio on mobile with tighter text spacing */
 @media only screen and (max-width: 767px) {
   .banners .banners-swiper,
   .banners .banners-swiper--mobile {
@@ -2254,7 +2254,7 @@ nav .group:hover > div {
   }
 }
 
-/* About Us full_cus 能力卡片悬停动效 */
+/* About Us full_cus capability card hover effect */
 .full_cus .full-cus-card,
 .full_cus .grid > div {
   transition: transform .28s ease, box-shadow .28s ease, background-color .28s ease, outline-color .28s ease;
@@ -2275,8 +2275,8 @@ nav .group:hover > div {
 }
 
 /*
- * Contact Us SNS：后台富文本常剥掉内联 SVG，色块 <a> 变空。
- * 用 CSS mask 补白图标，不依赖 HTML 内 SVG，也不改文案。
+ * Contact Us SNS: the CMS rich text often strips inline SVG, leaving the colored <a> empty.
+ * A CSS mask fills in the icon without relying on inline SVG in the HTML and without changing any copy.
  */
 .infos a[aria-label="Twitter"],
 .infos a[aria-label="LinkedIn"],
@@ -2336,7 +2336,7 @@ nav .group:hover > div {
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' d='M12.1 2C6.6 2 2 6.1 2 11.6c0 4.1 2.5 7.7 6.1 9.2-.1-.8-.2-2 0-2.9.2-.8 1.4-5.3 1.4-5.3s-.4-.8-.4-2c0-1.9 1.1-3.3 2.5-3.3 1.2 0 1.7.9 1.7 1.9 0 1.2-.8 3-1.2 4.6-.3 1.4.7 2.5 2 2.5 2.4 0 4.2-2.6 4.2-6.3 0-3.3-2.3-5.6-5.6-3.8 0-6 2.9-6 5.9 0 1.2.4 2.4 1.1 3.1.1.1.1.2.1.4-.1.4-.3 1.2-.3 1.3-.1.2-.2.3-.4.2-1.6-.8-2.6-3.2-2.6-5.2 0-4.2 3-8 8.7-8 4.6 0 8.2 3.3 8.2 7.6 0 4.5-2.8 8.2-6.7 8.2-1.3 0-2.6-.7-3-1.5l-.8 3c-.3 1-.9 2.3-1.3 3.1.9.3 1.9.5 2.9.5 5.5 0 10.1-4.1 10.1-9.6C22.2 6.1 17.6 2 12.1 2z'/%3E%3C/svg%3E");
 }
 
-/* 后台 SNS 动态图标：显示真实 img，禁用旧 mask 兜底 */
+/* CMS-driven SNS icons: show the real img and disable the legacy mask fallback */
 .infos a.sns-icon-link,
 .infos a.sns-icon-link[aria-label] {
   position: relative;
@@ -2354,7 +2354,7 @@ nav .group:hover > div {
   height: 100%;
   object-fit: contain;
 }
-/* 产品详情页：手机端隐藏分类 / 新产品侧栏；桌面端 sticky */
+/* Product detail: hide the category / new product sidebar on mobile; sticky on desktop */
 @media only screen and (max-width: 991px) {
   .pdp-content-with-sidebar .product-list-sidebar {
     display: none !important;
@@ -2394,4 +2394,4 @@ body.sec-space-on section.sec-bg-white + section.sec-bg-white .about-us-layout,
 body.sec-space-on section.sec-bg-white + section.sec-bg-white.sec-pad {
   padding-top: 2rem !important;
 }
-/* .sec-pad 不再强制 padding-top: 2rem，保留页面自身间距 */
+/* .sec-pad no longer forces padding-top: 2rem; keep the page's own spacing */

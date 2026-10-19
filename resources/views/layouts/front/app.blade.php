@@ -18,7 +18,7 @@
     <meta name="color-scheme" content="light" />
     <meta name="theme-color" content="#0b1220" />
     @php
-      // 后台 ico 常为相对路径（无前导 /），详情页等 URL 下会解析错；统一成站点根路径，SVG 补 type
+      // CMS icons are often relative paths (no leading /) and resolve incorrectly on detail-page URLs; normalise them to the site root path and add the type attribute for SVG
       $siteIco = front_image_url($data['setting']->ico ?? null);
       $faviconHref = $siteIco !== '' ? $siteIco : asset('favicon.ico');
       $faviconPath = strtolower((string) (parse_url($faviconHref, PHP_URL_PATH) ?: $faviconHref));
@@ -185,7 +185,7 @@
       button[class~="hover:text-white"]:hover,
       a[class~="hover:text-white"]:hover *,
       button[class~="hover:text-white"]:hover *,
-      /* 视频播放按钮：悬停保持白色三角，避免与红底叠成实心圆点 */
+      /* Video play button: keep the white triangle on hover so it does not merge into the red background as a solid dot */
       a.js-video-modal:hover .video-card__play,
       a.js-video-modal:hover .video-card__play *,
       a.js-video-modal:hover .video-play-btn,
@@ -194,7 +194,7 @@
         fill: #ffffff !important;
       }
 
-      /* Quote Now：悬停红底保持，文案/图标改为黑色（覆盖全局 button:hover 红字） */
+      /* Quote Now: keep the red background on hover and turn the text/icon black (overrides the global button:hover red text) */
       button.pdp-btn-quote:hover,
       button#quoteNowBtn:hover,
       button.pdp-btn-quote:hover *,
@@ -202,7 +202,7 @@
         color: #000000 !important;
       }
 
-      /* Product Tag：悬停主题红底 + 白字（覆盖全局 a:hover 红字） */
+      /* Product Tag: theme red background + white text on hover (overrides the global a:hover red text) */
       a.product-tag-link:hover,
       a.product-tag-link:hover * {
         color: #ffffff !important;
@@ -532,7 +532,7 @@
         max-width: 100% !important;
         height: auto !important;
       }
-      /* 前台强制：列表3/4/5 一排一图；后台编辑器样式不改 */
+      /* Front-end override: lists 3/4/5 show one image per row; the CMS editor styles are left untouched */
       .product-details-content #list_three,
       .product-details-content #list_four,
       .product-details-content #list_five,
@@ -649,7 +649,7 @@
       .product-highlights-content .det_pic_content .list:not([id]) > li .column:hover .image img {
         transform: none !important;
       }
-      /* 前台强制：列表6 一排一图；后台编辑器样式不改 */
+      /* Front-end override: list 6 shows one image per row; the CMS editor styles are left untouched */
       .product-details-content .cate_section_holder .cate_main_holder,
       .product-highlights-content .cate_section_holder .cate_main_holder {
         display: block !important;
@@ -868,11 +868,11 @@
       body.sec-space-on section.sec-bg-white + section.sec-bg-white.sec-pad {
         padding-top: 2rem !important;
       }
-      /* .sec-pad 不再强制 padding-top: 2rem */
+      /* .sec-pad no longer forces padding-top: 2rem */
     </style>
-    {{-- 按语言适配桌面头部：加宽导航容器，字号保持不变 --}}
+    {{-- Locale-aware desktop header: widen the nav container while keeping font sizes unchanged --}}
     <style id="locale-header-nav-css">
-      /* 头部内容区默认 1200（与站内其它区块一致） */
+      /* Header content area defaults to 1200 (consistent with the other sections on the site) */
       .site-header-container {
         width: 100%;
         max-width: 1200px;
@@ -882,8 +882,8 @@
       }
 
       /*
-       * 三栏：左 logo | 中导航绝对居中 | 右工具
-       * 两侧 1fr 等宽，保证导航相对 container 水平居中
+       * Three columns: logo on the left | nav absolutely centred | tools on the right
+       * Both sides are equal 1fr so the nav stays horizontally centred within the container
        */
       .site-header-bar {
         display: grid;
@@ -905,7 +905,7 @@
         grid-column: 3;
       }
 
-      /* 导航项单行，字号沿用原 16px，不缩小 */
+      /* Nav items stay on one line at the original 16px, never shrunk */
       .site-header-nav > a,
       .site-header-nav > .group > a {
         line-height: 1.2;
@@ -913,8 +913,8 @@
       }
 
       /*
-       * 长文案语言：只加宽头部 container。
-       * 正文 / 其它区块仍保持 max-w 1200。
+       * Long-copy locales: only the header container is widened.
+       * Body / other sections stay at max-w 1200.
        */
       @media (min-width: 992px) {
         html.lang-de .site-header-container,
@@ -934,7 +934,7 @@
         }
       }
 
-      /* 992–1199：接近视口全宽；可隐藏语言文字腾一点空间，字号不变 */
+      /* 992-1199: nearly full viewport width; the language text can be hidden to free up some space, font sizes unchanged */
       @media (min-width: 992px) and (max-width: 1199px) {
         html.lang-es .site-header-container,
         html.lang-de .site-header-container,
@@ -952,7 +952,7 @@
         }
       }
 
-      /* 移动端抽屉：长文案允许换行 */
+      /* Mobile drawer: long copy is allowed to wrap */
       @media (max-width: 991px) {
         html.lang-es #mobileMenu nav a,
         html.lang-es #mobileMenu nav button,
@@ -1023,7 +1023,7 @@
         max-width: 100% !important;
         height: auto !important;
       }
-      /* 前台强制：列表3/4/5 一排一图；后台编辑器样式不改 */
+      /* Front-end override: lists 3/4/5 show one image per row; the CMS editor styles are left untouched */
       .product-details-content #list_three,
       .product-details-content #list_four,
       .product-details-content #list_five,
@@ -1140,7 +1140,7 @@
       .product-highlights-content .det_pic_content .list:not([id]) > li .column:hover .image img {
         transform: none !important;
       }
-      /* 前台强制：列表6 一排一图；后台编辑器样式不改 */
+      /* Front-end override: list 6 shows one image per row; the CMS editor styles are left untouched */
       .product-details-content .cate_section_holder .cate_main_holder,
       .product-highlights-content .cate_section_holder .cate_main_holder {
         display: block !important;
@@ -1394,14 +1394,14 @@
     @if(View::hasSection('page-header'))
         @yield('page-header')
     @else
-        <!-- Page Banner：加/去掉 pagebanner--off 可统一统一内页 Banner（首页走 page-header，不受影响） -->
+        <!-- Page Banner: add/remove pagebanner--off to toggle the inner-page banner globally (the homepage uses page-header and is unaffected) -->
         <section class="relative w-full h-[300px] sm6:h-[350px] md1:h-[400px] md4:h-[500px] overflow-hidden pagebanner pagebanner--off pt-16 md4:pt-0">
           @if(View::hasSection('pagebanner'))
             @yield('pagebanner')
           @else
             <div class="absolute inset-0 bg-[url('{{ front_webp_url('/front/imgs/pagebanner.png') }}')] bg-center bg-no-repeat bg-cover" aria-hidden="true"></div>
           @endif
-          <!-- Desktop Header：固定在顶部，侧栏 sticky 预留其高度 -->
+          <!-- Desktop Header: fixed to the top; the sticky sidebar reserves its height -->
           <header class="pointer-events-none fixed inset-x-0 top-0 z-20 bg-[#FFF] py-[6px] hidden md4:block site-header">
             <div class="site-header-container pointer-events-auto mx-auto w-full px-4 sm2:px-5 md1:px-6 lg1:px-0">
               <div class="site-header-bar h-16 md1:h-20">
@@ -1715,7 +1715,7 @@
 
         <div class="relative mx-auto w-full max-w-[1200px] px-4 sm2:px-5 md1:px-6 lg1:px-0">
           <div class="flex flex-col items-center justify-between gap-3 py-3 text-center text-[14px] font-poppins-regular text-white md4:flex-row md4:text-left">
-            {{-- 限宽对齐红色斜切背景的最窄处（顶边 50%-60px），保证文案不会溢出红底 --}}
+            {{-- Width capped to the narrowest point of the red slanted background (top edge 50% - 60px) so the copy never overflows the red area --}}
             <div class="order-2 text-[15px] font-poppins-regular md4:order-1 md4:max-w-[calc(50%_-_60px)]">{{ __('JUNZHUO SPORTS CO., LTD. &copy; 2025 ICP NO. ALL RIGHTS RESERVED.') }}</div>
 
             <div class="order-1 flex items-center justify-center gap-2 md4:order-2 md4:justify-end">
@@ -1991,7 +1991,7 @@
             <button type="submit" class="mt-4 inline-flex h-10 w-full items-center justify-center bg-themeBg-d text-[12px] font-extrabold uppercase tracking-wide text-white transition hover:bg-themeBg-d">
               {{ __('SUBMIT') }}
             </button>
-            {{-- 暂时隐藏 Inquiry List 入口 --}}
+            {{-- Inquiry List entry temporarily hidden --}}
             <a href="/myinquirys" class="mt-3 hidden h-10 w-full items-center justify-center border border-themeBg-d bg-white text-[12px] font-extrabold uppercase tracking-wide text-themeBg-d transition hover:bg-themeBg-d hover:text-white">
               {{ __('Inquiry List') }} (<span class="inquiry-cart-badge">0</span>)
             </a>
@@ -2074,7 +2074,7 @@
         @json($frontI18n['messages'])
     );
     </script>
-    {{-- HTML5 校验气泡跟随站点语言，而非浏览器 UI 语言 --}}
+    {{-- HTML5 validation bubbles follow the site language rather than the browser UI language --}}
     <script type="text/javascript" src="/front/js/form-validation-i18n.js?v=20261015a"></script>
     <script type="text/javascript" src="/front/js/jquery.min.js"></script>
     <script type="text/javascript" src="/front/js/inquiry-cart.js?v=20261010g"></script>
@@ -2085,7 +2085,7 @@
     <script src="/front/js/swiper-common.js?v=20261010f" defer></script>
     @yield('page-js-footer')
 @php
-    // 线上排障：源码可见；完整诊断打开 /__lang_check?locale=es
+    // Production troubleshooting: visible in the source; open /__lang_check?locale=es for the full diagnostics
     $__loc = app()->getLocale();
     $__langFile = resource_path('lang/' . $__loc . '.json');
     $__langShare = __('Share');

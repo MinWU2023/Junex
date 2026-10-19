@@ -1,4 +1,4 @@
-﻿<x-layout>
+<x-layout>
 @section('tdk')
 @include('front.partials.seo-head')
 @endsection
@@ -349,7 +349,7 @@
 
 @include('front.partials.exciting-updates')
 
-{{-- Video Recommendation 板块暂时隐藏 --}}
+{{-- Video Recommendation section temporarily hidden --}}
 
 <section class="w-full bg-white why_choose sec-bg-white">
     <div class="mx-auto w-full px-4 sm2:px-5 md1:px-6 lg1:px-0">

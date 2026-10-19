@@ -102,14 +102,14 @@
     const tabButtons = () => Array.from(section.querySelectorAll('.hot-styles-tab'));
 
     /**
-     * 手机端 Tab 过多时：点击后把当前 Tab 滚到左侧，露出后面的 Tab；
-     * 点前面的 Tab 时同理滚回，露出被藏住的前项。
+     * Mobile: when there are too many tabs, clicking a tab scrolls it to the left edge
+     * to reveal the tabs after it; clicking an earlier tab scrolls back the same way.
      */
     const scrollTabIntoReveal = (activeTab) => {
       const scroller = section.querySelector('.hot-styles-tabs');
       if (!scroller || !activeTab) return;
 
-      // 桌面端一般能完整展示，无需强制滚动
+      // Desktop usually shows all tabs, so no forced scrolling is needed
       if (window.innerWidth > MOBILE_MAX) return;
 
       const pad = 18;
@@ -120,10 +120,10 @@
       const idx = tabs.indexOf(activeTab);
       if (idx < 0) return;
 
-      // 当前 Tab 贴左，自然露出右侧后续 Tab
+      // Pin the active tab to the left edge so the following tabs stay visible
       let target = Math.max(0, activeTab.offsetLeft - pad);
 
-      // 若存在下一项，尽量保证下一项至少露出一部分（提示还有更多）
+      // If a next tab exists, keep at least part of it visible as a hint that more tabs follow
       const next = tabs[idx + 1];
       if (next) {
         const peek = Math.min(48, Math.floor(next.offsetWidth * 0.45));
@@ -134,10 +134,10 @@
         }
       }
 
-      // 若存在上一项且当前贴左会把它完全藏掉时，略留一点左侧 peek
+      // If a previous tab exists and pinning left would hide it completely, leave a small left peek
       const prev = tabs[idx - 1];
       if (prev && idx > 0 && !next) {
-        // 最后一项：尽量同时露出前一项，提示可回退
+        // Last tab: also keep the previous one visible as a hint that you can go back
         target = Math.min(target, Math.max(0, prev.offsetLeft - pad));
       }
 
@@ -177,12 +177,12 @@
       slidesPerView: 2,
       spaceBetween: 12,
       watchOverflow: false,
-      // 关闭自适应高度，避免切 Tab 时出现从上到下的高度展开动画
+      // Disable autoHeight to avoid a top-to-bottom height animation when switching tabs
       autoHeight: false,
       observer: true,
       observeParents: true,
       allowTouchMove: true,
-      // 桌面端自动播；手机端是网格展示，不走轮播高度计算
+      // Autoplay on desktop; mobile uses a grid layout, so no swiper height calculation applies
       autoplay: false,
       breakpoints: {
         480: { slidesPerView: 2.2, spaceBetween: 12 },
@@ -219,7 +219,7 @@
         if (swiper.autoplay && typeof swiper.autoplay.stop === 'function') {
           swiper.autoplay.stop();
         }
-        // 避免 Swiper 把高度算成 0，导致下一板块叠上来
+        // Avoid Swiper measuring the height as 0, which would let the next section overlap
         swiper.el.style.height = 'auto';
         if (swiper.wrapperEl) {
           swiper.wrapperEl.style.transform = 'none';
@@ -280,7 +280,7 @@
       window.requestAnimationFrame(() => {
         const swiper = ensureSwiper(key);
         if (swiper) {
-          // 切 Tab 时立刻更新，不要带高度过渡
+          // Update immediately on tab switch, without a height transition
           swiper.el.style.transitionDuration = '0ms';
           if (swiper.wrapperEl) {
             swiper.wrapperEl.style.transitionDuration = '0ms';
@@ -339,7 +339,7 @@
       }, 150);
     });
 
-    // 首次进入不强制滚动，避免页面加载时 Tab 条跳动
+    // Do not force scrolling on first render, to avoid the tab bar jumping during page load
     if (activeKey) setActiveTab(activeKey, { scrollTab: false });
   };
 

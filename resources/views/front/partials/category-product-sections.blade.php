@@ -1,11 +1,11 @@
-{{-- 分类&产品形式：左侧栏 + 右侧按子分类展示产品，默认两行，超出才显示 View More / Hide More --}}
+{{-- Category & product mode: left sidebar + products grouped by subcategory on the right; two rows by default, View More / Hide More only when they overflow --}}
 @php
     $categoryProductSections = $categoryProductSections ?? [];
-    // 与 grid 列数对应：1列×2行 / 2列×2行 / 3列×2行
+    // Matches the grid column count: 1 col x 2 rows / 2 cols x 2 rows / 3 cols x 2 rows
     $initialVisibleMobile = 2;   // < sm5
     $initialVisibleTablet = 4;   // sm5 ~ md4-1
     $initialVisibleDesktop = 6;  // >= md4
-    // 服务端先按桌面两行隐藏，前端再按当前断点校正
+    // The server first hides by the desktop two-row count, then the front end adjusts to the current breakpoint
     $initialVisible = $initialVisibleDesktop;
     $listPaddingTop = $listPaddingTop ?? __('py-16');
 @endphp

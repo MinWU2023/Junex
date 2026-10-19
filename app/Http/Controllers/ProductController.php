@@ -266,7 +266,7 @@ class ProductController extends Controller
         $parentCategory = $category ? $category->parent : null;
         
         $productName = translated_attr($product, 'name');
-        // 详情页面包屑不展示 Products 层级：Home > 分类 > 产品
+        // Product detail breadcrumb omits the Products level: Home > category > product
         $breadcrumbs = $this->buildBreadcrumbs([
             ['label' => __('Home'), 'url' => '/'],
             $category ? ['label' => translated_attr($category, 'name'), 'url' => $category->url ? ('/' . $category->url->url) : null] : null,

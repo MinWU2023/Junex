@@ -104,7 +104,7 @@
 ])
 @else
     <section class="w-full blogs bg-white">
-    {{-- 仅一篇时底部 padding 相对原 pb-10/pb-14 各减 30px --}}
+    {{-- Only one post: bottom padding reduced by 30px from the original pb-10/pb-14 --}}
     <div class="mx-auto w-full max-w-[1200px] px-4 pt-10 sm2:px-5 md1:px-6 md4:pt-14 lg1:px-0 {{ $onlyFeaturedBlog ? 'pb-[10px] md4:pb-[26px]' : 'pb-10 md4:pb-14' }}">
     @if($hasFeaturedBlog)
     <article class="w-full bg-themeBg-g">
@@ -149,7 +149,7 @@
         @endforeach
     </div>
     @elseif($onlyFeaturedBlog)
-    {{-- 无第二篇：相对原 mt-8/mt-10 共减 50px（先减30再减20） --}}
+    {{-- No second post: 50px in total removed from the original mt-8/mt-10 (30px first, then 20px) --}}
     <div class="mt-[-18px] md1:mt-[-10px]" aria-hidden="true"></div>
     @endif
     </div>
@@ -164,7 +164,7 @@
 @endif
 @endif
 
-{{-- 博客标签列表不展示 Product Video；博客列表 / 分类列表仍保留 --}}
+{{-- The blog tag list does not show Product Video; the blog list / category list still keep it --}}
 @endsection 
 
 @section('page-css-footer')

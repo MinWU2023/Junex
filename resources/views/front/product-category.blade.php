@@ -261,7 +261,7 @@
   opacity: 1;
   transition: opacity .15s ease;
 }
-/* 富文本表格：恢复边框（Tailwind preflight 会清掉默认表格线） */
+/* Rich text tables: restore borders (Tailwind preflight removes the default table lines) */
 .cat-desc-body table {
   width: 100%;
   max-width: 100%;
@@ -278,7 +278,7 @@
   font-weight: 600;
   background: rgba(0, 0, 0, 0.03);
 }
-/* 分类页板块与下方定制服务间距收紧 */
+/* Category page: tighten the gap between sections and the custom services block below */
 .category-page-block + .custom_serrvices .sec-pad,
 .category-page-block + section.custom_serrvices .sec-pad {
   padding-top: 2rem;
@@ -299,8 +299,9 @@
   }
 
   /**
-   * 按「带文字的可视行」统计，并返回第 maxLines 行底部相对容器顶部的高度。
-   * 空文本节点不计行；图片/空白块不单独计行，但会包含在裁切高度内。
+   * Count only visible lines that contain text and return, relative to the container top,
+   * the height of the bottom of the maxLines-th line. Empty text nodes are not counted;
+   * images / blank blocks are not counted as lines but are included in the clipped height.
    */
   function measureTextLines(el, maxLines) {
     var range = document.createRange();
@@ -343,14 +344,15 @@
   }
 
   /**
-   * overflow:hidden 按文字行底裁切时，容易切掉单元格 padding / 表格线。
-   * 若裁切落在表格内，对齐到该行底边；并加 1px 避免亚像素裁掉边框。
+   * Clipping at a text line's bottom with overflow:hidden can cut off cell padding / table lines.
+   * If the clip point falls inside the table, align it to that row's bottom edge and add 1px to
+   * avoid sub-pixel clipping of the border.
    */
   function snapClampPastBorders(el, clampHeight, clampNode) {
     var bodyTop = el.getBoundingClientRect().top;
     var height = clampHeight;
 
-    // 裁切点落在某单元格内：至少露到该行底部（含底边框）
+    // Clip point falls inside a cell: reveal at least down to that row's bottom (including the bottom border)
     if (clampNode && clampNode.parentElement) {
       var cell = clampNode.parentElement.closest('td, th');
       if (cell) {
@@ -360,7 +362,7 @@
       }
     }
 
-    // 裁切线穿过表格中间：扩展到「已露出顶部」的最后一行底边
+    // Clip line crosses the middle of the table: extend to the bottom edge of the last row whose top is already visible
     var tables = el.querySelectorAll('table');
     for (var t = 0; t < tables.length; t++) {
       var table = tables[t];
@@ -382,7 +384,7 @@
       height = bestBottom;
     }
 
-    // 亚像素 / border-collapse 下多留 1px，避免底边框被裁掉
+    // Keep 1px extra for sub-pixel / border-collapse rounding so the bottom border is not clipped
     return height + 1;
   }
 
@@ -415,7 +417,7 @@
 
     var maxLines = parseInt(section.getAttribute('data-max-lines') || '6', 10) || 6;
     var keepExpanded = section.getAttribute('data-cat-desc-expanded') === '1';
-    // 先展开测量
+    // Expand first, then measure
     body.style.maxHeight = '';
     body.classList.remove('is-collapsed');
 
@@ -450,7 +452,7 @@
       if (lessBtn) {
         lessBtn.addEventListener('click', function () {
           collapse();
-          // 仅手动收起时滚回板块顶部，方便继续阅读；滚动本身不会触发收起
+          // Scroll back to the section top only on manual collapse so reading can continue; scrolling alone never collapses it
           try {
             section.scrollIntoView({ behavior: 'smooth', block: 'start' });
           } catch (e) {}
@@ -484,7 +486,7 @@
   whenReady(function () {
     run();
 
-    // 图片加载后行位置可能变化，需重测（保留已展开状态）
+    // Row positions may shift after images load, so re-measure (keeping the expanded state)
     document.querySelectorAll('.js-cat-desc-body img').forEach(function (img) {
       if (img.complete) return;
       img.addEventListener('load', function () {
@@ -497,7 +499,7 @@
       });
     });
 
-    // 兜底：避免脚本异常时内容一直不可见
+    // Fallback: avoid the content staying invisible if the script throws
     setTimeout(function () {
       document.querySelectorAll('.cat-desc-body.is-pending').forEach(function (el) {
         el.classList.remove('is-pending');
@@ -505,8 +507,8 @@
     }, 2500);
   });
 
-  // 手机滚动时地址栏显隐会触发 resize（高度变、宽度不变），
-  // 若整页重初始化会误把已展开内容收起。仅在宽度变化时重测。
+  // On mobile the address bar showing/hiding fires resize (height changes, width does not);
+  // re-initialising everything would wrongly collapse expanded content, so only re-measure when the width changes.
   var lastLayoutWidth = window.innerWidth;
   var resizeTimer = null;
   window.addEventListener('resize', function () {
