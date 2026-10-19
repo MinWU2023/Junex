@@ -1716,7 +1716,7 @@
         <div class="relative mx-auto w-full max-w-[1200px] px-4 sm2:px-5 md1:px-6 lg1:px-0">
           <div class="flex flex-col items-center justify-between gap-3 py-3 text-center text-[14px] font-poppins-regular text-white md4:flex-row md4:text-left">
             {{-- Width capped to the narrowest point of the red slanted background (top edge 50% - 60px) so the copy never overflows the red area --}}
-            <div class="order-2 text-[15px] font-poppins-regular md4:order-1 md4:max-w-[calc(50%_-_60px)]">{{ __('JUNZHUO SPORTS CO., LTD. &copy; 2025 ICP NO. ALL RIGHTS RESERVED.') }}</div>
+            <div class="order-2 text-[15px] font-poppins-regular md4:order-1 md4:max-w-[calc(50%_-_60px)]">{{ __('JUNZHUO SPORTS CO., LTD. © 2025 ICP NO. ALL RIGHTS RESERVED.') }}</div>
 
             <div class="order-1 flex items-center justify-center gap-2 md4:order-2 md4:justify-end">
               <span class="inline-flex h-5 items-center justify-center bg-themeBg-n px-2 text-[14px] font-poppins-regular text-white ring-1 ring-white/15 transition duration-200 hover:bg-black/35">{{ __('IPV6') }}</span>
