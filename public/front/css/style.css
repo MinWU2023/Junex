@@ -1248,6 +1248,11 @@ nav .group:hover > div {
   text-stroke: 1.5px #fff;
 }
 
+/* Why Choose 数据卡片：数值（如 45M+）与描边后缀（如 Products）各占一行 */
+.why_choose .text-stroke-white {
+  display: block;
+}
+
 .full_cus .flex {
   transition: transform 0.3s ease, background-color 0.3s ease;
 }
