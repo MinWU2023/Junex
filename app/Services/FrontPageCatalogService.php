@@ -474,7 +474,11 @@ class FrontPageCatalogService
 
     private function absoluteUrl(string $path): string
     {
-        $base = rtrim((string)request()->getSchemeAndHttpHost(), '/');
+        // 使用 .env 中配置的 APP_URL（config('app.url')）作为 sitemap 域名；未配置时才回退到当前请求域名
+        $base = rtrim((string)config('app.url'), '/');
+        if ($base === '') {
+            $base = rtrim((string)request()->getSchemeAndHttpHost(), '/');
+        }
         if ($path === '') {
             return $base . '/';
         }
