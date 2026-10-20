@@ -254,7 +254,7 @@ class FrontPageCatalogService
             if (isset($disabled[$path])) {
                 continue;
             }
-            $locs[$this->absoluteUrl($path)] = true;
+            $locs[$path] = true;
         }
 
         // 2) 产品分类 + 产品详情
@@ -266,7 +266,7 @@ class FrontPageCatalogService
                     foreach ($rows as $row) {
                         $path = $this->modelFrontPath($row);
                         if ($path !== null) {
-                            $locs[$this->absoluteUrl($path)] = true;
+                            $locs[$path] = true;
                         }
                     }
                 });
@@ -280,7 +280,7 @@ class FrontPageCatalogService
                     foreach ($rows as $row) {
                         $path = $this->modelFrontPath($row);
                         if ($path !== null) {
-                            $locs[$this->absoluteUrl($path)] = true;
+                            $locs[$path] = true;
                         }
                     }
                 });
@@ -295,7 +295,7 @@ class FrontPageCatalogService
                     foreach ($rows as $row) {
                         $path = $this->modelFrontPath($row);
                         if ($path !== null) {
-                            $locs[$this->absoluteUrl($path)] = true;
+                            $locs[$path] = true;
                         }
                     }
                 });
@@ -309,7 +309,7 @@ class FrontPageCatalogService
                     foreach ($rows as $row) {
                         $path = $this->modelFrontPath($row);
                         if ($path !== null) {
-                            $locs[$this->absoluteUrl($path)] = true;
+                            $locs[$path] = true;
                         }
                     }
                 });
@@ -327,7 +327,7 @@ class FrontPageCatalogService
                         }
                         $path = $this->modelFrontPath($row);
                         if ($path !== null) {
-                            $locs[$this->absoluteUrl($path)] = true;
+                            $locs[$path] = true;
                         }
                     }
                 });
@@ -341,25 +341,124 @@ class FrontPageCatalogService
                     foreach ($rows as $row) {
                         $path = $this->modelFrontPath($row, 'video');
                         if ($path !== null) {
-                            $locs[$this->absoluteUrl($path)] = true;
+                            $locs[$path] = true;
                         }
                     }
                 });
         }
 
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
-        $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
-        foreach (array_keys($locs) as $loc) {
-            $xml .= '  <url><loc>' . htmlspecialchars($loc, ENT_XML1) . '</loc></url>' . "\n";
-        }
-        $xml .= '</urlset>' . "\n";
+        $paths = array_map('strval', array_keys($locs));
 
-        $file = public_path('sitemap.xml');
-        if (file_put_contents($file, $xml, LOCK_EX) === false) {
-            throw new \RuntimeException('无法写入 sitemap.xml');
+        // 按多语言生成 sitemap_{lang}.xml，每个语言使用各自后台配置的域名
+        foreach ($this->sitemapTargets() as $code => $base) {
+            $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+            $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+            foreach ($paths as $path) {
+                $loc = $path === '' ? $base . '/' : $base . '/' . ltrim($path, '/');
+                $xml .= '  <url><loc>' . htmlspecialchars($loc, ENT_XML1) . '</loc></url>' . "\n";
+            }
+            $xml .= '</urlset>' . "\n";
+
+            $file = public_path('sitemap_' . $code . '.xml');
+            if (file_put_contents($file, $xml, LOCK_EX) === false) {
+                throw new \RuntimeException('无法写入 sitemap_' . $code . '.xml');
+            }
         }
 
-        return count($locs);
+        // 删除旧的静态 sitemap.xml，否则 Web 服务器会直接返回它而不经过路由
+        $legacy = public_path('sitemap.xml');
+        if (is_file($legacy)) {
+            @unlink($legacy);
+        }
+
+        return count($paths);
+    }
+
+    /**
+     * 各语言 sitemap 的域名：[language_code => 'https://host']。
+     * 取后台语言配置里的 url；没有任何语言配置时回退 APP_URL。
+     *
+     * @return array<string,string>
+     */
+    public function sitemapTargets(): array
+    {
+        $targets = [];
+        try {
+            $rows = \App\Modules\Setting\Models\Locale::query()->orderByDesc('sort')->get(['url', 'language_code']);
+        } catch (\Throwable $e) {
+            $rows = collect();
+        }
+
+        $appUrl = (string)config('app.url');
+        $defaultScheme = strtolower((string)parse_url($appUrl, PHP_URL_SCHEME)) ?: 'https';
+        if (config('app.redirect_https')) {
+            $defaultScheme = 'https';
+        }
+
+        foreach ($rows as $row) {
+            $code = strtolower(trim((string)$row->language_code));
+            $url = trim((string)$row->url);
+            if ($code === '' || $url === '') {
+                continue;
+            }
+            if (preg_match('#^(https?)://#i', $url, $m)) {
+                $scheme = strtolower($m[1]);
+                $url = preg_replace('#^https?://#i', '', $url);
+            } else {
+                $scheme = $defaultScheme;
+            }
+            $host = rtrim(explode('/', $url, 2)[0], '.');
+            if ($host === '') {
+                continue;
+            }
+            $targets[$code] = $scheme . '://' . $host;
+        }
+
+        if ($targets === []) {
+            $base = rtrim($appUrl, '/');
+            if ($base === '') {
+                $base = rtrim((string)request()->getSchemeAndHttpHost(), '/');
+            }
+            $targets[strtolower((string)config('app.fallback_locale', 'en'))] = $base;
+        }
+
+        return $targets;
+    }
+
+    /**
+     * 按访问域名找到对应的 sitemap_{lang}.xml 文件路径；找不到返回 null。
+     */
+    public function resolveSitemapFile(string $host): ?string
+    {
+        $host = strtolower(trim($host));
+        $strip = function (string $h): string {
+            return preg_replace('/^www\./', '', $h) ?: $h;
+        };
+
+        $code = null;
+        foreach ($this->sitemapTargets() as $c => $base) {
+            $baseHost = strtolower((string)parse_url($base, PHP_URL_HOST));
+            if ($baseHost !== '' && $strip($baseHost) === $strip($host)) {
+                $code = $c;
+                break;
+            }
+        }
+
+        $candidates = [];
+        if ($code !== null) {
+            $candidates[] = $code;
+        }
+        $candidates[] = strtolower((string)app()->getLocale());
+        $candidates[] = strtolower((string)config('app.fallback_locale', 'en'));
+
+        foreach (array_unique($candidates) as $c) {
+            $file = public_path('sitemap_' . $c . '.xml');
+            if ($c !== '' && is_file($file)) {
+                return $file;
+            }
+        }
+
+        return null;
     }
 
     /**

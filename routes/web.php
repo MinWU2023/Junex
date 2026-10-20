@@ -41,20 +41,32 @@ Route::get('/fix_product_junex_link', [FixProductBrandJunkController::class, 'li
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('/sitemap.xml', function () {
-    $file = public_path('sitemap.xml');
-    if (!is_file($file)) {
+// 按访问域名对应的语言，输出 public/sitemap_{lang}.xml
+Route::get('/sitemap.xml', function (\Illuminate\Http\Request $request) {
+    $catalog = app(\App\Services\FrontPageCatalogService::class);
+    $file = $catalog->resolveSitemapFile($request->getHost());
+    if ($file === null) {
         try {
-            app(\App\Services\FrontPageCatalogService::class)->generateSitemap();
+            $catalog->generateSitemap();
         } catch (\Throwable $e) {
             abort(404);
         }
+        $file = $catalog->resolveSitemapFile($request->getHost());
     }
-    if (!is_file($file)) {
+    if ($file === null || !is_file($file)) {
         abort(404);
     }
     return response()->file($file, ['Content-Type' => 'application/xml; charset=UTF-8']);
 })->name('sitemap');
+
+// 伪 robots.txt：读取 public/robot_temp.txt 模板，{domain} 替换为当前访问域名
+Route::get('/robots.txt', function (\Illuminate\Http\Request $request) {
+    $tpl = public_path('robot_temp.txt');
+    $content = is_file($tpl) ? (string)file_get_contents($tpl) : "User-agent: *\nAllow: /\nSitemap: {domain}/sitemap.xml\n";
+    $domain = rtrim($request->getSchemeAndHttpHost(), '/');
+    $content = str_replace('{domain}', $domain, $content);
+    return response($content, 200, ['Content-Type' => 'text/plain; charset=UTF-8']);
+})->name('robots');
 
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 

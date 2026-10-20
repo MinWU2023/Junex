@@ -169,7 +169,7 @@ class PageController extends BaseController
      */
     public function getRobots()
     {
-        $file = public_path('robots.txt');
+        $file = public_path('robot_temp.txt');
         $content = is_file($file) ? (string)file_get_contents($file) : '';
         return response()->json([
             'code' => 200,
@@ -190,7 +190,7 @@ class PageController extends BaseController
             $content = (string)$request->input('content', '');
         }
 
-        $file = public_path('robots.txt');
+        $file = public_path('robot_temp.txt');
         try {
             if (file_put_contents($file, $content, LOCK_EX) === false) {
                 throw new \RuntimeException('无法写入 robots.txt');
