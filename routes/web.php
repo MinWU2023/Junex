@@ -86,10 +86,14 @@ Route::get('/products', [ProductController::class, 'index'])->name('products');
 
 Route::get('/newstyle', [NewStyleController::class, 'index'])->name('newstyle');
 
-Route::get('/myinquirys', [MyInquiryController::class, 'index'])->name('myinquirys');
+Route::get('/my-inquiries', [MyInquiryController::class, 'index'])->name('myinquirys');
 Route::get('/inquiry-list', [MyInquiryController::class, 'index'])->name('inquiry.list');
-Route::post('/myinquirys', [MyInquiryController::class, 'store'])->name('myinquirys.store');
+Route::post('/my-inquiries', [MyInquiryController::class, 'store'])->name('myinquirys.store');
 Route::post('/inquiry-list', [MyInquiryController::class, 'store'])->name('inquiry.list.store');
+// 旧地址 301 跳转到新地址
+Route::get('/myinquirys', function () {
+    return redirect('/my-inquiries', 301);
+});
 
 Route::get('/login', [CustomerAuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [CustomerAuthController::class, 'login'])->name('login.submit');
@@ -109,7 +113,11 @@ Route::get('/privacy-policy', [HomeController::class, 'privacyPolicy'])->name('p
 
 Route::get('/notfound', [HomeController::class, 'notFound'])->name('notfound');
 
-Route::get('/inquirysuccess', [HomeController::class, 'inquirySuccessFront'])->name('inquirysuccess');
+Route::get('/inquiry-success', [HomeController::class, 'inquirySuccessFront'])->name('inquirysuccess');
+// 旧地址 301 跳转到新地址
+Route::get('/inquirysuccess', function () {
+    return redirect('/inquiry-success', 301);
+});
 
 Route::post('/inquiry', [HomeController::class, 'inquiryStore'])->name('inquiry.store');
 

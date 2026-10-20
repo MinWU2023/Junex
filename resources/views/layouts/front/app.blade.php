@@ -1992,7 +1992,7 @@
               {{ __('SUBMIT') }}
             </button>
             {{-- Inquiry List entry temporarily hidden --}}
-            <a href="/myinquirys" class="mt-3 hidden h-10 w-full items-center justify-center border border-themeBg-d bg-white text-[12px] font-extrabold uppercase tracking-wide text-themeBg-d transition hover:bg-themeBg-d hover:text-white">
+            <a href="/my-inquiries" class="mt-3 hidden h-10 w-full items-center justify-center border border-themeBg-d bg-white text-[12px] font-extrabold uppercase tracking-wide text-themeBg-d transition hover:bg-themeBg-d hover:text-white">
               {{ __('Inquiry List') }} (<span class="inquiry-cart-badge">0</span>)
             </a>
           </form>

@@ -247,7 +247,7 @@
           if (typeof showMessage === 'function') {
             showMessage({ type: 'success', message: (typeof __ === 'function' ? __('Message successfully!') : 'Message successfully!'), duration: 2000 });
           }
-          var redirectUrl = (result.data && result.data.redirect) ? result.data.redirect : '/inquirysuccess';
+          var redirectUrl = (result.data && result.data.redirect) ? result.data.redirect : '/inquiry-success';
           setTimeout(function () {
             window.location.href = redirectUrl;
           }, 2000);

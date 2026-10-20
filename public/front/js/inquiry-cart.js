@@ -317,7 +317,7 @@
         e.preventDefault();
         e.stopPropagation();
         if (!getCount()) return;
-        window.location.href = '/myinquirys';
+        window.location.href = '/my-inquiries';
       }
     }
 

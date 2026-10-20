@@ -723,7 +723,7 @@ class HomeController extends Controller
         $injectToView = (bool)$request->get('inject', true);
         $setting = app('settings')['setting'];
         $pageBanner = $this->getBannersByArea('Inquiry');
-        $tdk = $this->resolveCmsPageTdkByPath($setting, 'inquirysuccess');
+        $tdk = $this->resolveCmsPageTdkByPath($setting, 'inquiry-success');
 
         $data = [
             'injectToView' => $injectToView,

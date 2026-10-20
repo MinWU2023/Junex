@@ -15,7 +15,7 @@ class MyInquiryController extends Controller
         $injectToView = (bool)$request->get('inject', true);
         $pageBanner = $this->getBannersByArea('Inquiry');
         $setting = app('settings')['setting'];
-        $tdk = $this->resolveCmsPageTdkByPath($setting, 'myinquirys');
+        $tdk = $this->resolveCmsPageTdkByPath($setting, 'my-inquiries');
 
         $data = [
             'productsData' => [],

@@ -1063,7 +1063,7 @@ $(function () {
                 formEl.reset();
                 syncInquiryFormMeta();
                 $('.inquiry_popup').removeClass('inquiry_popup_active');
-                window.location.href = (res && res.redirect) ? res.redirect : '/inquirysuccess';
+                window.location.href = (res && res.redirect) ? res.redirect : '/inquiry-success';
                 return;
             }
             if (typeof showMessage === 'function') {
@@ -1189,7 +1189,7 @@ $(function () {
                 formEl.reset();
                 if (typeof window.clearInquiryAttachments === 'function') { window.clearInquiryAttachments($form[0]); }
                 syncInquiryFormMeta();
-                window.location.href = (res && res.redirect) ? res.redirect : '/inquirysuccess';
+                window.location.href = (res && res.redirect) ? res.redirect : '/inquiry-success';
                 return;
             }
             if (typeof showMessage === 'function') {

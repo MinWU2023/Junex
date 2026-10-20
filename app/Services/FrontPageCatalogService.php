@@ -55,10 +55,10 @@ class FrontPageCatalogService
             ['path' => 'login', 'name' => '登录', 'tab' => 'account'],
             ['path' => 'register', 'name' => '注册', 'tab' => 'account'],
             ['path' => 'forget', 'name' => '忘记密码', 'tab' => 'account'],
-            ['path' => 'myinquirys', 'name' => '我的询盘', 'tab' => 'account'],
+            ['path' => 'my-inquiries', 'name' => '我的询盘', 'tab' => 'account'],
             ['path' => 'inquiry-list', 'name' => '询盘列表', 'tab' => 'account'],
             ['path' => 'search', 'name' => '搜索', 'tab' => 'other'],
-            ['path' => 'inquirysuccess', 'name' => '询盘成功', 'tab' => 'other'],
+            ['path' => 'inquiry-success', 'name' => '询盘成功', 'tab' => 'other'],
             ['path' => 'notfound', 'name' => '404 页面', 'tab' => 'other'],
         ];
 
@@ -114,6 +114,19 @@ class FrontPageCatalogService
     {
         if (!Schema::hasTable('front_page_controls')) {
             return;
+        }
+
+        // 旧路径改名后沿用原来的 sitemap/访问开关，避免被重置为默认开启
+        $renamed = false;
+        foreach (['myinquirys' => 'my-inquiries', 'inquirysuccess' => 'inquiry-success'] as $old => $new) {
+            if (FrontPageControl::query()->where('path', $old)->exists()
+                && !FrontPageControl::query()->where('path', $new)->exists()) {
+                FrontPageControl::query()->where('path', $old)->update(['path' => $new]);
+                $renamed = true;
+            }
+        }
+        if ($renamed) {
+            $this->forgetAccessCache();
         }
 
         $seen = [];

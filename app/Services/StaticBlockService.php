@@ -565,7 +565,7 @@ class StaticBlockService
             BlogController::class => 'blogs',
             FaqController::class => 'faqs',
             NewStyleController::class => 'newstyle',
-            MyInquiryController::class => 'myinquirys',
+            MyInquiryController::class => 'my-inquiries',
             VideoController::class => 'videos',
         ];
         foreach ($controllerKeys as $class => $key) {
@@ -594,7 +594,7 @@ class StaticBlockService
                 'customerServices' => 'customer-services',
                 'privacyPolicy' => 'privacy-policy',
                 'notFound' => 'notfound',
-                'inquirySuccessFront' => 'inquirysuccess',
+                'inquirySuccessFront' => 'inquiry-success',
             ];
             if (isset($homeKeys[$method])) {
                 $keys[] = $homeKeys[$method];
