@@ -27,14 +27,14 @@
                         <div class="swiper-wrapper">
                             @foreach(($column['items'] ?? []) as $row)
                             <div class="swiper-slide">
-                                <a href="{{ $row['url'] ?? '#' }}" class="group relative h-[265px] block overflow-hidden rounded bg-white shadow-sm ring-1 ring-slate-200/70">
+                                <div class="group relative h-[265px] block overflow-hidden rounded bg-white shadow-sm ring-1 ring-slate-200/70">
                                     <img class="h-[265px] w-full object-cover" src="{{ $row['image_url'] ?? '' }}" alt="{{ $row['title'] ?? '' }}" loading="lazy" />
                                     <div class="absolute inset-x-0 bottom-0 p-3">
                                         <div class="flex h-[50px] w-full items-center justify-center bg-black/50 px-3 text-center text-white backdrop-blur-sm text-f16 font-poppins-medium">
                                             <span class="cs-line-clamp-2 leading-[20px]">{{ $row['title'] ?? '' }}</span>
                                         </div>
                                     </div>
-                                </a>
+                                </div>
                             </div>
                             @endforeach
                         </div>
@@ -45,27 +45,27 @@
                 @if($isList)
                     <div class="mt-5 hidden md1:block">
                         @foreach(($column['items'] ?? []) as $row)
-                        <a href="{{ $row['url'] ?? '#' }}" class="group relative h-[265px] overflow-hidden rounded bg-white shadow-sm ring-1 ring-slate-200/70 transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:ring-slate-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-themeBg-d focus-visible:ring-offset-2 mb-5 block">
+                        <div class="group relative h-[265px] overflow-hidden rounded bg-white shadow-sm ring-1 ring-slate-200/70 transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:ring-slate-300 mb-5 block">
                             <img class="w-full object-cover transition-transform duration-500 ease-out group-hover:scale-110" src="{{ $row['image_url'] ?? '' }}" alt="{{ $row['title'] ?? '' }}" loading="lazy" />
                             <div class="absolute inset-x-0 bottom-0 p-3">
                                 <div class="flex h-[50px] w-full items-center justify-center bg-black/50 px-3 text-center text-white backdrop-blur-sm text-f16 font-poppins-medium transition duration-300 group-hover:-translate-y-1 group-hover:bg-black/60">
                                     <span class="cs-line-clamp-2">{{ $row['title'] ?? '' }}</span>
                                 </div>
                             </div>
-                        </a>
+                        </div>
                         @endforeach
                     </div>
                 @else
                     <div class="mt-5 hidden md1:grid grid-cols-2 gap-4 md1:gap-5">
                         @foreach(($column['items'] ?? []) as $row)
-                        <a href="{{ $row['url'] ?? '#' }}" class="group relative h-[265px] overflow-hidden rounded bg-white shadow-sm ring-1 ring-slate-200/70 transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:ring-slate-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-themeBg-d focus-visible:ring-offset-2">
+                        <div class="group relative h-[265px] overflow-hidden rounded bg-white shadow-sm ring-1 ring-slate-200/70 transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:ring-slate-300">
                             <img class="h-[265px] w-full object-cover transition-transform duration-500 ease-out group-hover:scale-110" src="{{ $row['image_url'] ?? '' }}" alt="{{ $row['title'] ?? '' }}" loading="lazy" />
                             <div class="absolute inset-x-0 bottom-0 p-3">
                                 <div class="flex h-[50px] w-full items-center justify-center bg-black/50 px-3 text-center text-white backdrop-blur-sm text-f16 font-poppins-medium transition duration-300 group-hover:-translate-y-1 group-hover:bg-black/60">
                                     <span class="cs-line-clamp-2 leading-[20px]">{{ $row['title'] ?? '' }}</span>
                                 </div>
                             </div>
-                        </a>
+                        </div>
                         @endforeach
                     </div>
                 @endif
