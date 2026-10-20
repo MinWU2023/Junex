@@ -360,7 +360,22 @@ class FrontPageCatalogService
                 });
         }
 
-        $paths = array_map('strval', array_keys($locs));
+        // 过滤掉博客前缀本身（/blog、/blogcategory、/blogtag）：它们不是真实页面，博客列表是 /blogs
+        $excluded = ['blog', 'blogcategory', 'blogtag'];
+        foreach (['blog', 'blog_category', 'blog_tag'] as $key) {
+            $prefix = trim((string)config('url.' . $key, ''), '/');
+            if ($prefix !== '') {
+                $excluded[] = $prefix;
+            }
+        }
+        $excluded = array_flip(array_unique($excluded));
+
+        $paths = array_values(array_filter(
+            array_map('strval', array_keys($locs)),
+            function (string $path) use ($excluded) {
+                return !isset($excluded[trim($path, '/')]);
+            }
+        ));
 
         // 按多语言生成 sitemap_{lang}.xml，每个语言使用各自后台配置的域名
         foreach ($this->sitemapTargets() as $code => $base) {
