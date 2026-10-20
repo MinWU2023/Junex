@@ -42,6 +42,7 @@
                         <button type="button" class="layui-btn layui-btn-normal layui-btn-sm" data-batch="access_on">{{ __('批量开启访问') }}</button>
                         <button type="button" class="layui-btn layui-btn-danger layui-btn-sm" data-batch="access_off">{{ __('批量关闭访问') }}</button>
                         <button type="submit" class="layui-btn layui-btn-sm" form="front-page-sitemap-form">{{ __('生成 sitemap') }}</button>
+                        <button type="button" class="layui-btn layui-btn-normal layui-btn-sm" id="btn-edit-robots">{{ __('修改robot') }}</button>
                     </div>
 
                     <table class="layui-table">
@@ -151,6 +152,85 @@
                     });
                 });
             })();
+        </script>
+        <script>
+            layui.config({base: '/ui/'}).extend({index: 'lib/index'}).use(['index', 'layer'], function () {
+                var layer = layui.layer;
+                var $ = layui.$;
+                var getUrl = '{{ route('admin.page.robots.get', [], false) }}';
+                var saveUrl = '{{ route('admin.page.robots.save', [], false) }}';
+                var csrf = '{{ csrf_token() }}';
+
+                $(document).on('click', '#btn-edit-robots', function () {
+                    var loading = layer.load();
+                    fetch(getUrl, {
+                        method: 'GET',
+                        credentials: 'same-origin',
+                        headers: {'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest'}
+                    }).then(function (res) {
+                        return res.json();
+                    }).then(function (data) {
+                        layer.close(loading);
+                        var original = data.content || '';
+                        var useCRLF = original.indexOf('\r\n') !== -1;
+
+                        layer.open({
+                            type: 1,
+                            title: 'robots.txt',
+                            area: ['760px', '600px'],
+                            maxmin: true,
+                            shadeClose: false,
+                            btn: ['{{ __('提交') }}', '{{ __('取消') }}'],
+                            content: '<div style="padding:15px;">' +
+                                '<textarea id="robots-content" spellcheck="false" wrap="off" ' +
+                                'style="width:100%;height:440px;box-sizing:border-box;font-family:Consolas,Monaco,monospace;' +
+                                'font-size:13px;line-height:1.5;white-space:pre;overflow:auto;padding:10px;border:1px solid #e6e6e6;resize:none;"></textarea>' +
+                                '</div>',
+                            success: function () {
+                                // 用 .val() 赋值，原样保留换行
+                                $('#robots-content').val(original);
+                            },
+                            yes: function (index) {
+                                var text = $('#robots-content').val();
+                                // 浏览器 textarea 统一为 \n，原文件是 CRLF 时还原
+                                if (useCRLF) {
+                                    text = text.replace(/\r?\n/g, '\r\n');
+                                }
+                                var saving = layer.load();
+                                fetch(saveUrl, {
+                                    method: 'POST',
+                                    credentials: 'same-origin',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'Accept': 'application/json',
+                                        'X-Requested-With': 'XMLHttpRequest',
+                                        'X-CSRF-TOKEN': csrf
+                                    },
+                                    body: JSON.stringify({content: text})
+                                }).then(function (res) {
+                                    return res.json().then(function (j) {
+                                        return {ok: res.ok, body: j};
+                                    });
+                                }).then(function (r) {
+                                    layer.close(saving);
+                                    if (r.ok) {
+                                        layer.msg('{{ __('修改成功') }}', {icon: 1, time: 1200});
+                                        layer.close(index);
+                                    } else {
+                                        layer.msg((r.body && r.body.message) || '保存失败', {icon: 2});
+                                    }
+                                }).catch(function () {
+                                    layer.close(saving);
+                                    layer.msg('保存失败', {icon: 2});
+                                });
+                            }
+                        });
+                    }).catch(function () {
+                        layer.close(loading);
+                        layer.msg('读取 robots.txt 失败', {icon: 2});
+                    });
+                });
+            });
         </script>
     @endsection
     </body>
