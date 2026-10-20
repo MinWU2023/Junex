@@ -493,6 +493,10 @@ Route::group(['middleware' => ['auth', 'admin.permission']], function () {
 
     Route::post('/page/remove', [PageController::class, 'remove'])->name('admin.page.remove');
 
+    // 在线编辑 public/robots.txt（必须在 resource('/page') 之前注册）
+    Route::get('/page/robots', [PageController::class, 'getRobots'])->name('admin.page.robots.get');
+    Route::post('/page/robots', [PageController::class, 'saveRobots'])->name('admin.page.robots.save');
+
     Route::get('/page/restore/{id}', [PageController::class, 'restore'])
         ->name('admin.page.restore');
 

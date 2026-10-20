@@ -164,6 +164,52 @@ class PageController extends BaseController
         return $this->success();
     }
 
+    /**
+     * 读取 public/robots.txt 原始内容（保留换行）
+     */
+    public function getRobots()
+    {
+        $file = public_path('robots.txt');
+        $content = is_file($file) ? (string)file_get_contents($file) : '';
+        return response()->json([
+            'code' => 200,
+            'content' => $content,
+        ]);
+    }
+
+    /**
+     * 保存 public/robots.txt（原样写入，不做 trim，保留换行）
+     * 前端以 application/json 提交，这里读取原始 body，避免 TrimStrings 中间件裁掉首尾空白/换行。
+     */
+    public function saveRobots(Request $request)
+    {
+        $raw = json_decode($request->getContent(), true);
+        if (is_array($raw) && array_key_exists('content', $raw)) {
+            $content = (string)$raw['content'];
+        } else {
+            $content = (string)$request->input('content', '');
+        }
+
+        $file = public_path('robots.txt');
+        try {
+            if (file_put_contents($file, $content, LOCK_EX) === false) {
+                throw new \RuntimeException('无法写入 robots.txt');
+            }
+            AdminLog::log([
+                'name' => date('Y-m-d H:i:s') . ' 用户' . $request->user()->email . '修改了 robots.txt',
+                'modelName' => $this->modelName,
+                'content' => $content,
+            ]);
+        } catch (\Throwable $exception) {
+            Log::error($this->modelName . ':saveRobots，错误原因为：' . $exception->getMessage());
+            return response()->json([
+                'code' => 500,
+                'message' => 'robots.txt 保存失败：' . $exception->getMessage(),
+            ], 500);
+        }
+        return $this->success();
+    }
+
     public function restore($id)
     {
         $article = Page::find($id);
