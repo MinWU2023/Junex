@@ -16,9 +16,9 @@
                 <div class="inline-flex items-center rounded-full bg-[#FEECEC] px-4 py-1.5 text-f12 font-poppins-semibold uppercase tracking-[0.18em] text-themeBg-d md1:text-f14">
                     {{ $eyebrow }}
                 </div>
-                <h1 class="mt-5 text-f32 font-poppins-extrabold leading-tight text-themeText-a sm6:text-f36 md1:text-f40 lg1:text-f48">
+                <h2 class="mt-5 text-f32 font-poppins-extrabold leading-tight text-themeText-a sm6:text-f36 md1:text-f40 lg1:text-f48">
                     {{ $title }}
-                </h1>
+                </h2>
                 <p class="mx-auto mt-4 max-w-xl text-f15 font-poppins-regular leading-relaxed text-themeText-g md1:mt-5 md1:text-f16 md3:mx-0">
                     {{ $description }}
                 </p>

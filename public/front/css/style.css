@@ -2225,7 +2225,8 @@ nav .group:hover > div {
   .banners .banners-swiper--mobile .swiper-slide {
     height: 100% !important;
   }
-  .banners .swiper-slide h1 {
+  .banners .swiper-slide h1,
+  .banners .swiper-slide h2 {
     margin-bottom: 0.5rem !important;
   }
   .banners .swiper-slide p {

@@ -84,7 +84,7 @@
         <div class="sec-pad py-16">
             <div class="w-full bg-themeBg-f px-4 pt-6  pb-8 ring-1 ring-black/5 sm6:px-8 md1:px-10 md1:pt-8  md1:pt-10 md4:px-12 md4:pt-10 md4:pb-14">
             <article class="flex flex-col privacy-policy-content">
-                <h1 class="text-f24 font-poppins-medium uppercase text-themeText-b">{{ $pageName ?? __('Privacy Policy') }}</h1>
+                <h2 class="text-f24 font-poppins-medium uppercase text-themeText-b">{{ $pageName ?? __('Privacy Policy') }}</h2>
                 @if(!empty($createdLabel))
                 <p class="mt-4 text-f16 font-poppins-medium text-themeText-b md1:mt-5">{{ __('Last updated:') }} {{ $createdLabel }}</p>
                 @endif

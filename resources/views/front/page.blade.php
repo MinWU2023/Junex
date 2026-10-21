@@ -90,7 +90,7 @@
     <div class="py-10 md1:py-12 md4:py-14">
         <div class="w-full bg-themeBg-f px-4 pt-6  pb-8 ring-1 ring-black/5 sm6:px-8 md1:px-10 md1:pt-8  md1:pt-10 md4:px-12 md4:pt-10 md4:pb-14">
         <article class="flex flex-col">
-            <h1 class="text-f24 font-poppins-medium uppercase text-themeText-b">{{ $pageName ?? '' }}</h1>
+            <h2 class="text-f24 font-poppins-medium uppercase text-themeText-b">{{ $pageName ?? '' }}</h2>
             <p class="my-4 text-f16 font-poppins-medium text-themeText-b md1:my-5">{{ __('Last updated:') }} {{ $createdLabel ?? '' }}</p>
             {!! $pageContent ?? '' !!}
         </article>

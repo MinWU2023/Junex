@@ -52,7 +52,7 @@
                             <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 7V3m8 4V3" /><path d="M4 11h16" /><path d="M5 5h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z" /></svg>
                             <span>{{ $videoDate ?? '' }}</span>
                         </div>
-                        <h1 class="mx-auto mt-4 max-w-[720px] leading-snug font-poppins-medium text-f28 text-themeText-f">{{ $videoTitle ?? '' }}</h1>
+                        <h2 class="mx-auto mt-4 max-w-[720px] leading-snug font-poppins-medium text-f28 text-themeText-f">{{ $videoTitle ?? '' }}</h2>
                     </div>
 
                     <a href="javascript:void(0)" class="js-video-modal relative mt-6 block overflow-hidden bg-slate-200 md1:mt-8" data-video-url="{{ $videoUrl ?? '' }}">

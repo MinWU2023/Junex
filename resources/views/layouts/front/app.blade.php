@@ -4,6 +4,28 @@
   $frontLocaleCode = strtolower(str_replace('_', '-', trim((string) $frontLocaleCode)));
   $frontLocaleCode = preg_replace('/[^a-z0-9\-]/', '', $frontLocaleCode) ?: 'en';
   $frontLocaleShort = explode('-', $frontLocaleCode)[0] ?: 'en';
+
+  // 自带 H1 的页面（产品详情/博客详情/产品分类/博客分类）：
+  // 这些页面的标题占 H1，头部导航 Logo 必须用非 H1 标签，避免一页两个 H1。
+  $frontOwnH1Actions = [
+      'ProductController@show',
+      'ProductController@category',
+      'BlogController@show',
+      'BlogController@category',
+  ];
+  $frontCurrentAction = '';
+  try {
+      $frontCurrentAction = (string) (request()->route() ? request()->route()->getActionName() : '');
+  } catch (\Throwable $e) {
+      $frontCurrentAction = '';
+  }
+  $pageHasOwnH1 = false;
+  foreach ($frontOwnH1Actions as $frontOwnH1Action) {
+      if ($frontCurrentAction !== '' && str_contains($frontCurrentAction, $frontOwnH1Action)) {
+          $pageHasOwnH1 = true;
+          break;
+      }
+  }
 @endphp
 <html
   lang="{{ str_replace('_', '-', $frontLocaleCode) }}"
@@ -1411,9 +1433,18 @@
           <header class="pointer-events-none fixed inset-x-0 top-0 z-20 bg-[#FFF] py-[6px] hidden md4:block site-header">
             <div class="site-header-container pointer-events-auto mx-auto w-full px-4 sm2:px-5 md1:px-6 lg1:px-0">
               <div class="site-header-bar h-16 md1:h-20">
+                @if($pageHasOwnH1)
                 <a href="/" class="flex items-center gap-2 site-header-logo">
                   <img class="site-header-logo-img h-[70px] w-auto max-w-[140px] object-contain" src="{{ $logoForInner }}" alt="{{ __('Logo') }}" loading="lazy" />
                 </a>
+                @else
+                {{-- 其他页面：Logo 作为本页唯一 H1；style 抵消标题默认字号/边距，保持原样式 --}}
+                <h1 class="flex items-center gap-2 site-header-logo" style="margin:0;font-size:inherit;font-weight:inherit;line-height:inherit;">
+                  <a href="/" class="flex items-center gap-2">
+                    <img class="site-header-logo-img h-[70px] w-auto max-w-[140px] object-contain" src="{{ $logoForInner }}" alt="{{ __('Logo') }}" loading="lazy" />
+                  </a>
+                </h1>
+                @endif
 
                   @php
                     $navItems = $data['nav']['items'] ?? [];

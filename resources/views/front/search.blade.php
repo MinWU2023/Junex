@@ -209,9 +209,9 @@
                 <div class="inline-flex items-center rounded-full bg-[#FEECEC] px-4 py-1.5 text-f12 font-poppins-semibold uppercase tracking-[0.18em] text-themeBg-d md1:text-f14">
                     {{ __('No Products') }}
                 </div>
-                <h1 class="mt-5 text-f32 font-poppins-extrabold leading-tight text-themeText-a sm6:text-f36 md1:text-f40 lg1:text-f48">
+                <h2 class="mt-5 text-f32 font-poppins-extrabold leading-tight text-themeText-a sm6:text-f36 md1:text-f40 lg1:text-f48">
                     {{ __('No Matching Products') }}
-                </h1>
+                </h2>
                 <p class="mx-auto mt-4 max-w-xl text-f15 font-poppins-regular leading-relaxed text-themeText-g md1:mt-5 md1:text-f16 md3:mx-0">
                     @if(!empty($q))
                         {{ __('Sorry, we could not find any products for ":q". Try another keyword, or browse our catalog to find the styles you need.', ['q' => $q]) }}

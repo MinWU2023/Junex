@@ -70,7 +70,7 @@
             {!! $videosHeaderHtml !!}
         @else
         <div class="mb-8 text-center md1:mb-10">
-            <h1 class="text-f28 font-poppins-semibold uppercase tracking-wide text-themeText-f md1:text-f32">{{ __('Product Videos') }}</h1>
+            <h2 class="text-f28 font-poppins-semibold uppercase tracking-wide text-themeText-f md1:text-f32">{{ __('Product Videos') }}</h2>
             <div class="mx-auto mt-3 h-[7px] w-[46px] rounded bg-themeBg-d" aria-hidden="true"></div>
             <p class="mx-auto mt-4 max-w-[720px] text-f14 font-poppins-regular leading-relaxed text-themeText-g md1:text-f15">
                 {{ __('Watch factory showcases, product highlights, and customization workflows from our sportswear production line.') }}

@@ -28,7 +28,7 @@
         <div class="py-10 md1:py-12 md4:py-16">
             <div class="mx-auto w-full max-w-[1008px] bg-white shadow-[0_18px_40px_rgba(0,0,0,0.12)] ring-1 ring-black/5">
                 <div class="px-5 py-7 sm6:px-8 md1:px-12">
-                    <h1 class="text-center text-f26 md1:text-f32 font-poppins-semibold uppercase tracking-wide text-themeText-f">{{ __('Create Account') }}</h1>
+                    <h2 class="text-center text-f26 md1:text-f32 font-poppins-semibold uppercase tracking-wide text-themeText-f">{{ __('Create Account') }}</h2>
                     <div class="mx-auto mt-3 h-[7px] w-[46px] rounded bg-themeBg-d" aria-hidden="true"></div>
 
                     @if ($errors->any())

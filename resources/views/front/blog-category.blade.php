@@ -83,6 +83,9 @@
 </section>
 
 
+{{-- 本页唯一 H1：博客分类名（视觉隐藏，不影响原有布局与样式） --}}
+<h1 style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">{{ isset($category) ? translated_attr($category, 'name') : '' }}</h1>
+
     <section class="w-full blogs bg-white sec-bg-white">
     <div class="sec-pad mx-auto w-full max-w-[1200px] px-4 py-16 sm2:px-5 md1:px-6 lg1:px-0">
     @if(!empty($featuredBlog))
