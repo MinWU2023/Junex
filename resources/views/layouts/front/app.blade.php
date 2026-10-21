@@ -26,6 +26,10 @@
     @endphp
     <link rel="icon" href="@yield('favicon', $faviconHref)"@if($faviconType) type="{{ $faviconType }}"@endif>
     @yield('tdk')
+    {{-- 后台基础设置：GSC 代码（Google Search Console 验证 meta 等） --}}
+    {!! app('settings')['setting']->gsg_code ?? '' !!}
+    {{-- 后台基础设置：GTM 代码 --}}
+    {!! app('settings')['setting']->head_code ?? '' !!}
 
     <style type="text/css">
       @font-face { font-family: 'Poppins-Regular'; src: url('/front/fonts/Poppins-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
@@ -1258,6 +1262,8 @@
     @yield('page-js-header')
 </head>
 <body class="min-h-full bg-white font-sans text-slate-900 antialiased sec-space-on lang-{{ $frontLocaleShort }}">
+{{-- 后台基础设置：Body代码（google noscript） --}}
+{!! app('settings')['setting']->body_code ?? '' !!}
     <input type="hidden" id="customer_id" value="{{ $data['customer_id'] }}" /> 
     <svg xmlns="http://www.w3.org/2000/svg" class="hidden">
       <symbol id="icon-uncollect" viewBox="0 0 15 14" fill="none">
