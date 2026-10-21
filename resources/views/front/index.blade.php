@@ -21,10 +21,25 @@
                 $siteLogo = $setting->logo ?? front_webp_url('/front/imgs/logo2.svg');
                 $innerLogo = $setting->inner_logo ?? null;
                 $stickyLogo = $innerLogo ?: $siteLogo;
+
+                // 首页头部 Logo 的 alt：取首页 TDK 的 title（seo_home_title，为空则退回基础 title）
+                $homeLogoAlt = trim((string) translated_attr($setting, 'seo_home_title'));
+                if ($homeLogoAlt === '') {
+                    $homeLogoAlt = trim((string) translated_attr($setting, 'title'));
+                }
+                if ($homeLogoAlt !== '') {
+                    $homeLogoAlt = trim(str_replace('{site_name}', (string) translated_attr($setting, 'name'), $homeLogoAlt));
+                }
+                if ($homeLogoAlt === '') {
+                    $homeLogoAlt = __('Logo');
+                }
             @endphp
-            <a href="/" class="flex items-center gap-2 site-header-logo">
-                <img class="header-logo selectable site-header-logo-img h-[70px] w-[100px] object-contain" src="{{ $siteLogo }}" data-default-src="{{ $siteLogo }}" data-sticky-src="{{ $stickyLogo }}" alt="{{ __('Logo') }}" loading="lazy" />
-            </a>
+            {{-- 首页没有内容标题，头部 Logo 承担本页唯一 H1；style 抵消标题默认字号/边距，保持原样式 --}}
+            <h1 class="flex items-center gap-2 site-header-logo" style="margin:0;font-size:inherit;font-weight:inherit;line-height:inherit;">
+                <a href="/" class="flex items-center gap-2">
+                    <img class="header-logo selectable site-header-logo-img h-[70px] w-[100px] object-contain" src="{{ $siteLogo }}" data-default-src="{{ $siteLogo }}" data-sticky-src="{{ $stickyLogo }}" alt="{{ $homeLogoAlt }}" loading="lazy" />
+                </a>
+            </h1>
             @php
                 $navItems = $nav['items'] ?? [];
                 $linkBase = 'relative transition duration-200 hover:text-white after:absolute after:left-1/2 after:-translate-x-1/2 after:-bottom-[14px] after:h-[5px] after:w-[34px] after:rounded-[5px] after:bg-themeBg-d after:opacity-0 after:transition-all after:duration-200 hover:after:opacity-100';

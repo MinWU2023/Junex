@@ -26,6 +26,28 @@
           break;
       }
   }
+
+  // 头部 Logo 的 alt：取首页 TDK 的 title（seo_home_title，为空则退回基础 title），
+  // 并把 {site_name} 占位符替换为站点名，与首页 <title> 完全一致。
+  $frontLogoAlt = '';
+  try {
+      $frontSetting = $data['setting'] ?? (app('settings')['setting'] ?? null);
+      if ($frontSetting) {
+          $frontLogoAlt = trim((string) translated_attr($frontSetting, 'seo_home_title'));
+          if ($frontLogoAlt === '') {
+              $frontLogoAlt = trim((string) translated_attr($frontSetting, 'title'));
+          }
+          if ($frontLogoAlt !== '') {
+              $frontLogoAlt = str_replace('{site_name}', (string) translated_attr($frontSetting, 'name'), $frontLogoAlt);
+              $frontLogoAlt = trim($frontLogoAlt);
+          }
+      }
+  } catch (\Throwable $e) {
+      $frontLogoAlt = '';
+  }
+  if ($frontLogoAlt === '') {
+      $frontLogoAlt = __('Logo');
+  }
 @endphp
 <html
   lang="{{ str_replace('_', '-', $frontLocaleCode) }}"
@@ -1309,7 +1331,7 @@
             $logoForInner = $data['header_logo_url'] ?? front_webp_url('/front/imgs/logo2.svg');
           @endphp
           <a href="/" class="header-mobile-logo">
-            <img class="h-[52px] w-auto max-w-[110px] object-contain" src="{{ $logoForInner }}" alt="{{ __('Logo') }}" loading="lazy" />
+            <img class="h-[52px] w-auto max-w-[110px] object-contain" src="{{ $logoForInner }}" alt="{{ $frontLogoAlt ?? __('Logo') }}" loading="lazy" />
           </a>
         </div>
 
@@ -1354,7 +1376,7 @@
       <div id="mobileMenuBackdrop" class="absolute inset-0 bg-black/60"></div>
       <div id="mobileMenuPanel" class="absolute left-0 top-0 flex h-full w-[280px] max-w-[85vw] -translate-x-full flex-col bg-white shadow-xl transition-transform duration-200">
         <div class="flex items-center justify-between px-4 py-4 ring-1 ring-slate-200">
-          <img class="h-10 w-auto max-w-[110px] object-contain" src="{{ $logoForInner }}" alt="{{ __('Logo') }}" loading="lazy" />
+          <img class="h-10 w-auto max-w-[110px] object-contain" src="{{ $logoForInner }}" alt="{{ $frontLogoAlt ?? __('Logo') }}" loading="lazy" />
           <button id="mobileMenuClose" type="button" class="inline-flex h-9 w-9 items-center justify-center rounded bg-slate-900/5 text-slate-800 transition hover:bg-slate-900/10" aria-label="{{ __('Close') }}">
             <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M18 6L6 18" />
@@ -1435,13 +1457,13 @@
               <div class="site-header-bar h-16 md1:h-20">
                 @if($pageHasOwnH1)
                 <a href="/" class="flex items-center gap-2 site-header-logo">
-                  <img class="site-header-logo-img h-[70px] w-auto max-w-[140px] object-contain" src="{{ $logoForInner }}" alt="{{ __('Logo') }}" loading="lazy" />
+                  <img class="site-header-logo-img h-[70px] w-auto max-w-[140px] object-contain" src="{{ $logoForInner }}" alt="{{ $frontLogoAlt ?? __('Logo') }}" loading="lazy" />
                 </a>
                 @else
                 {{-- 其他页面：Logo 作为本页唯一 H1；style 抵消标题默认字号/边距，保持原样式 --}}
                 <h1 class="flex items-center gap-2 site-header-logo" style="margin:0;font-size:inherit;font-weight:inherit;line-height:inherit;">
                   <a href="/" class="flex items-center gap-2">
-                    <img class="site-header-logo-img h-[70px] w-auto max-w-[140px] object-contain" src="{{ $logoForInner }}" alt="{{ __('Logo') }}" loading="lazy" />
+                    <img class="site-header-logo-img h-[70px] w-auto max-w-[140px] object-contain" src="{{ $logoForInner }}" alt="{{ $frontLogoAlt ?? __('Logo') }}" loading="lazy" />
                   </a>
                 </h1>
                 @endif
@@ -1618,7 +1640,7 @@
                 @php
                   $bottomLogo = $data['footer_logo_url'] ?? front_webp_url('/front/imgs/footer_logo.png');
                 @endphp
-                <img class="h-auto w-[110px] object-contain sm3:w-[130px] sm6:w-[150px] md1:w-[170px]" src="{{ $bottomLogo }}" alt="{{ __('Logo') }}" loading="lazy" />
+                <img class="h-auto w-[110px] object-contain sm3:w-[130px] sm6:w-[150px] md1:w-[170px]" src="{{ $bottomLogo }}" alt="{{ $frontLogoAlt ?? __('Logo') }}" loading="lazy" />
                 <p class="mt-3 max-w-[100%] text-[11px] leading-5 text-white/70">
                   {{ $data['footerContact']['brief'] ?? __('Infray Technologies Co., Ltd., A Subsidiary Corporation Of Rayton, Is An Innovative.') }}
                 </p>
