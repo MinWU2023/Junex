@@ -1,4 +1,6 @@
 <x-layout>
+{{-- 本页由博客名占 H1，头部 Logo 用非 H1 标签 --}}
+@section('front-page-own-h1', '1')
 @section('tdk')
 @include('front.partials.seo-head')
 @endsection

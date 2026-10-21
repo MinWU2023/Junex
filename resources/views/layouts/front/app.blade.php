@@ -7,24 +7,32 @@
 
   // 自带 H1 的页面（产品详情/产品列表/产品分类/博客详情/博客分类）：
   // 这些页面由内容标题占 H1，头部导航 Logo 必须用非 H1 标签，避免一页两个 H1。
-  $frontOwnH1Actions = [
-      'ProductController@show',
-      'ProductController@index',
-      'ProductController@category',
-      'BlogController@show',
-      'BlogController@category',
-  ];
-  $frontCurrentAction = '';
-  try {
-      $frontCurrentAction = (string) (request()->route() ? request()->route()->getActionName() : '');
-  } catch (\Throwable $e) {
+  //
+  // 判断方式：由页面视图自己声明 @section('front-page-own-h1', '1')。
+  // <x-layout> 里插槽内容（页面视图）先于布局视图渲染，所以这里读得到该 section
+  // （同 @section('page-header') + View::hasSection('page-header') 的既有用法）。
+  $pageHasOwnH1 = View::hasSection('front-page-own-h1');
+
+  // 兜底：页面视图若漏了上面那个 section，再按路由动作名判断一次。
+  if (! $pageHasOwnH1) {
+      $frontOwnH1Actions = [
+          'ProductController@show',
+          'ProductController@index',
+          'ProductController@category',
+          'BlogController@show',
+          'BlogController@category',
+      ];
       $frontCurrentAction = '';
-  }
-  $pageHasOwnH1 = false;
-  foreach ($frontOwnH1Actions as $frontOwnH1Action) {
-      if ($frontCurrentAction !== '' && str_contains($frontCurrentAction, $frontOwnH1Action)) {
-          $pageHasOwnH1 = true;
-          break;
+      try {
+          $frontCurrentAction = (string) (request()->route() ? request()->route()->getActionName() : '');
+      } catch (\Throwable $e) {
+          $frontCurrentAction = '';
+      }
+      foreach ($frontOwnH1Actions as $frontOwnH1Action) {
+          if ($frontCurrentAction !== '' && str_contains($frontCurrentAction, $frontOwnH1Action)) {
+              $pageHasOwnH1 = true;
+              break;
+          }
       }
   }
 
