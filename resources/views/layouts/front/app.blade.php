@@ -5,10 +5,11 @@
   $frontLocaleCode = preg_replace('/[^a-z0-9\-]/', '', $frontLocaleCode) ?: 'en';
   $frontLocaleShort = explode('-', $frontLocaleCode)[0] ?: 'en';
 
-  // 自带 H1 的页面（产品详情/博客详情/产品分类/博客分类）：
-  // 这些页面的标题占 H1，头部导航 Logo 必须用非 H1 标签，避免一页两个 H1。
+  // 自带 H1 的页面（产品详情/产品列表/产品分类/博客详情/博客分类）：
+  // 这些页面由内容标题占 H1，头部导航 Logo 必须用非 H1 标签，避免一页两个 H1。
   $frontOwnH1Actions = [
       'ProductController@show',
+      'ProductController@index',
       'ProductController@category',
       'BlogController@show',
       'BlogController@category',

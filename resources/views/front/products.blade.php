@@ -82,7 +82,17 @@
     </div>
 </section>
 
-{!! static_block_html('products_header') !!}
+@php
+    // 产品列表页的 H1 由内容标题承担（头部 Logo 已是 <a>）：
+    // 静态块 products_header 内若已包含 H1 就直接沿用；没有则补一个视觉隐藏的 H1，
+    // 保证本页恰好只有一个 H1。
+    $productsHeaderHtml = static_block_html('products_header');
+    $productsHeaderHasH1 = (bool) preg_match('/<h1\b/i', (string) $productsHeaderHtml);
+@endphp
+@unless($productsHeaderHasH1)
+<h1 style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">{{ __('Products') }}</h1>
+@endunless
+{!! $productsHeaderHtml !!}
 
 @include('front.partials.product-list-with-sidebar', [
     'products' => $products ?? null,
