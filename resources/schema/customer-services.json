@@ -1,0 +1,37 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "{{PAGE_URL}}#webpage",
+      "url": "{{PAGE_URL}}",
+      "name": "{{PAGE_TITLE}}",
+      "description": "{{PAGE_DESCRIPTION}}",
+      "inLanguage": "{{LOCALE}}",
+      "isPartOf": {
+        "@id": "{{SITE_URL}}/#website"
+      },
+      "breadcrumb": {
+        "@id": "{{PAGE_URL}}#breadcrumb"
+      },
+      "about": {
+        "@id": "{{SITE_URL}}/#organization"
+      },
+      "mainEntity": {
+        "@type": "Service",
+        "name": "{{PAGE_TITLE}}",
+        "description": "{{PAGE_DESCRIPTION}}",
+        "serviceType": "{{SERVICE_TYPE}}",
+        "provider": {
+          "@id": "{{SITE_URL}}/#organization"
+        },
+        "areaServed": "{{SERVICE_AREA}}"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "{{PAGE_URL}}#breadcrumb",
+      "itemListElement": "{{BREADCRUMB_ITEMS}}"
+    }
+  ]
+}

@@ -1051,3 +1051,178 @@ if (!function_exists('translated_attrs')) {
         return \App\Support\FrontTranslation::attrs($model, $attributes, $locale);
     }
 }
+
+if (!function_exists('front_absolute_url')) {
+    /**
+     * 把站内相对路径转成可对外分享的绝对地址（OG / Schema 必须用绝对地址）。
+     * 已是 http(s)、协议相对、data: 的原样返回。
+     */
+    function front_absolute_url(?string $src): string
+    {
+        $src = trim((string)$src);
+        if ($src === '') {
+            return '';
+        }
+        if (preg_match('#^(https?:)?//#i', $src) || stripos($src, 'data:') === 0) {
+            return $src;
+        }
+        if (str_starts_with($src, '#')) {
+            return $src;
+        }
+
+        try {
+            return url('/' . ltrim($src, '/'));
+        } catch (\Throwable $e) {
+            return $src;
+        }
+    }
+}
+
+if (!function_exists('front_og_locale')) {
+    /**
+     * OG 用的 locale 格式是 "语言_地区"（如 en_US）。
+     * 站点语种代码是 en / es / de …，这里做一层映射，未知代码原样返回。
+     */
+    function front_og_locale(?string $code = null): string
+    {
+        if ($code === null || trim($code) === '') {
+            $code = function_exists('front_locale_code')
+                ? front_locale_code()
+                : (string)app()->getLocale();
+        }
+
+        $code = strtolower(str_replace('-', '_', trim((string)$code)));
+
+        $map = [
+            'en' => 'en_US',
+            'es' => 'es_ES',
+            'de' => 'de_DE',
+            'it' => 'it_IT',
+            'pt' => 'pt_PT',
+            'ru' => 'ru_RU',
+            'ja' => 'ja_JP',
+            'jp' => 'ja_JP',
+            'fr' => 'fr_FR',
+            'nl' => 'nl_NL',
+            'pl' => 'pl_PL',
+            'tr' => 'tr_TR',
+            'ko' => 'ko_KR',
+            'ar' => 'ar_AR',
+            'zh' => 'zh_CN',
+            'vi' => 'vi_VN',
+            'th' => 'th_TH',
+            'id' => 'id_ID',
+            'hi' => 'hi_IN',
+        ];
+
+        if (isset($map[$code])) {
+            return $map[$code];
+        }
+
+        // 已经是 en_us / zh_cn 这种带地区的形式，转成标准大小写
+        if (str_contains($code, '_')) {
+            [$lang, $region] = array_pad(explode('_', $code, 2), 2, '');
+            return strtolower($lang) . ($region !== '' ? '_' . strtoupper($region) : '');
+        }
+
+        return $code;
+    }
+}
+
+if (!function_exists('front_schema_markup')) {
+    /**
+     * 渲染某个页面的 Schema.org 结构化数据（规则文件：resources/schema/{type}.json）。
+     * 失败时返回空字符串，绝不影响页面渲染。
+     */
+    function front_schema_markup(string $type, array $vars = []): string
+    {
+        try {
+            return app(\App\Services\SchemaMarkupService::class)->render($type, $vars);
+        } catch (\Throwable $e) {
+            return '';
+        }
+    }
+}
+
+if (!function_exists('front_schema_breadcrumbs')) {
+    /**
+     * 面包屑数组（[['label'=>..,'url'=>..]]）→ Schema BreadcrumbList.itemListElement。
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    function front_schema_breadcrumbs(array $breadcrumbs): array
+    {
+        $items = [];
+        $position = 0;
+
+        foreach ($breadcrumbs as $crumb) {
+            if (!is_array($crumb)) {
+                continue;
+            }
+            $name = trim((string)($crumb['label'] ?? ''));
+            if ($name === '') {
+                continue;
+            }
+
+            $position++;
+            $item = [
+                '@type' => 'ListItem',
+                'position' => $position,
+                'name' => $name,
+            ];
+
+            $url = trim((string)($crumb['url'] ?? ''));
+            if ($url !== '' && stripos($url, 'javascript:') !== 0) {
+                $item['item'] = front_absolute_url($url);
+            }
+
+            $items[] = $item;
+        }
+
+        return $items;
+    }
+}
+
+if (!function_exists('front_schema_item_list')) {
+    /**
+     * 列表页商品/文章数组 → Schema ItemList.itemListElement。
+     *
+     * @param  array<int, array<string, mixed>>  $items  每项至少含 name（或 title）+ url
+     * @return array<int, array<string, mixed>>
+     */
+    function front_schema_item_list(array $items, int $limit = 20): array
+    {
+        $list = [];
+        $position = 0;
+
+        foreach ($items as $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+            $name = trim((string)($item['name'] ?? ($item['title'] ?? '')));
+            if ($name === '') {
+                continue;
+            }
+
+            $position++;
+            $row = [
+                '@type' => 'ListItem',
+                'position' => $position,
+                'name' => $name,
+            ];
+
+            $url = trim((string)($item['url'] ?? ''));
+            if ($url !== '' && stripos($url, 'javascript:') !== 0) {
+                $row['url'] = front_absolute_url($url);
+            }
+
+            $list[] = $row;
+
+            if (count($list) >= $limit) {
+                break;
+            }
+        }
+
+        return $list;
+    }
+}

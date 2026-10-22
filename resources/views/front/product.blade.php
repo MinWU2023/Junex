@@ -1,8 +1,25 @@
 <x-layout>
 {{-- 本页由产品名占 H1，头部 Logo 用非 H1 标签 --}}
 @section('front-page-own-h1', '1')
+@php
+    // 分享图用产品主图；品牌名用于结构化数据
+    $pdpOgImage = (string) (($productImagesData[0]['url'] ?? '') ?: '');
+    $pdpBrandName = !empty($product->productBrand) ? translated_attr($product->productBrand, 'name') : '';
+@endphp
+@section('og-image', $pdpOgImage)
+@section('og-type', 'product')
 @section('tdk')
 @include('front.partials.seo-head')
+@include('front.partials.schema-markup', [
+    'schemaType' => 'product',
+    'schemaVars' => [
+        'PRODUCT_NAME' => translated_attr($product, 'name'),
+        'PRODUCT_IMAGE' => front_absolute_url($pdpOgImage),
+        'PRODUCT_SKU' => (string) ($product->url_key ?? ''),
+        'PRODUCT_BRAND' => $pdpBrandName,
+        'PRODUCT_CATEGORY' => (string) ($productCategoryLabel ?? ''),
+    ],
+])
 @endsection
 
 @section('page-css-header')

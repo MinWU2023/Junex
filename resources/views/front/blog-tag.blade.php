@@ -1,6 +1,14 @@
 <x-layout>
 @section('tdk')
 @include('front.partials.seo-head')
+@include('front.partials.schema-markup', [
+    'schemaType' => 'blog-tag',
+    'schemaVars' => [
+        'TAG_NAME' => translated_attr($tag, 'name'),
+        'ITEM_COUNT' => count($blogsListData ?? []) + (empty($featuredBlog) ? 0 : 1),
+        'ITEM_LIST' => front_schema_item_list(array_merge(empty($featuredBlog) ? [] : [$featuredBlog], $blogsListData ?? [])),
+    ],
+])
 @endsection
 
 @section('page-css-header')

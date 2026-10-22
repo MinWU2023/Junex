@@ -3,6 +3,14 @@
 @section('front-page-own-h1', '1')
 @section('tdk')
 @include('front.partials.seo-head')
+@include('front.partials.schema-markup', [
+    'schemaType' => 'product-list',
+    'schemaVars' => [
+        'LIST_NAME' => __('Products'),
+        'ITEM_COUNT' => count($productsData ?? []),
+        'ITEM_LIST' => front_schema_item_list($productsData ?? []),
+    ],
+])
 @endsection
 
 @section('page-css-header')

@@ -1,6 +1,14 @@
 <x-layout>
 @section('tdk')
 @include('front.partials.seo-head')
+@include('front.partials.schema-markup', [
+    'schemaType' => 'product-tag',
+    'schemaVars' => [
+        'TAG_NAME' => translated_attr($tag, 'name'),
+        'ITEM_COUNT' => count($productsData ?? []),
+        'ITEM_LIST' => front_schema_item_list($productsData ?? []),
+    ],
+])
 @endsection
 
 @section('page-css-header')

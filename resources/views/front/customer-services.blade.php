@@ -1,6 +1,12 @@
 <x-layout>
 @section('tdk')
 @include('front.partials.seo-head')
+@include('front.partials.schema-markup', [
+    'schemaType' => 'customer-services',
+    'schemaVars' => [
+        'SERVICE_TYPE' => __('Customer Services'),
+    ],
+])
 @endsection
 
 @section('page-css-header')

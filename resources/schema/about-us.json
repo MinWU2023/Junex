@@ -1,0 +1,45 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "AboutPage",
+      "@id": "{{PAGE_URL}}#webpage",
+      "url": "{{PAGE_URL}}",
+      "name": "{{PAGE_TITLE}}",
+      "description": "{{PAGE_DESCRIPTION}}",
+      "inLanguage": "{{LOCALE}}",
+      "isPartOf": {
+        "@id": "{{SITE_URL}}/#website"
+      },
+      "breadcrumb": {
+        "@id": "{{PAGE_URL}}#breadcrumb"
+      },
+      "about": {
+        "@id": "{{SITE_URL}}/#organization"
+      }
+    },
+    {
+      "@type": "Organization",
+      "@id": "{{SITE_URL}}/#organization",
+      "name": "{{SITE_NAME}}",
+      "url": "{{SITE_URL}}/",
+      "description": "{{SITE_DESCRIPTION}}",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "{{LOGO_URL}}"
+      },
+      "email": "{{ORG_EMAIL}}",
+      "telephone": "{{ORG_PHONE}}",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "{{ORG_ADDRESS}}"
+      },
+      "sameAs": "{{SAME_AS}}"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "{{PAGE_URL}}#breadcrumb",
+      "itemListElement": "{{BREADCRUMB_ITEMS}}"
+    }
+  ]
+}

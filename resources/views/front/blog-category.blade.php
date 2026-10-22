@@ -3,6 +3,14 @@
 @section('front-page-own-h1', '1')
 @section('tdk')
 @include('front.partials.seo-head')
+@include('front.partials.schema-markup', [
+    'schemaType' => 'blog-category',
+    'schemaVars' => [
+        'CATEGORY_NAME' => translated_attr($category, 'name'),
+        'ITEM_COUNT' => count($blogsListData ?? []) + (empty($featuredBlog) ? 0 : 1),
+        'ITEM_LIST' => front_schema_item_list(array_merge(empty($featuredBlog) ? [] : [$featuredBlog], $blogsListData ?? [])),
+    ],
+])
 @endsection
 
 @section('page-css-header')

@@ -1,6 +1,7 @@
 <x-layout>
 @section('tdk')
 @include('front.partials.seo-head')
+@include('front.partials.schema-markup', ['schemaType' => 'home'])
 @endsection
 
 @section('page-css-header')

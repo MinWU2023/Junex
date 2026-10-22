@@ -1,0 +1,54 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "ContactPage",
+      "@id": "{{PAGE_URL}}#webpage",
+      "url": "{{PAGE_URL}}",
+      "name": "{{PAGE_TITLE}}",
+      "description": "{{PAGE_DESCRIPTION}}",
+      "inLanguage": "{{LOCALE}}",
+      "isPartOf": {
+        "@id": "{{SITE_URL}}/#website"
+      },
+      "breadcrumb": {
+        "@id": "{{PAGE_URL}}#breadcrumb"
+      },
+      "about": {
+        "@id": "{{SITE_URL}}/#organization"
+      },
+      "mainEntity": {
+        "@id": "{{SITE_URL}}/#organization"
+      }
+    },
+    {
+      "@type": "Organization",
+      "@id": "{{SITE_URL}}/#organization",
+      "name": "{{SITE_NAME}}",
+      "url": "{{SITE_URL}}/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "{{LOGO_URL}}"
+      },
+      "email": "{{ORG_EMAIL}}",
+      "telephone": "{{ORG_PHONE}}",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "{{ORG_ADDRESS}}"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "email": "{{ORG_EMAIL}}",
+        "telephone": "{{ORG_PHONE}}",
+        "availableLanguage": "{{LOCALE}}"
+      },
+      "sameAs": "{{SAME_AS}}"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "{{PAGE_URL}}#breadcrumb",
+      "itemListElement": "{{BREADCRUMB_ITEMS}}"
+    }
+  ]
+}

@@ -91,6 +91,8 @@
     @endphp
     <link rel="icon" href="@yield('favicon', $faviconHref)"@if($faviconType) type="{{ $faviconType }}"@endif>
     @yield('tdk')
+    {{-- OG / Twitter 分享标签：标题、描述、关键词与上面 TDK 完全同源；分享图默认用 Logo，产品/博客详情页各自覆盖 --}}
+    @include('front.partials.social-meta')
     {{-- 后台基础设置：GSC 代码（Google Search Console 验证 meta 等） --}}
     {!! app('settings')['setting']->gsg_code ?? '' !!}
     {{-- 后台基础设置：GTM 代码 --}}

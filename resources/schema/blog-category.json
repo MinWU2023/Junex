@@ -1,0 +1,34 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "@id": "{{PAGE_URL}}#webpage",
+      "url": "{{PAGE_URL}}",
+      "name": "{{PAGE_TITLE}}",
+      "description": "{{PAGE_DESCRIPTION}}",
+      "inLanguage": "{{LOCALE}}",
+      "isPartOf": {
+        "@id": "{{SITE_URL}}/#website"
+      },
+      "breadcrumb": {
+        "@id": "{{PAGE_URL}}#breadcrumb"
+      },
+      "about": {
+        "@type": "Thing",
+        "name": "{{CATEGORY_NAME}}"
+      },
+      "mainEntity": {
+        "@type": "ItemList",
+        "name": "{{CATEGORY_NAME}}",
+        "numberOfItems": "{{ITEM_COUNT}}",
+        "itemListElement": "{{ITEM_LIST}}"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "{{PAGE_URL}}#breadcrumb",
+      "itemListElement": "{{BREADCRUMB_ITEMS}}"
+    }
+  ]
+}

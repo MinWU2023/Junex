@@ -1,8 +1,38 @@
 <x-layout>
 {{-- 本页由博客名占 H1，头部 Logo 用非 H1 标签 --}}
 @section('front-page-own-h1', '1')
+@php
+    // 分享图用博客主图；发布时间 / 标签用于结构化数据
+    $blogOgImage = (string) ($blogCover ?? '');
+    $blogPublishedRaw = !empty($blog->customer_at) ? $blog->customer_at : ($blog->updated_at ?? null);
+    $blogPublishedIso = '';
+    if (!empty($blogPublishedRaw)) {
+        $blogPublishedTs = strtotime((string) $blogPublishedRaw);
+        if ($blogPublishedTs) {
+            $blogPublishedIso = gmdate('c', $blogPublishedTs);
+        }
+    }
+    $blogSchemaTags = [];
+    foreach (($blogTagsData ?? []) as $blogSchemaTag) {
+        $blogSchemaTagName = trim((string) ($blogSchemaTag['name'] ?? ''));
+        if ($blogSchemaTagName !== '') {
+            $blogSchemaTags[] = $blogSchemaTagName;
+        }
+    }
+@endphp
+@section('og-image', $blogOgImage)
+@section('og-type', 'article')
 @section('tdk')
 @include('front.partials.seo-head')
+@include('front.partials.schema-markup', [
+    'schemaType' => 'blog',
+    'schemaVars' => [
+        'BLOG_TITLE' => (string) ($blogTitle ?? ''),
+        'BLOG_IMAGE' => front_absolute_url($blogOgImage),
+        'BLOG_DATE' => $blogPublishedIso,
+        'BLOG_TAGS' => implode(', ', $blogSchemaTags),
+    ],
+])
 @endsection
 
 @section('page-css-header')

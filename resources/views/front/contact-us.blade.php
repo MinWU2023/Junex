@@ -7,6 +7,7 @@
 @if(!empty($tdk['keywords']))
 <meta name="keywords" content="{{ $tdk['keywords'] }}" />
 @endif
+@include('front.partials.schema-markup', ['schemaType' => 'contact-us'])
 @endsection
 
 @section('page-css-header')
