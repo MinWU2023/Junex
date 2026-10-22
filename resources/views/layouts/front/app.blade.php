@@ -36,23 +36,35 @@
       }
   }
 
-  // 头部 Logo 的 alt：取首页 TDK 的 title（seo_home_title，为空则退回基础 title），
-  // 并把 {site_name} 占位符替换为站点名，与首页 <title> 完全一致。
+  // 头部 Logo 的 alt：直接读取本页 @section('tdk') 渲染出来的 <title> 文本，
+  // 保证 alt 与浏览器标签标题完全一致（页面视图先于本布局渲染，此时 section 已就绪）。
   $frontLogoAlt = '';
   try {
-      $frontSetting = $data['setting'] ?? (app('settings')['setting'] ?? null);
-      if ($frontSetting) {
-          $frontLogoAlt = trim((string) translated_attr($frontSetting, 'seo_home_title'));
-          if ($frontLogoAlt === '') {
-              $frontLogoAlt = trim((string) translated_attr($frontSetting, 'title'));
-          }
-          if ($frontLogoAlt !== '') {
-              $frontLogoAlt = str_replace('{site_name}', (string) translated_attr($frontSetting, 'name'), $frontLogoAlt);
-              $frontLogoAlt = trim($frontLogoAlt);
-          }
+      $frontTdkHtml = (string) View::yieldContent('tdk');
+      if ($frontTdkHtml !== '' && preg_match('/<title\b[^>]*>(.*?)<\/title>/is', $frontTdkHtml, $frontTitleMatch)) {
+          $frontLogoAlt = trim(html_entity_decode(strip_tags($frontTitleMatch[1]), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+          $frontLogoAlt = trim(preg_replace('/\s+/u', ' ', $frontLogoAlt) ?? $frontLogoAlt);
       }
   } catch (\Throwable $e) {
       $frontLogoAlt = '';
+  }
+
+  // 兜底：页面没有输出 <title> 时，退回首页 TDK 的 title。
+  if ($frontLogoAlt === '') {
+      try {
+          $frontSetting = $data['setting'] ?? (app('settings')['setting'] ?? null);
+          if ($frontSetting) {
+              $frontLogoAlt = trim((string) translated_attr($frontSetting, 'seo_home_title'));
+              if ($frontLogoAlt === '') {
+                  $frontLogoAlt = trim((string) translated_attr($frontSetting, 'title'));
+              }
+              if ($frontLogoAlt !== '') {
+                  $frontLogoAlt = trim(str_replace('{site_name}', (string) translated_attr($frontSetting, 'name'), $frontLogoAlt));
+              }
+          }
+      } catch (\Throwable $e) {
+          $frontLogoAlt = '';
+      }
   }
   if ($frontLogoAlt === '') {
       $frontLogoAlt = __('Logo');

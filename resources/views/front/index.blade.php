@@ -22,13 +22,26 @@
                 $innerLogo = $setting->inner_logo ?? null;
                 $stickyLogo = $innerLogo ?: $siteLogo;
 
-                // 首页头部 Logo 的 alt：取首页 TDK 的 title（seo_home_title，为空则退回基础 title）
-                $homeLogoAlt = trim((string) translated_attr($setting, 'seo_home_title'));
-                if ($homeLogoAlt === '') {
-                    $homeLogoAlt = trim((string) translated_attr($setting, 'title'));
+                // 头部 Logo 的 alt：直接取本页 <title> 文本，保证与浏览器标签标题一致
+                $homeLogoAlt = '';
+                try {
+                    $homeTdkHtml = (string) View::yieldContent('tdk');
+                    if ($homeTdkHtml !== '' && preg_match('/<title\b[^>]*>(.*?)<\/title>/is', $homeTdkHtml, $homeTitleMatch)) {
+                        $homeLogoAlt = trim(html_entity_decode(strip_tags($homeTitleMatch[1]), ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+                        $homeLogoAlt = trim(preg_replace('/\s+/u', ' ', $homeLogoAlt) ?? $homeLogoAlt);
+                    }
+                } catch (\Throwable $e) {
+                    $homeLogoAlt = '';
                 }
-                if ($homeLogoAlt !== '') {
-                    $homeLogoAlt = trim(str_replace('{site_name}', (string) translated_attr($setting, 'name'), $homeLogoAlt));
+                // 兜底：退回首页 TDK 的 title
+                if ($homeLogoAlt === '') {
+                    $homeLogoAlt = trim((string) translated_attr($setting, 'seo_home_title'));
+                    if ($homeLogoAlt === '') {
+                        $homeLogoAlt = trim((string) translated_attr($setting, 'title'));
+                    }
+                    if ($homeLogoAlt !== '') {
+                        $homeLogoAlt = trim(str_replace('{site_name}', (string) translated_attr($setting, 'name'), $homeLogoAlt));
+                    }
                 }
                 if ($homeLogoAlt === '') {
                     $homeLogoAlt = __('Logo');

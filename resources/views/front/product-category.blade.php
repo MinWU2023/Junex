@@ -84,9 +84,6 @@
     </div>
 </section>
 
-{{-- 本页唯一 H1：产品分类名（视觉隐藏，不影响原有布局与样式） --}}
-<h1 style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">{{ isset($category) ? translated_attr($category, 'name') : '' }}</h1>
-
 @php $categoryContentHtml = translated_attr($category, 'content'); @endphp
 @if($categoryContentHtml !== '' && trim(strip_tags($categoryContentHtml)) !== '')
 <section class="w-full bg-themeBg-a category-description sec-bg-white js-cat-desc-section" data-max-lines="6">
