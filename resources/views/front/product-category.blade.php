@@ -293,7 +293,7 @@
      正文容器继承的是 Poppins-Regular，只写 700 会变成浏览器合成假粗体，
      所以同时指定 Poppins-Bold 让 700 用到真实粗体字形 */
 h1 {
-  font-weight: 700;
+  font-weight: 700 !important;
   font-family: 'Poppins-Bold', ui-sans-serif, system-ui, sans-serif;
 }
 </style>
