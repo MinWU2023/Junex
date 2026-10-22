@@ -1129,6 +1129,40 @@ if (!function_exists('front_og_locale')) {
     }
 }
 
+if (!function_exists('front_canonical_url')) {
+    /**
+     * 当前页的 canonical 地址（绝对地址）。
+     *
+     * 规则：保留路径与语言子域，去掉全部 query（utm / 筛选 / inject 等），
+     * 仅保留分页参数 page（page>1 时），让列表第 2 页自指而不是全部指向第 1 页。
+     * 需要特殊指定时，页面视图可用 section('canonical') 覆盖。
+     */
+    function front_canonical_url(): string
+    {
+        try {
+            $request = request();
+            $url = (string)$request->url();
+
+            if ($url === '') {
+                return '';
+            }
+
+            $page = (int)$request->query('page', 0);
+            if ($page > 1) {
+                $url .= '?page=' . $page;
+            }
+
+            return $url;
+        } catch (\Throwable $e) {
+            try {
+                return (string)url()->current();
+            } catch (\Throwable $inner) {
+                return '';
+            }
+        }
+    }
+}
+
 if (!function_exists('front_schema_markup')) {
     /**
      * 渲染某个页面的 Schema.org 结构化数据（规则文件：resources/schema/{type}.json）。

@@ -90,6 +90,17 @@
       $faviconType = str_ends_with($faviconPath, '.svg') ? 'image/svg+xml' : null;
     @endphp
     <link rel="icon" href="@yield('favicon', $faviconHref)"@if($faviconType) type="{{ $faviconType }}"@endif>
+    @php
+      // canonical：指向当前页地址（绝对地址，去掉 utm / 筛选等 query，分页保留 page）。
+      // 页面需要特殊指定时用 section('canonical') 覆盖；下方 og:url 复用同一值，保证两者一致。
+      $frontCanonicalUrl = trim((string) View::yieldContent('canonical'));
+      if ($frontCanonicalUrl === '') {
+          $frontCanonicalUrl = front_canonical_url();
+      }
+    @endphp
+    @if($frontCanonicalUrl !== '')
+    <link rel="canonical" href="{{ $frontCanonicalUrl }}" />
+    @endif
     @yield('tdk')
     {{-- OG / Twitter 分享标签：标题、描述、关键词与上面 TDK 完全同源；分享图默认用 Logo，产品/博客详情页各自覆盖 --}}
     @include('front.partials.social-meta')

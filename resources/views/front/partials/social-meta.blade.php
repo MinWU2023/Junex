@@ -35,7 +35,11 @@
     }
     $ogImage = front_absolute_url($ogImage);
 
-    $ogUrl = url()->current();
+    // og:url 与 head 里的 rel="canonical" 用同一个值，两者必须一致
+    $ogUrl = trim((string) ($frontCanonicalUrl ?? ''));
+    if ($ogUrl === '') {
+        $ogUrl = (string) url()->current();
+    }
     $ogSiteName = $ogSetting ? translated_attr($ogSetting, 'name') : (string) config('app.name');
     $ogLocale = front_og_locale();
     $ogCurrentCode = strtolower((string) front_locale_code());
