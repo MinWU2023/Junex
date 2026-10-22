@@ -285,6 +285,17 @@
 .category-page-block + section.custom_serrvices .sec-pad {
   padding-top: 2rem;
 }
+/* 产品分类页 H1 加粗。
+   这段 style 只在产品分类页输出（@section('page-css-header') 仅本页使用），
+   所以直接写 h1 选择器也只影响本页。
+   - font-weight: 700 是需求要求的加粗值
+   - 站点字体是按字重拆成独立 family 的（Poppins-Regular / Poppins-Bold ...），
+     正文容器继承的是 Poppins-Regular，只写 700 会变成浏览器合成假粗体，
+     所以同时指定 Poppins-Bold 让 700 用到真实粗体字形 */
+h1 {
+  font-weight: 700;
+  font-family: 'Poppins-Bold', ui-sans-serif, system-ui, sans-serif;
+}
 </style>
 @endsection
 
