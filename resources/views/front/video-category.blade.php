@@ -55,7 +55,7 @@
                         </span>
                     </div>
                 </a>
-                <div class="flex w-full flex-col justify-center px-6 py-6 md2:w-[42%] md2:px-10 md2:py-10">
+                <div class="flex w-full flex-col justify-center px-6 py-6 md2:w-[52%] md2:px-10 md2:py-10">
                     <div class="text-f14 font-poppins-regular text-themeText-p">{{ $featuredVideo['date'] ?? '' }}</div>
                     <h2 class="mt-4 text-f34 font-poppins-semibold leading-snug text-themeText-f">
                         <a href="{{ $featuredVideo['url'] ?? '#' }}">{{ $featuredVideo['title'] ?? '' }}</a>

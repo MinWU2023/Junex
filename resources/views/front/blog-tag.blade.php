@@ -120,7 +120,7 @@
         <div class="relative flex w-full items-center justify-center md2:w-[48%]">
             <img class="w-full object-cover" src="{{ $featuredBlog['image'] }}" alt="{{ __('Blog cover') }}" loading="lazy" />
         </div>
-        <div class="flex w-full flex-col justify-center px-6 py-6 md2:w-[42%] md2:px-10 md2:py-10">
+        <div class="flex w-full flex-col justify-center px-6 py-6 md2:w-[52%] md2:px-10 md2:py-10">
             <h2 class="text-f34 font-poppins-semibold leading-snug font-themeText-f">
             {{ $featuredBlog['title'] }}
             </h2>
